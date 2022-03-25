@@ -1,0 +1,23 @@
+{
+  "name": "pizzeriasite",
+  "version": "1.0.0",
+  "description": "Site de livraison de pizzas à domicile.",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gaufre.informatique.univ-paris-diderot.fr/bragina/pizzeriasite.git"
+  },
+  "author": "Natalia & David",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.1.3",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "node": "^17.7.1",
+    "nodemon": "^2.0.15",
+    "pg": "^8.7.3"
+  }
+}
