@@ -1,0 +1,16 @@
+body {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #F7F2F2;
+    color: #1C1C1E;
+}
+
+/*dark mode*/
+@media(prefers-color-scheme: dark){
+    body {
+        background-color: #1C1C1E;
+        color: #F7F2F2;
+    }
+}
