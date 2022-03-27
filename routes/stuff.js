@@ -7,19 +7,9 @@ const MFProtection=require('../middlewares/protection');
 const stuffControllers=require('../controllers/stuffControllers');
 
 //Pages
+console.log(process);
+
 router.get('*', MFProtection, stuffControllers.GetError);
 
-//TODO: index page
-/*serv.get('/', function (req, res) {
-
-});
-
-serv.get("/menu/:id/", (req, res) => {
-
-});
-
-serv.get("/livraison/:id/", (req, res) => {
-
-});*/
 
 module.exports=router;

@@ -1,11 +1,13 @@
 //Dependencies files required
 const express=require('express');
-const app=express();
+const app = express();
 
 //TODO: remove npm bootstrap and nodemon
 
-//Local file required
-const stuffRoutes=require('./routes/stuff');
+// Routers
+const header_router = require('./routes/headerRouter');
+const main_router = require('./routes/homeRouter');
+const livreur_router = require('./routes/livreurRouter');
 
 //TODO: to add to a middlewares/set header
 //Allows to access the API from any source, add headers and send requests with the methods mentioned.
@@ -34,7 +36,9 @@ app.set('trust proxy',1)
 //TODO: set express session
 
 //Set the routes
-app.use('', stuffRoutes);
-
+app.use('', header_router);
+app.use('', main_router);
+app.use('', livreur_router);
+                           
 //Listen port
 app.listen(8080, () => console.log("server started on port " + 8080));
