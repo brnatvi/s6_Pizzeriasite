@@ -5,9 +5,7 @@ const app = express();
 //TODO: remove npm bootstrap and nodemon
 
 // Routers init
-const header_router = require('./routes/rHeader');
-const main_router = require('./routes/rHome');
-const livreur_router = require('./routes/rLivreur');
+const router = require('./routes/routes');
 
 //TODO: to add to a middlewares/set header
 //Allows to access the API from any source, add headers and send requests with the methods mentioned.
@@ -37,9 +35,7 @@ app.set('trust proxy',1)
 //TODO: set express session
 
 //Set the routes
-app.use('/', header_router);
-app.use('/', main_router);
-app.use('/livraison', livreur_router);
-                           
+app.use('/', router);
+
 //Listen port
 app.listen(8080, () => console.log("server started on port " + 8080));
