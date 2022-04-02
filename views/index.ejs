@@ -1,31 +1,113 @@
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-
-</head>
-
-<body class="container">
-    <header>
-        <div>
-            <%- include('header'); %>
+<%- include('header'); %>
+    <div class="container-fluid d-flex flex-column flex-lg-row justify-content-center" id="main-container">
+        <!-- Navigation Bar -->
+        <div id="container-navigation-bar" class="col-3">
+            <div class="nav flex-row flex-lg-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link d-flex" id="v-pills-salades-tab" data-toggle="pill" href="#v-pills-salades" role="tab" aria-controls="v-pills-home" aria-selected="true">
+                    <img src="img/salades.png" height="35px" width="35px">
+                    <p class="color-text">Nos salades</p>
+                </a>
+                <a class="nav-link d-flex" id="v-pills-boissons-tab" data-toggle="pill" href="#v-pills-boissons" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+                    <img src="img/boissons.png" height="35px" width="35px">
+                    <p class="color-text">Nos boissons</p>
+                </a>
+                <a class="nav-link d-flex" id="v-pills-desserts-tab" data-toggle="pill" href="#v-pills-desserts" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+                    <img src="img/desserts.png" height="35px" width="35px">
+                    <p class="color-text">Nos desserts</p>
+                </a>
+                <a class="nav-link d-flex" id="v-pills-menus-tab" data-toggle="pill" href="#v-pills-menus" role="tab" aria-controls="v-pills-settings" aria-selected="false">
+                    <img src="img/menus.png" height="35px" width="35px">
+                    <p class="color-text">Nos menus</p>
+                </a>
+                <a class="nav-link d-flex active" id="v-pills-pizzas-tab" data-toggle="pill" href="#v-pills-pizzas" role="tab" aria-controls="v-pills-settings" aria-selected="false">
+                    <img src="img/pizzas.png" height="35px" width="35px">
+                    <p class="color-text">Nos pizzas</p>
+                </a>
+                <a class="nav-link d-flex" id="v-pills-recommandations-tab" data-toggle="pill" href="#v-pills-recommandations" role="tab" aria-controls="v-pills-settings" aria-selected="false">
+                    <img src="img/recommandations.png" height="35px" width="35px">
+                    <p class="color-text">Recommandations</p>
+                </a>
+            </div>
         </div>
-    </header>
-
-    <main>
-        <div class="jumbotron">
-
+        <!-- List Of Items -->
+        <div id="container-items" class="col-6">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade" id="v-pills-salades" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    <h1>salades</h1>
+                    <div class="row">
+                        <!--TODO: salades-->
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-boissons" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                    <h1>Nos boissons</h1>
+                    <div class="row">
+                        <!--TODO: boissons-->
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-desserts" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                    <h1>Nos desserts</h1>
+                    <div class="row">
+                        <!--TODO: desserts-->
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-menus" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                    <h1>Nos menus</h1>
+                    <div class="row">
+                        <!--TODO: menus-->
+                    </div>
+                </div>
+                <div class="tab-pane fade show active" id="v-pills-pizzas" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    <h1>Nos Pizzas</h1>
+                    <div class="row" id="all-pizzas">
+                        <% for(let i=0; i<9; i++){ %>
+                            <div class="m-auto">
+                                <img src="img/pizza2.png">
+                                <p class="name-pizza">Pizza Raclette</p>
+                                <p class="price-pizza">5.54€</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-recommandations" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                    <h1>Recommandations</h1>
+                    <div class="row">
+                        <!--TODO: recommandations-->
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
-    <ul class="">
-
-    </ul>
-    <footer>
-        <div>
-            <%- include('footer'); %>
+        <!-- Cart -->
+        <div id="container-cart" class="col-3">
+            <div class="card-cmd secondary">
+                <div id="header-cart">
+                    <div class="info">
+                        <p>Votre panier</p>
+                    </div>
+                    <div class="price">
+                        <p>Total (TTC)</p>
+                        <p>11.08 &#8364;</p>
+                    </div>
+                    <button type="button" class="btn btn-primary">Valider mon panier</button>
+                </div>
+                <div id="header-border"></div>
+                <div>
+                    <% for (var i = 0; i < 3; i++) {%>
+                    <div class="element">
+                        <p>Lorem Ipsum</p>
+                        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                        <div class="element-menu">
+                            <div>
+                                <img src="img/remove_circle_outline.svg">
+                                <p>2</p>
+                                <img src="img/add_circle_outline.svg">
+                            </div>
+                            <p>11.08 &#8364;</p>
+                        </div>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
         </div>
-    </footer>
-
-</body>
-
-</html>
+    </div>
+    <script type="text/javascript" src="js/main.js"></script>
+<%- include('footer'); %>
