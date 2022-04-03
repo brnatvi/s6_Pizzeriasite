@@ -4,7 +4,11 @@ const Commande = require("../model/commande.js");
 //----------- fonctionnality available to Client/User --------------------
 
 exports.index = function (req, rep) {    
-    rep.render('../views/index');
+    rep.render('../views/index',{
+        params: {
+            title: 'index'
+        }
+    });
 };
 
 exports.showCarte = function (req, rep) {

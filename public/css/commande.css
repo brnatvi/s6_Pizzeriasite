@@ -1,0 +1,132 @@
+#container-cart{
+    max-width: 350px;
+}
+
+.card-cmd{
+    border-radius: 12px;
+}
+
+.info p{
+    font-weight: bold;
+    margin: auto auto auto 0;
+}
+
+.info{
+    display: flex;
+    flex-direction: row;
+}
+
+.price{
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.price p{
+    margin: auto;
+    font-weight: bold;
+}
+
+.price p:first-child{
+    margin-left: 0;
+}
+
+.price p:last-child{
+    margin-right: 0;
+}
+
+#header-border{
+    width: 90%;
+    border-bottom: solid 1px #333741;
+    margin: 20px auto 5px;
+}
+
+.element {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.element p{
+    font-weight: normal;
+    margin-bottom: 8px;
+}
+
+.element p:first-child {
+    font-weight: bold;
+}
+
+.element-menu{
+    margin-left: auto;
+    margin-right: 0;
+    width: auto;
+    display: flex;
+    flex-direction: row
+}
+
+.element-menu div{
+    display: flex;
+    flex-direction: row;
+}
+
+.element-menu div p{
+    margin: 0 4px;
+}
+
+.element-menu p{
+    margin: 0 0 0 auto;
+    float: right
+}
+
+.main-container-livreur{
+    padding-left: 15px;
+}
+
+#container-in-progress{
+    max-width: 1050px;
+}
+
+.secondary-livreur{
+    margin-right: 0;
+    margin-top: 32px;
+}
+
+.price-livreur, .btn-livreur{
+    max-width: 250px;
+}
+
+.time-livreur{
+    margin-right: 0;
+}
+
+.content-commande-livreur{
+    max-width: 300px;
+}
+
+#new-order{
+    margin-top: 50px;
+}
+
+.info-livreur p:last-child{
+    margin-right: 0;
+}
+
+/*responsive*/
+@media only screen and (max-width: 992px){
+    #container-cart{
+        max-width: 100%;
+    }
+}
+
+@media only screen and (max-width: 720px){
+    .wip-livreur{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 480px){
+    .info-livreur{
+        display: flex;
+        flex-direction: column;
+    }
+}

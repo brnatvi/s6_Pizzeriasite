@@ -34,7 +34,7 @@ router.post("/panier/:id/delete", function(req, res){           // ??? check pat
 router.get("/livraison", controller_Livreur.connectLivreur);
 
 // 2 afficher commande disponible
-router.get("/commande", controller_Livreur.showCommande);
+router.get("/commande", stuffControllers.GetCommande);
 
 // 3 changer le status de commande
 router.post("/commande/:id/update", function(req, res){

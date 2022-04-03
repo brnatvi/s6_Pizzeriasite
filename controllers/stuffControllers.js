@@ -5,3 +5,12 @@ exports.GetError = (req, res) => {
         }
     })
 }
+
+//TODO: change location
+exports.GetCommande = (req, res) => {
+    res.status(404).render('commande',{
+        params: {
+            title: 'commande'
+        }
+    })
+}
