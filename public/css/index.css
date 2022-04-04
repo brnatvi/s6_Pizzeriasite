@@ -2,7 +2,7 @@
     max-width: 250px;
 }
 
-#v-pills-pizzas div div img{
+.item-description{
     width: 200px;
     height: 200px;
 }
@@ -129,7 +129,53 @@ button{
     max-width: 1050px;
 }
 
+/*animation*/
+.name-pizza, .price-pizza{
+    transition: all .5s;
+}
+
+.item-description {
+    padding: 0;
+    background-position: center;
+    background-size: cover;
+    transition: all .5s;
+}
+
+.container-item-desc:hover .item-description,
+.container-item-desc:focus .item-description {
+    transform: scale(1.05);
+    transition: all .5s;
+    cursor: pointer;
+}
+
+.container-item-desc:hover .name-pizza,
+.container-item-desc:hover .price-pizza{
+    transition: all .5s;
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.remove-img:hover, .add-img:hover{
+    cursor: pointer;
+    opacity: .75;
+    transition: all .5s;
+}
+
 /*responsive*/
+@media only screen and (max-width: 1343px) {
+    .item-description{
+        width: 250px;
+        height: 250px;
+    }
+}
+
+@media only screen and (max-width: 1195px) {
+    .item-description{
+        width: 200px;
+        height: 200px;
+    }
+}
+
 @media only screen and (max-width: 992px){
     #container-navigation-bar{
         margin: auto;
@@ -161,8 +207,8 @@ button{
     }
 }
 
-@media only screen and (min-width: 1160px) {
-    #v-pills-pizzas div div img{
+@media only screen and (min-width: 1644px) {
+    .item-description{
         width: 250px;
         height: 250px;
     }

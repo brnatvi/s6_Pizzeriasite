@@ -23,6 +23,14 @@ body {
     margin: 0;
 }
 
+.modal-header, .modal-footer{
+    border: none;
+}
+
+.modal-dialog{
+    max-width: 1000px;
+}
+
 /*dark mode*/
 @media(prefers-color-scheme: dark){
     body {

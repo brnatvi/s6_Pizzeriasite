@@ -59,9 +59,9 @@
             <div class="tab-pane fade show active" id="v-pills-pizzas" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <h1>Nos pizzas</h1>
                 <div class="row" id="all-pizzas">
-                    <% for(let i=0; i<9; i++){ %>
-                        <div class="m-auto">
-                            <img src="img/pizza2.png">
+                    <% for(let i=0; i<10; i++){ %>
+                        <div class="m-auto container-item-desc" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter"><!--TODO: onclick send request get sauce etc... -->
+                            <img class="item-description" src="img/pizza2.png">
                             <p class="name-pizza">Pizza Raclette</p>
                             <p class="price-pizza">5.54€</p>
                         </div>
@@ -97,14 +97,30 @@
                         <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
                         <div class="element-menu">
                             <div>
-                                <img src="img/remove_circle_outline.svg">
+                                <img class="remove-img" src="img/remove_circle_outline.svg">
                                 <p>2</p>
-                                <img src="img/add_circle_outline.svg">
+                                <img class="add-img" src="img/add_circle_outline.svg">
                             </div>
                             <p>11.08 &#8364;</p>
                         </div>
                     </div>
                 <%}%>
+            </div>
+        </div>
+    </div>
+</div>
+<!--TODO: change the location of the modal-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content secondary">
+            <div class="modal-header">
+                <h5 class="modal-title text-center m-auto" id="exampleModalCenterTitle">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Valider mes choix</button>
             </div>
         </div>
     </div>
