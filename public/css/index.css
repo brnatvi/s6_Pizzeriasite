@@ -24,7 +24,7 @@
 .name-pizza{
     font-weight: bold;
     margin-top: 8px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .price-pizza{
@@ -87,10 +87,6 @@ button{
 
 #v-pills-tab a p{
     margin: auto auto auto 6px;
-}
-
-#v-pills-tab{
-    padding-top: 64px;
 }
 
 #header-border{
