@@ -1,3 +1,4 @@
+
 const Client = require("../model/client.js");
 const Commande = require("../model/commande.js");
 
@@ -12,20 +13,6 @@ exports.showCarte = function (req, rep) {
 };
 
 exports.registrClient = function (req, rep) {
-    const r = Client.createClient();
-    rep.json(r);    
+    Client.createClient(req, rep);   
 };
 
-exports.loginClient = function (req, rep) {
-    const info = Client.loginClient();
-    rep.json(info);
-};
-
-exports.showPanier = function (req, rep) {
-    const info = Client.showPanier();
-    rep.json(info);
-};
-
-exports.deleteItem = function (req, rep) {
-    rep.send("delete item from panier");
-};

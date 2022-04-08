@@ -1,10 +1,11 @@
-const db = require('db');
+const db = require('./db');
 
 class Client {   
     
     async createClient (req, res){
         const {nom, prenom, address} = req.body;
-        const newPerson = await db.query("INSERT INTO client values ('ALL','Allemagne');");
+        const newPerson = await db.query("INSERT INTO client (nom, prenom, adr_client) VALUES ($1, $2, $3);", [nom, prenom, address]);
+        res.json(newPerson.rows);
     }
 
     async getUsers (req, res){
