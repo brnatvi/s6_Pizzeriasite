@@ -1,26 +1,27 @@
-const pg = require('pg');
+const db = require('db');
 
-
-function User() {   
-    this.id = '19';
-    this.address = 'his address'
-
-    this.showCarte = function () {
-        return ("Show carte - business logic with BD");
-    };
-
-    this.registrClient = function () {
-        return ("Registrement - business logic with BD");
-    };
-
-    this.loginClient = function () {
-        return [this.id, this.address];
-    };
-        
-    this.showPanier = function () {
-        return ("Show panier - business logic with BD");
-    };
+class Client {   
     
+    async createClient (req, res){
+        const {nom, prenom, address} = req.body;
+        const newPerson = await db.query("INSERT INTO client values ('ALL','Allemagne');");
+    }
+
+    async getUsers (req, res){
+
+    }
+
+    async getOneUser (req, res){
+
+    }
+
+    async updateUser (req, res){
+
+    }
+
+    async deleteUser (req, res){
+
+    }    
 }
 
-module.exports = new User();
+module.exports = new Client();

@@ -1,10 +1,10 @@
-const User = require("../model/client.js");
+const Client = require("../model/client.js");
 const Commande = require("../model/commande.js");
 
 //----------- fonctionnality available to Client/User --------------------
 
-exports.index = function (req, rep) {    
-    rep.render('../views/index');
+exports.index = function (req, rep) {
+    rep.render('../views/index'); 
 };
 
 exports.showCarte = function (req, rep) {
@@ -12,17 +12,17 @@ exports.showCarte = function (req, rep) {
 };
 
 exports.registrClient = function (req, rep) {
-    const info = User.registrClient();  
-    rep.json(info); 
+    const r = Client.createClient();
+    rep.json(r);    
 };
 
 exports.loginClient = function (req, rep) {
-    const info = User.loginClient();  
-    rep.json(info);   
+    const info = Client.loginClient();
+    rep.json(info);
 };
 
 exports.showPanier = function (req, rep) {
-    const info = User.showPanier();  
+    const info = Client.showPanier();
     rep.json(info);
 };
 

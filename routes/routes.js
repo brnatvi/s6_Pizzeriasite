@@ -15,22 +15,13 @@ router.get("/", controller_Client.index);
 router.get("/carte", controller_Client.showCarte);
 
 // 3 client s'enregistre'
-router.get("/signin", controller_Client.registrClient);
-
-// 4 client se connecte
-router.get("/login", controller_Client.loginClient);           // ??? need it?
-
-// 5 afficher le panier
-router.get("/panier", controller_Client.showPanier);           // ??? need it?
-
-// 6 delete item
-router.post("/panier/:id/delete", function(req, res){           // ??? check path
-    controller_Client.deleteItem;
-});
+router.post("/signin", controller_Client.registrClient);
 
 
 //------------- Livreur ---------------------
 // 1 login/register pour livreur
+router.post("/livraison", controller_Livreur.registrLivreur);
+
 router.get("/livraison", controller_Livreur.connectLivreur);
 
 // 2 afficher commande disponible
