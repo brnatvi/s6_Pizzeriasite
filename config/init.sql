@@ -1,8 +1,11 @@
-drop table if exists client cascade;
-drop table if exists livreur cascade;
-drop table if exists commande cascade;
-drop table if exists livraison cascade;
-drop table if exists contenu_commande cascade;
+DROP DATABASE IF EXISTS pizzeria;
+CREATE DATABASE pizzeria;
+
+DROP TABLE IF EXISTS client cascade;
+DROP TABLE IF EXISTS livreur cascade;
+DROP TABLE IF EXISTS commande cascade;
+DROP TABLE IF EXISTS livraison cascade;
+DROP TABLE IF EXISTS contenu_commande cascade;
 
 CREATE TABLE client (
     id_client SERIAL PRIMARY KEY,
