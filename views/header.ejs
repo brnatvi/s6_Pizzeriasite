@@ -1,12 +1,35 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Default Configuration -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css" type="text/css">
+
+    <!-- According to the requested page -->
     <title> Pizzeria </title>
+    <link rel="stylesheet" href="/css/<%- locals.params.title %>.css" type="text/css">
+    <% if(locals.params.title==='error'){ %>
+    <meta http-equiv="refresh" content="3;URL=/">
+    <% } %>
 </head>
 <body>
-    
-</body>
+    <nav id="nav-navigation">
+        <div id="blur-nav" class="justify-content-center" style="position: absolute;">
+
+        </div>
+        <div id="menu-bar-left" class="col-11 row m-auto">
+            <img src="img/logo_pizza.png" height="60px" alt="logo">
+            <div>
+                <button class="rmv-style-btn">Accueil</button>
+                <button class="rmv-style-btn">Nos produits</button>
+                <button class="rmv-style-btn">Nous Contacter</button>
+            </div>
+        </div>
+    </nav>
