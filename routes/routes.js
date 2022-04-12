@@ -6,16 +6,23 @@ const controller_Client = require("../controllers/contr_client.js");
 const controller_Livreur = require("../controllers/contr_livreur.js");
 
 const router = express.Router(); 
-                                                                        // ??? to check all GET POST USE
-//------------- Client ---------------------
+
+//------------- Main ---------------------
 // 1 logo -> home page
 router.get("/", controller_Client.index);
-
 // 2 lien vers la carte
 router.get("/carte", controller_Client.showCarte);
 
-// 3 client s'enregistre'
-router.post("/signin", controller_Client.registrClient);
+
+//------------- Client ---------------------
+router.post("/signup", controller_Client.addClient);
+router.post("/signupR", controller_Client.addRegisteredClient);
+router.get("/client/:id", controller_Client.getClient);
+router.get("/clients", controller_Client.getListClients);
+router.put("/client", controller_Client.updateClient);
+router.delete("/client/:id", controller_Client.deleteClient);
+router.put("/updateMail", controller_Client.updateMail);
+router.put("/updatePass", controller_Client.updatePassword);
 
 
 //------------- Livreur ---------------------
