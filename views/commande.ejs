@@ -1,0 +1,64 @@
+<%- include('header'); %>
+<div class="container-fluid d-flex flex-column flex-lg-row justify-content-center main-container-livreur" id="main-container">
+    <div id="container-in-progress" class="col-9">
+        <!-- In Progress -->
+        <div id="in-progress">
+            <h1>En cours de livraison</h1>
+            <div class="card-cmd secondary secondary-livreur">
+                <div id="header-cart">
+                    <div class="info info-livreur">
+                        <p>Commande n°1478564545<span class="wip-livreur"> - en cours de livraison</span></p>
+                        <p>Heure de livraison - 19h50</p>
+                    </div>
+                    <div class="price price-livreur">
+                        <p>Total (TTC)</p>
+                        <p>11.08 &#8364;</p>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-livreur">Livraison effectué</button>
+                </div>
+                <div id="header-border"></div>
+                <div>
+                    <% for (var i = 0; i < 3; i++) {%>
+                        <div class="element">
+                            <p>Lorem Ipsum</p>
+                            <p class="content-commande-livreur">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                            <div class="element-menu">
+                                <p>11.08 &#8364;</p>
+                            </div>
+                        </div>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+        <!-- New Order -->
+        <div id="new-order">
+            <h1>Commande non prise en charge</h1>
+            <div class="card-cmd secondary secondary-livreur">
+                <div id="header-cart">
+                    <div class="info info-livreur">
+                        <p>Commande n°1478564545</p>
+                        <p>Heure de livraison - 19h50</p>
+                    </div>
+                    <div class="price price-livreur">
+                        <p>Total (TTC)</p>
+                        <p>11.08 &#8364;</p>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-livreur">Prendre en charge la commande</button>
+                </div>
+                <div id="header-border"></div>
+                <div>
+                    <% for (var i = 0; i < 3; i++) {%>
+                        <div class="element">
+                            <p>Lorem Ipsum</p>
+                            <p class="content-commande-livreur">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                            <div class="element-menu">
+                                <p>11.08 &#8364;</p>
+                            </div>
+                        </div>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer'); %>
