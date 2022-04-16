@@ -15,14 +15,12 @@ router.get("/carte", controller_Client.showCarte);
 
 
 //------------- Client ---------------------
-router.post("/signup", controller_Client.addClient);
-router.post("/signupR", controller_Client.addRegisteredClient);
+router.post("/addClient", controller_Client.addClient);
+router.post("/signup", controller_Client.addRegisteredClient);
 router.get("/client/:id", controller_Client.getClient);
 router.get("/clients", controller_Client.getListClients);
-router.put("/client", controller_Client.updateClient);
+router.put("/update", controller_Client.updateRegisteredClient);
 router.delete("/client/:id", controller_Client.deleteClient);
-router.put("/updateMail", controller_Client.updateMail);
-router.put("/updatePass", controller_Client.updatePassword);
 
 
 //------------- Livreur ---------------------

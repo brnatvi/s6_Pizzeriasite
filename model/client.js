@@ -3,6 +3,7 @@ const db = require('./db');
     //TODO remove RETURNING* (not all !!!!) and res.json at the end of debugging
 class Client {
 
+
     //--------------- Basic client --------------------------------------------
 
     async addClient (req, res){
@@ -24,7 +25,7 @@ class Client {
 
     async getListClients (req, res){
         const users = await db.query("SELECT * FROM client;");
-        res.json(users.rows[0]);
+        res.json(users.rows);
     };
 
     //-------------- Registred client -----------------------------------------    
@@ -41,7 +42,7 @@ class Client {
         const id = req.params.id;
         await db.query("DELETE FROM security_client WHERE id_client = $1;", [id]);
     };    
-
+    
     async updateMail(req, res){
         const {id, email} = req.body;
         const updated = await db.query("UPDATE security_client SET email = $2 WHERE id_client = $1 RETURNING *;", [id, email]);
@@ -49,8 +50,32 @@ class Client {
     };
 
     async updatePassword(req, res){
-        const {email, pw, resetToken} = req.body;
-        const updated = await db.query("UPDATE security_client SET pw = $3 WHERE (email = $1 AND resetToken = $2) RETURNING *;", [email, resetToken, pw]);
+        const {id, email, pw, resetToken} = req.body;
+        const updated = await db.query("UPDATE security_client SET pw = $4 WHERE (id_client = $1 AND email = $2 AND resetToken = $3) RETURNING *;", [id, email, resetToken, pw]);
+        res.json(updated.rows);       
+    };
+
+    async updateAddress(req, res){
+        const {id, address} = req.body;
+        const updated = await db.query("UPDATE client SET adr_client = $2 WHERE id_client = $1 RETURNING *;", [id, address]);
+        res.json(updated.rows);       
+    };
+
+    async updateMobile(req, res){
+        const {id, mobile} = req.body;
+        const updated = await db.query("UPDATE client SET mobile = $2 WHERE id_client = $1 RETURNING *;", [id, mobile]);
+        res.json(updated.rows);       
+    };
+
+    async updateNom(req, res){
+        const {id, nom} = req.body;
+        const updated = await db.query("UPDATE client SET nom = $2 WHERE id_client = $1 RETURNING *;", [id, nom]);
+        res.json(updated.rows);       
+    };
+
+    async updatePrenom(req, res){
+        const {id, prenom} = req.body;
+        const updated = await db.query("UPDATE client SET prenom = $2 WHERE id_client = $1 RETURNING *;", [id, prenom]);
         res.json(updated.rows);       
     };
 }

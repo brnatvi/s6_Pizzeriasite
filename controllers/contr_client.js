@@ -5,48 +5,62 @@ const Commande = require("../model/commande.js");
 //----------- fonctionnality available to Client/User --------------------
 
 exports.index = function (req, rep) {
-    rep.render('../views/index'); 
+    rep.render('../views/index');
 };
 
 exports.showCarte = function (req, rep) {
     rep.send('HOME: main menu page');
 };
 
-//------------------------------------------------------------------------
+//---------------------- Basic client --------------------------------------------------
 
 /* add new client to database */
 exports.addClient = function (req, rep) {
-    Client.addClient(req, rep);   
+    Client.addClient(req, rep);
 };
 
 /* get list of clients */
 exports.getClient = function (req, rep) {
-    Client.getClientByID(req, rep);   
+    Client.getClientByID(req, rep);
 };
 
 /* get list of clients */
 exports.getListClients = function (req, rep) {
-    Client.getListClients(req, rep);   
-};
-
-/* update info client */
-exports.updateClient = function (req, rep) {
-    Client.updateClient(req, rep);   
+    Client.getListClients(req, rep);
 };
 
 /* remouve client from list */
 exports.deleteClient = function (req, rep) {
-    Client.deleteClient(req, rep);   
+    Client.deleteClient(req, rep);
 };
+
+//---------------------- Registered client ----------------------------------------------
 
 exports.addRegisteredClient = function (req, rep) {
-    Client.addRegisteredClient(req, rep);   
+    Client.addRegisteredClient(req, rep);
 };
 
-exports.updateMail = function (req, rep) {
-    Client.updateMail(req, rep);   
+exports.updateRegisteredClient = function (req, rep) {
+    if (req.body.nom) {
+        Client.updateNom(req, rep);
+    }
+    else if (req.body.prenom) {
+        Client.updatePrenom(req, rep);
+    }
+    else if (req.body.email) {
+        Client.updateMail(req, rep);
+    }
+    else if (req.body.pw) {
+        Client.updatePassword(req, rep);
+    }
+    else if (req.body.mobile) {
+        Client.updateMobile(req, rep);
+    }
+    else if (req.body.address) {
+        Client.updateAddress(req, rep);
+    };
 };
 
-exports.updatePassword = function (req, rep) {
-    Client.updatePassword(req, rep);   
+exports.deleteRegisteredClient = function (req, rep) {
+    Client.deleteRegisteredClient(req, rep);
 };
