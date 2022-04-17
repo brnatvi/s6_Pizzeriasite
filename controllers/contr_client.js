@@ -1,4 +1,5 @@
-const User = require("../model/client.js");
+
+const Client = require("../model/client.js");
 const Commande = require("../model/commande.js");
 
 //----------- fonctionnality available to Client/User --------------------
@@ -15,21 +16,55 @@ exports.showCarte = function (req, rep) {
     rep.send('HOME: main menu page');
 };
 
-exports.registrClient = function (req, rep) {
-    const info = User.registrClient();  
-    rep.json(info); 
+//---------------------- Basic client --------------------------------------------------
+
+/* add new client to database */
+exports.addClient = function (req, rep) {
+    Client.addClient(req, rep);
 };
 
-exports.loginClient = function (req, rep) {
-    const info = User.loginClient();  
-    rep.json(info);   
+/* get list of clients */
+exports.getClient = function (req, rep) {
+    Client.getClientByID(req, rep);
 };
 
-exports.showPanier = function (req, rep) {
-    const info = User.showPanier();  
-    rep.json(info);
+/* get list of clients */
+exports.getListClients = function (req, rep) {
+    Client.getListClients(req, rep);
 };
 
-exports.deleteItem = function (req, rep) {
-    rep.send("delete item from panier");
+/* remouve client from list */
+exports.deleteClient = function (req, rep) {
+    Client.deleteClient(req, rep);
+};
+
+//---------------------- Registered client ----------------------------------------------
+
+exports.addRegisteredClient = function (req, rep) {
+    Client.addRegisteredClient(req, rep);
+};
+
+exports.updateRegisteredClient = function (req, rep) {
+    if (req.body.nom) {
+        Client.updateNom(req, rep);
+    }
+    else if (req.body.prenom) {
+        Client.updatePrenom(req, rep);
+    }
+    else if (req.body.email) {
+        Client.updateMail(req, rep);
+    }
+    else if (req.body.pw) {
+        Client.updatePassword(req, rep);
+    }
+    else if (req.body.mobile) {
+        Client.updateMobile(req, rep);
+    }
+    else if (req.body.address) {
+        Client.updateAddress(req, rep);
+    };
+};
+
+exports.deleteRegisteredClient = function (req, rep) {
+    Client.deleteRegisteredClient(req, rep);
 };

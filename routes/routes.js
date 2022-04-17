@@ -6,31 +6,27 @@ const controller_Client = require("../controllers/contr_client.js");
 const controller_Livreur = require("../controllers/contr_livreur.js");
 
 const router = express.Router(); 
-                                                                        // ??? to check all GET POST USE
-//------------- Client ---------------------
+
+//------------- Main ---------------------
 // 1 logo -> home page
 router.get("/", controller_Client.index);
-
 // 2 lien vers la carte
 router.get("/carte", controller_Client.showCarte);
 
-// 3 client s'enregistre'
-router.get("/signin", controller_Client.registrClient);
 
-// 4 client se connecte
-router.get("/login", controller_Client.loginClient);           // ??? need it?
-
-// 5 afficher le panier
-router.get("/panier", controller_Client.showPanier);           // ??? need it?
-
-// 6 delete item
-router.post("/panier/:id/delete", function(req, res){           // ??? check path
-    controller_Client.deleteItem;
-});
+//------------- Client ---------------------
+router.post("/addClient", controller_Client.addClient);
+router.post("/signup", controller_Client.addRegisteredClient);
+router.get("/client/:id", controller_Client.getClient);
+router.get("/clients", controller_Client.getListClients);
+router.put("/update", controller_Client.updateRegisteredClient);
+router.delete("/client/:id", controller_Client.deleteClient);
 
 
 //------------- Livreur ---------------------
 // 1 login/register pour livreur
+router.post("/livraison", controller_Livreur.registrLivreur);
+
 router.get("/livraison", controller_Livreur.connectLivreur);
 
 // 2 afficher commande disponible

@@ -3,10 +3,16 @@ const Commande = require("../model/commande.js");
 
 //----------- fonctionnality available to Livreur --------------------
 
-exports.connectLivreur = function (req, rep) {
+exports.registrLivreur = function (req, rep) {
     const r = Livreur.registrLivreur();
-    rep.send(r);
-    //const k = Livreur.connectLivreur();
+    //console.log(r);
+    //return(r);
+    rep.json(r);
+};
+
+exports.connectLivreur = function (req, rep) {    
+    const r2 = Livreur.connectLivreur();
+    rep.json(r2 + " " + req.body.nom + " " + req.body.prenom);
 };
 
 exports.showCommande = function (req, rep) {
@@ -15,7 +21,6 @@ exports.showCommande = function (req, rep) {
 };
 
 exports.updateCommande = function (req, rep) {
-    const r1 = Commande.updateCommande();
     const r2 = Livreur.updateCommandeHistory();
-    rep.send("In Commande: " + r1 + " In Livreur: " + r2);
+    rep.send("In Livreur: " + r2);
 };
