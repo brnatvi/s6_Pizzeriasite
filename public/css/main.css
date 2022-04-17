@@ -84,6 +84,11 @@ body {
     z-index: 100;
 }
 
+#modal-body-item{
+    min-height: 150px;
+    display: flex;
+}
+
 /*responsive*/
 @media only screen and (max-width: 576px) {
     #menu-bar-left img{

@@ -1,8 +1,20 @@
-
 const Client = require("../model/client.js");
 const Commande = require("../model/commande.js");
 
 //----------- fonctionnality available to Client/User --------------------
+
+exports.addCartItem = function (req, rep) {
+    // TODO: request bdd
+    console.log("TODO: request bdd"+JSON.stringify(req.body.idPizza));
+    rep.json({
+        id: 1,
+        name: 'Pizza Raclette',
+        ingredients: 'sauce tomate . fromage à raclette ' +
+            '. champignons . 8 olives noires . ' +
+            '2 tranches de jambon',
+        price: 5.96
+    });
+}
 
 exports.index = function (req, rep) {    
     rep.render('../views/index',{

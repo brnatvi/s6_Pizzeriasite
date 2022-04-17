@@ -22,6 +22,12 @@ router.get("/clients", controller_Client.getListClients);
 router.put("/update", controller_Client.updateRegisteredClient);
 router.delete("/client/:id", controller_Client.deleteClient);
 
+//ajax request - cart item
+router.post("/more-ifo-item", controller_Client.addCartItem);
+router.post("/add-new-cart-item", controller_Client.addCartItem);
+router.post("/remove-cart-item", controller_Client.addCartItem);
+router.post("/add-cart-item", controller_Client.addCartItem);
+
 
 //------------- Livreur ---------------------
 // 1 login/register pour livreur
@@ -33,9 +39,7 @@ router.get("/livraison", controller_Livreur.connectLivreur);
 router.get("/commande", stuffControllers.GetCommande);
 
 // 3 changer le status de commande
-router.post("/commande/:id/update", function(req, res){
-    controller_Livreur.updateCommande
-});                        
+router.post("/commande/:id/update", controller_Livreur.updateCommande);
 
 router.get('*', MFProtection, stuffControllers.GetError);
 //console.log(process);
