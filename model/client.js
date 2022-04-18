@@ -23,6 +23,16 @@ class Client {
         res.json(person.rows[0]);
     };
 
+    async getNbrClientByEmail (req, res){
+        const email = req.body.email;
+        return await db.query("SELECT COUNT(*) FROM security_client WHERE email = $1;", [email]);
+    }
+
+    async getClientByEmail (req, res){
+        const email = req.body.email;
+        return await db.query("SELECT email, pw FROM security_client WHERE email = $1;", [email]);
+    }
+
     async getListClients (req, res){
         const users = await db.query("SELECT * FROM client;");
         res.json(users.rows);
@@ -31,11 +41,10 @@ class Client {
     //-------------- Registred client -----------------------------------------    
     
     async addRegisteredClient (req, res){
-        const {nom, prenom, address, mobile, email, pw, resetToken} = req.body;
+        const {nom, prenom, address, mobile, email, pw} = req.body;
         const newId = await db.query("INSERT INTO client (nom, prenom, adr_client, mobile) VALUES ($1, $2, $3, $4) RETURNING id_client;", [nom, prenom, address, mobile]);
         const id = newId.rows[0].id_client;       
-        const person = await db.query("INSERT INTO security_client (id_client, email, pw, resetToken) VALUES ($1, $2, $3, $4) RETURNING *;", [id, email, pw, resetToken]);
-        res.json(person.rows[0]);
+        await db.query("INSERT INTO security_client (id_client, email, pw, resetToken) VALUES ($1, $2, $3, $4) RETURNING *;", [id, email, pw, ""]);
     };
 
     async deleteRegisteredClient (req, res){

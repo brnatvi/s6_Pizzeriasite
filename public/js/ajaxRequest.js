@@ -222,4 +222,85 @@ $(document).ready(function() {
         });
     });
 
+    /**
+     *
+     */
+    $(document).on('click', '.signup-user', function(e) {
+        const form = $(this).parent().parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = {
+                nom : $("#userFirstName").val(),
+                prenom : $("#userLastName").val(),
+                address : $("#userAdress").val(),
+                mobile : $("#userPhone").val(),
+                email : $("#userEmail").val(),
+                pw : $("#userPassword").val()
+            }
+        console.log(action);
+        console.log(method);
+        console.log(data);
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+                //TODO: update session
+                //alert(data.responseJSON.messageSuccess);
+                alert(data);
+                console.log("OK");
+                window.location.reload(true);
+            }, error : function (data) {
+                console.log(data.responseJSON.messageError)
+                alert(data.responseJSON.messageError);
+                console.log("ERROR");
+            }
+        });
+    });
+
+    $(document).on('click', '.signin-user', function(e) {
+        const form = $(this).parent().parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = {
+                email : $("#userEmailSignIn").val(),
+                pw : $("#userPasswordSignIn").val()
+            }
+        console.log(action);
+        console.log(method);
+        console.log(data);
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+                //TODO: update session
+                //alert(data.responseJSON.messageSuccess);
+                alert(data);
+                console.log("OK");
+                window.location.reload(true);
+            }, error : function (data) {
+                console.log(data.responseJSON.messageError)
+                alert(data.responseJSON.messageError);
+                console.log("ERROR");
+            }
+        });
+    });
+    
+    $(document).on('click', '#logoutSession', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "logout",
+            type: "GET",
+            success: () => {
+                window.location.replace(window.location.origin);
+                alert('Vous avez bien été déconnecté.');
+            }, error : function () {
+                alert('Impossible de vous déconnecter.');
+            }
+        });
+    })
+
 });

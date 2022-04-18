@@ -28,8 +28,13 @@
             <img src="img/logo_pizza.png" height="60px" alt="logo">
             <div>
                 <button class="rmv-style-btn">Nos produits</button><!-- TODO link home -->
-                <button id="connection-user" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
-                <button id="connection-user" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signup">S'enregistrer</button>
+
+                <% if (locals.params.quantity===undefined){ %>
+                <button id="connection-user-signin" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
+                <button id="connection-user-signup" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signup">S'enregistrer</button>
+                <% }else{ %>
+                <button class="rmv-style-btn" id="logoutSession">Se déconnecter</button>
+                <% } %>
             </div>
         </div>
     </nav>
@@ -44,32 +49,33 @@
                     <div id="modal-body-signup-user">
                         <div>
                             <label for="userFirstName">Prénom:</label><br>
-                            <input class="form-control" type="text" id="userFirstName" name="userFirstName">
+                            <input class="form-control" type="text" id="userFirstName" name="userFirstName" pattern="text">
                         </div>
 
                         <div>
                             <label for="userLastName">Nom:</label><br>
-                            <input class="form-control" type="text" id="userLastName" name="userLastName">
+                            <input class="form-control" type="text" id="userLastName" name="userLastName" pattern="text">
+                        </div>
+
+                        <div>
+                            <label for="userAdress">Adresse:</label><br>
+                            <input class="form-control" type="text" id="userAdress" name="userAdress">
                         </div>
 
                         <div>
                             <label for="userPhone">Numéro de téléphone:</label><br>
-                            <input class="form-control" type="tel" id="userPhone" name="userPhone">
+                            <input class="form-control" type="tel" id="userPhone" name="userPhone" pattern="tel">
                         </div>
 
                         <div>
                             <label for="userEmail">Email:</label><br>
-                            <input class="form-control" type="email" id="userEmail" name="userEmail">
+                            <input class="form-control" type="email" id="userEmail" name="userEmail" pattern="email">
                         </div>
 
                         <div>
                             <label for="userPassword">Mot de passe:</label><br>
-                            <input class="form-control" type="password" id="userPassword" name="userPassword">
-                        </div>
-
-                        <div>
-                            <label for="userPasswordConfirm">Mot de passe:</label><br>
-                            <input class="form-control" type="password" id="userPasswordConfirm" name="userPasswordConfirm">
+                            <input class="form-control" type="password" id="userPassword" name="userPassword" minlength="8">
+                            <input type="checkbox" id="signup-show-password">Afficher le mot de passe
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -84,7 +90,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content secondary">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center m-auto" id="modal-connexion-signin-user">Sign-Up</h5>
+                    <h5 class="modal-title text-center m-auto" id="modal-connexion-signin-user">Sign-In</h5>
                 </div>
                 <form class="form-add-dart-item" method="post" action="signin">
                     <div id="modal-body-signin-user">

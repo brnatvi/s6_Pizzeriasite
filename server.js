@@ -34,17 +34,17 @@ app.use(express.urlencoded({extended: true}));
 app.set('trust proxy',1)
 
 //session parameter
-/*app.use(session({
+app.use(session({
     secret: "VERYSECRETTOKENSESSION",
     resave: false,
     saveUninitialized: false,
     rolling: true,
     cookie: {
         httpOnly: true,
-        secure: true,
+        secure: false,//true: fonctionne uniquement avec htpps
         maxAge: 60 * 60 * 1000
     }
-}))*/
+}))
 
 //Set the routes
 app.use('/', router);
