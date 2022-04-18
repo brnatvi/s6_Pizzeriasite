@@ -27,9 +27,81 @@
         <div id="menu-bar-left" class="col-11 row m-auto">
             <img src="img/logo_pizza.png" height="60px" alt="logo">
             <div>
-                <button class="rmv-style-btn">Accueil</button>
-                <button class="rmv-style-btn">Nos produits</button>
-                <button class="rmv-style-btn">Nous Contacter</button>
+                <button class="rmv-style-btn">Nos produits</button><!-- TODO link home -->
+                <button id="connection-user" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
+                <button id="connection-user" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signup">S'enregistrer</button>
             </div>
         </div>
     </nav>
+    <!-- Sign-Up -->
+    <div class="modal fade" id="modal-connexion-signup" tabindex="-1" role="dialog" aria-labelledby="modal-connexion-signup-user" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center m-auto" id="modal-connexion-signup-user">Sign-Up</h5>
+                </div>
+                <form class="form-add-dart-item" method="post" action="signup">
+                    <div id="modal-body-signup-user">
+                        <div>
+                            <label for="userFirstName">Prénom:</label><br>
+                            <input class="form-control" type="text" id="userFirstName" name="userFirstName">
+                        </div>
+
+                        <div>
+                            <label for="userLastName">Nom:</label><br>
+                            <input class="form-control" type="text" id="userLastName" name="userLastName">
+                        </div>
+
+                        <div>
+                            <label for="userPhone">Numéro de téléphone:</label><br>
+                            <input class="form-control" type="tel" id="userPhone" name="userPhone">
+                        </div>
+
+                        <div>
+                            <label for="userEmail">Email:</label><br>
+                            <input class="form-control" type="email" id="userEmail" name="userEmail">
+                        </div>
+
+                        <div>
+                            <label for="userPassword">Mot de passe:</label><br>
+                            <input class="form-control" type="password" id="userPassword" name="userPassword">
+                        </div>
+
+                        <div>
+                            <label for="userPasswordConfirm">Mot de passe:</label><br>
+                            <input class="form-control" type="password" id="userPasswordConfirm" name="userPasswordConfirm">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary signup-user">S'enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Log-In -->
+    <div class="modal fade" id="modal-connexion-signin" tabindex="-1" role="dialog" aria-labelledby="modal-connexion-signin-user" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center m-auto" id="modal-connexion-signin-user">Sign-Up</h5>
+                </div>
+                <form class="form-add-dart-item" method="post" action="signin">
+                    <div id="modal-body-signin-user">
+                        <div>
+                            <label for="userEmailSignIn">Email:</label><br>
+                            <input class="form-control" type="email" id="userEmailSignIn" name="userEmailSignIn">
+                        </div>
+
+                        <div>
+                            <label for="userPasswordSignIn">Mot de passe:</label><br>
+                            <input class="form-control" type="password" id="userPasswordSignIn" name="userPasswordSignIn">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary signin-user">Se Connecter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

@@ -17,6 +17,7 @@ router.get("/carte", controller_Client.showCarte);
 //------------- Client ---------------------
 router.post("/addClient", controller_Client.addClient);
 router.post("/signup", controller_Client.addRegisteredClient);
+router.post("/signin", controller_Client.addRegisteredClient);//TODO
 router.get("/client/:id", controller_Client.getClient);
 router.get("/clients", controller_Client.getListClients);
 router.put("/update", controller_Client.updateRegisteredClient);

@@ -89,6 +89,15 @@ body {
     display: flex;
 }
 
+.modal-footer{
+    margin-top: 50px;
+}
+
+#modal-body-signin-user div, #modal-body-signup-user div, .modal-footer button {
+    max-width: 600px;
+    margin: auto;
+}
+
 /*responsive*/
 @media only screen and (max-width: 576px) {
     #menu-bar-left img{
