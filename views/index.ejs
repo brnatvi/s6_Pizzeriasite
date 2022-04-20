@@ -88,32 +88,32 @@
                 </div>
                 <div class="price">
                     <p>Total (TTC)</p>
-                    <p>11.08 &#8364;</p>
+                    <p id="total-price-cart-item"><%- (locals.params.price===undefined)?"0":locals.params.price.toFixed(2); %> &#8364;</p>
                 </div>
                 <button type="button" class="btn btn-primary">Valider mon panier</button>
             </div>
             <div id="header-border"></div>
             <div id="list-cart-item">
-                <% for (var i = 2; i <= 4; i++) { %>
-                    <div id="<%-i%>" class="element">
-                        <p>Lorem Ipsum</p>
-                        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ %>
+                    <div id="<%- article.id %>" class="element">
+                        <p><%- article.name %></p>
+                        <p><%- article.ingredients %></p>
                         <div class="element-menu">
                             <div class="menu-quantity">
                                 <form method="post" action="remove-cart-item">
-                                    <input type="hidden" value="<%-i%>">
+                                    <input type="hidden" value="<%- article.id %>">
                                     <input type="image" class="remove-img" src="img/remove_circle_outline.svg" alt="Submit">
                                 </form>
-                                <p class="quantity-item">2</p>
+                                <p class="quantity-item"><%- (locals.params.quantity[article.id+""]!==undefined)?locals.params.quantity[article.id+""]:"0"; %></p>
                                 <form method="post" action="add-cart-item">
-                                    <input type="hidden" value="<%-i%>">
+                                    <input type="hidden" value="<%- article.id %>">
                                     <input type="image" class="add-img" src="img/add_circle_outline.svg" alt="Submit">
                                 </form>
                             </div>
-                            <p class="price-item">11.08 &#8364;</p>
+                            <p class="price-item"><%- article.price %> &#8364;</p>
                         </div>
                     </div>
-                <% } %>
+                <% })}; %>
             </div>
         </div>
     </div>

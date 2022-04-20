@@ -159,6 +159,11 @@ $(document).ready(function() {
                         .appendTo(elementMenu);
 
                 }
+                //update total
+
+                let price=parseFloat($('#total-price-cart-item').text().substring(0, $('#total-price-cart-item').text().length-2));
+                $('#total-price-cart-item').text((price+data.price).toFixed(2)+" €");
+                //then hide modal
                 $('#modal-info-item').modal('hide');
             }, error : function (data) {
                 console.log("Impossible d'ajouter l'article voulu");
@@ -190,6 +195,9 @@ $(document).ready(function() {
                 }
                 //TODO: update session
 
+                //update total
+                let price=parseFloat($('#total-price-cart-item').text().substring(0, $('#total-price-cart-item').text().length-2));
+                $('#total-price-cart-item').text((price-data.price).toFixed(2)+" €");
             }, error : function (data) {
                 console.log("Impossible d'accéder à l'article voulu");
             }
@@ -215,7 +223,8 @@ $(document).ready(function() {
                 let qnttRemove=form.parent().find('.quantity-item');
                 qnttRemove.text(parseInt(qnttRemove.text())+1);
                 //TODO: update session
-
+                let price=parseFloat($('#total-price-cart-item').text().substring(0, $('#total-price-cart-item').text().length-2));
+                $('#total-price-cart-item').text((price+data.price).toFixed(2)+" €");
             }, error : function (data) {
                 console.log("Impossible d'accéder à l'article voulu");
             }
@@ -276,15 +285,10 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                //TODO: update session
-                //alert(data.responseJSON.messageSuccess);
-                alert(data);
-                console.log("OK");
+                //console.log(data.responseJSON);
                 window.location.reload(true);
             }, error : function (data) {
-                console.log(data.responseJSON.messageError)
-                alert(data.responseJSON.messageError);
-                console.log("ERROR");
+                console.log(data.responseJSON.messageError);
             }
         });
     });
@@ -301,6 +305,6 @@ $(document).ready(function() {
                 alert('Impossible de vous déconnecter.');
             }
         });
-    })
+    });
 
 });

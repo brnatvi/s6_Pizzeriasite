@@ -84,11 +84,20 @@ exports.index = function (req, rep) {
 
     if(req.session.user!==undefined){
         //TODO: request all info articles cart item -> array item: id, description, price unity...
+        let resRequestBdd=[{
+            id: 1,
+            name: 'Pizza Raclette',
+            ingredients: 'sauce tomate . fromage à raclette ' +
+                '. champignons . 8 olives noires . ' +
+                '2 tranches de jambon',
+            price: 5.96
+        }];
         rep.render('../views/index',{
                 params: {
                     title: 'index',
                     quantity: req.session.user.cartItem.idQuantity,
-                    price: req.session.user.cartItem.price
+                    price: req.session.user.cartItem.price,
+                    list: resRequestBdd
                 }
         });
     }else{
@@ -150,6 +159,7 @@ exports.signIn = function (req, rep) {
     })
 }
 
+//TODO: check regex
 exports.addRegisteredClient = function (req, rep) {
     Client.getNbrClientByEmail(req, rep).then(res=>{
         if (parseInt(res.rows[0].count)===0){
@@ -159,7 +169,7 @@ exports.addRegisteredClient = function (req, rep) {
                 rep.status(409).send({messageError : 'Votre prénom doit contenir uniquement des caractères alphanumérique.'});
             }else if(! /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.email)){
                 rep.status(409).send({messageError : 'Votre email est invalide.'});
-            }else if(req.body.pw.length>8){
+            }else if(req.body.pw.length>8){//TODO: <
                 rep.status(409).send({messageError : 'Votre mot de passe doit contenir au moins 8 caractères.'});
             }else{
                 bcrypt.genSalt(10, function (err, salt) {
