@@ -1,4 +1,5 @@
 const db = require('./db');
+const jwt = require("jsonwebtoken");
 
     //TODO remove RETURNING* (not all !!!!) and res.json at the end of debugging
 class Client {
@@ -29,8 +30,21 @@ class Client {
     }
 
     async getClientByEmail (req, res){
-        const email = req.body.email;
-        return await db.query("SELECT email, pw FROM security_client WHERE email = $1;", [email]);
+        const emailreq = req.body.email;
+        console.log("-------------->"+emailreq)
+        let respsec= await db.query("SELECT id_client, pw FROM security_client WHERE email = $1;", [emailreq]);
+        console.log(respsec.rows[0].id_client);
+        let respnrm= await db.query("SELECT nom, prenom, adr_client, mobile FROM client WHERE id_client = $1;", [respsec.rows[0].id_client]);
+        let response={
+            nom: respnrm.rows[0].nom,
+            prenom: respnrm.rows[0].prenom,
+            address: respnrm.rows[0].adr_client,
+            mobile: respnrm.rows[0].mobile,
+            email: emailreq,
+            pw: respsec.rows[0].pw
+        }
+        console.log(response)
+        return response;
     }
 
     async getListClients (req, res){

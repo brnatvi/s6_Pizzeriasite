@@ -33,6 +33,21 @@ body {
 }
 
 /*nav*/
+#style-logo{
+    margin: 0px;
+    height: 70px;
+}
+
+.rmv-style-btn{
+    padding: 1px 6px;
+    margin: 25px 10px;
+}
+
+.rmw-style-a:hover, .rmw-style-a{
+    color: #1C1C1E;
+    text-decoration: inherit;
+}
+
 .rmv-style-btn{
     border: none;
     height: 25px;
@@ -119,6 +134,10 @@ body {
     }
     .rmv-style-btn{
         color: #F7F2F2;
+    }
+    .rmw-style-a:hover{
+        color: #F7F2F2;
+        text-decoration: inherit;
     }
     #blur-nav{
         background-color: rgba(28, 28, 30, 0.85);

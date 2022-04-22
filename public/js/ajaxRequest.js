@@ -244,6 +244,7 @@ $(document).ready(function() {
                 address : $("#userAdress").val(),
                 mobile : $("#userPhone").val(),
                 email : $("#userEmail").val(),
+                isDeliveryMan : $("#is-delivery-man").is(":checked"),
                 pw : $("#userPassword").val()
             }
         console.log(action);
@@ -253,13 +254,13 @@ $(document).ready(function() {
         $.ajax({
             url: action,
             type: method,
-            data: data,
+            data: data,//for boolean
             success: function(data) {
                 //TODO: update session
                 //alert(data.responseJSON.messageSuccess);
                 alert(data);
                 console.log("OK");
-                window.location.reload(true);
+                //window.location.reload(true);
             }, error : function (data) {
                 console.log(data.responseJSON.messageError)
                 alert(data.responseJSON.messageError);
@@ -274,7 +275,8 @@ $(document).ready(function() {
             method = form.attr('method'),
             data = {
                 email : $("#userEmailSignIn").val(),
-                pw : $("#userPasswordSignIn").val()
+                pw : $("#userPasswordSignIn").val(),
+                isDeliveryMan : $("#is-delivery-man-login").is(":checked")
             }
         console.log(action);
         console.log(method);
@@ -283,7 +285,7 @@ $(document).ready(function() {
         $.ajax({
             url: action,
             type: method,
-            data: data,
+            data: data,//for boolean
             success: function(data) {
                 //console.log(data.responseJSON);
                 window.location.reload(true);
