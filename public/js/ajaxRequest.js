@@ -14,9 +14,6 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                //TODO: add session
-                //TODO: update graphic
-                console.log(data);
                 $("#modal-info-item-title").text(data.name);
 
                 $("#modal-body-item").empty();
@@ -37,21 +34,7 @@ $(document).ready(function() {
                     .appendTo('#modal-body-item');
 
                 $('.input-hide-add-cart').val(data.id);
-
-                //bdd pizza return info:
-                //if not pizza ingredient = null
-                /*{
-                    name
-                    ingredient
-                    price
-                }*/
-                //updateCardUser()
-                //check if pizza is present add quantity - else:
-                //create cart item -> div = element with id=x and class
-                //  add title, content pizza
-                //  price for each unity, not update if article add
-                //  quantity
-            }, error : function (data) {
+            }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }
         });
@@ -61,9 +44,6 @@ $(document).ready(function() {
      * Ajouter un article au panier.
      **/
     $(document).on('click', '.add-cart-item', function(e) {
-        /*
-        console.log($(this).parent(".form-add-dart-item").find('.input-hide-add-cart').val());*/
-        /**/
         const form = $(this).parent(".form-add-dart-item");
         let action = form.attr('action'),
             method = form.attr('method'),
@@ -74,20 +54,14 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                //TODO: add session
-                console.log(data);
                 let isPresent=false;
                 $("#list-cart-item").children().each(function(){
-                    console.log(parseInt($(this).attr('id'))+' + '+data.id);
                     if (parseInt($(this).attr('id'))===data.id){
                         let quantity=$(this).find(".quantity-item");
                         quantity.text(parseInt(quantity.text())+1);
-                        console.log(quantity.text());
                         isPresent=true;
-                        //TODO: update session
                     }
                 });
-                console.log("OKAYY");
                 if (!isPresent){
 
                     $('<div>').attr('id', data.id)
@@ -160,12 +134,12 @@ $(document).ready(function() {
 
                 }
                 //update total
-
-                let price=parseFloat($('#total-price-cart-item').text().substring(0, $('#total-price-cart-item').text().length-2));
-                $('#total-price-cart-item').text((price+data.price).toFixed(2)+" €");
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                totalpriceitem.text((price+data.price).toFixed(2)+" €");
                 //then hide modal
                 $('#modal-info-item').modal('hide');
-            }, error : function (data) {
+            }, error : function () {
                 console.log("Impossible d'ajouter l'article voulu");
             }
         });
@@ -185,20 +159,17 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                console.log(data);
-
                 let qnttRemove=form.parent().find('.quantity-item');
                 if (parseInt(qnttRemove.text())-1<=0){
                     form.parent().parent().parent().remove();
                 }else{
                     qnttRemove.text(parseInt(qnttRemove.text())-1);
                 }
-                //TODO: update session
-
                 //update total
-                let price=parseFloat($('#total-price-cart-item').text().substring(0, $('#total-price-cart-item').text().length-2));
-                $('#total-price-cart-item').text((price-data.price).toFixed(2)+" €");
-            }, error : function (data) {
+                let totalpricecartitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpricecartitem.text().substring(0, totalpricecartitem.text().length-2));
+                totalpricecartitem.text((price-data.price).toFixed(2)+" €");
+            }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }
         });
@@ -218,21 +189,19 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                console.log(data);
-
                 let qnttRemove=form.parent().find('.quantity-item');
                 qnttRemove.text(parseInt(qnttRemove.text())+1);
-                //TODO: update session
-                let price=parseFloat($('#total-price-cart-item').text().substring(0, $('#total-price-cart-item').text().length-2));
-                $('#total-price-cart-item').text((price+data.price).toFixed(2)+" €");
-            }, error : function (data) {
+                let totalpriceitemcart=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitemcart.text().substring(0, totalpriceitemcart.text().length-2));
+                totalpriceitemcart.text((price+data.price).toFixed(2)+" €");
+            }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }
         });
     });
 
     /**
-     *
+     * Enregistrement d'un nouvel utilisateur
      */
     $(document).on('click', '.signup-user', function(e) {
         const form = $(this).parent().parent();
@@ -247,28 +216,22 @@ $(document).ready(function() {
                 isDeliveryMan : $("#is-delivery-man").is(":checked"),
                 pw : $("#userPassword").val()
             }
-        console.log(action);
-        console.log(method);
-        console.log(data);
         e.preventDefault();
         $.ajax({
             url: action,
             type: method,
-            data: data,//for boolean
-            success: function(data) {
-                //TODO: update session
-                //alert(data.responseJSON.messageSuccess);
-                alert(data);
-                console.log("OK");
-                //window.location.reload(true);
+            data: data,
+            success: function() {
+                window.location.reload(true);
             }, error : function (data) {
-                console.log(data.responseJSON.messageError)
-                alert(data.responseJSON.messageError);
-                console.log("ERROR");
+                console.log(data.responseJSON.messageError);
             }
         });
     });
 
+    /**
+     * Connexion d'un utilisateur
+     */
     $(document).on('click', '.signin-user', function(e) {
         const form = $(this).parent().parent();
         let action = form.attr('action'),
@@ -278,23 +241,22 @@ $(document).ready(function() {
                 pw : $("#userPasswordSignIn").val(),
                 isDeliveryMan : $("#is-delivery-man-login").is(":checked")
             }
-        console.log(action);
-        console.log(method);
-        console.log(data);
         e.preventDefault();
         $.ajax({
             url: action,
             type: method,
-            data: data,//for boolean
-            success: function(data) {
-                //console.log(data.responseJSON);
+            data: data,
+            success: function() {
                 window.location.reload(true);
             }, error : function (data) {
                 console.log(data.responseJSON.messageError);
             }
         });
     });
-    
+
+    /**
+     * Déconnexion d'un utilisateur
+     */
     $(document).on('click', '#logoutSession', function (e) {
         e.preventDefault();
         $.ajax({
@@ -302,7 +264,6 @@ $(document).ready(function() {
             type: "GET",
             success: () => {
                 window.location.replace(window.location.origin);
-                alert('Vous avez bien été déconnecté.');
             }, error : function () {
                 alert('Impossible de vous déconnecter.');
             }
