@@ -1,29 +1,32 @@
 const db = require('./db');
 
 class Commande {
+    
+    async addPlatToCommande (id_contenu, id_plat, quantite){  
+        const rez = await db.query("INSERT INTO contenu_commande (id_contenu, id_plat, quantite) VALUES ($1, $2, $3) RETURNING *;", [id_contenu, id_plat, quantite]);   
+        res.json(rez.rows[0]);
+    };
+
+    async deletePlatFromCommande (id_contenu, id_plat){ 
+        const plat = await db.query("DELETE FROM contenu_commande WHERE id_contenu = $1 AND id_plat = $2;", [id_contenu, id_plat]);       
+        res.json(plat.rows);
+    };
 
     async createCommande (req, res){
-        const {nom, prenom, address} = req.body;
-        const newPerson = await db.query("INSERT INTO client (nom, prenom, adr_client) VALUES ($1, $2, $3) RETURNING *;", [nom, prenom, address]);        
-        res.json(newPerson.rows);
+        const now = new Date();       
+        const {client, contenu} = req.body;        
+        const prix = await db.query(
+    "SELECT sum(plats.prix * contenu_commande.quantite) FROM contenu_commande INNER JOIN plats ON (contenu_commande.id_plat = plats.id_plat) WHERE id_contenu = $1;", [contenu]);        
+        const newCommande = await db.query(
+    "INSERT INTO commande (date_commande, id_client, id_contenu, prix_commande) VALUES ($1, $2, $3, $4) RETURNING *;", [now, client, contenu, prix]);        
+        res.json(newCommande.rows[0]);
     };
 
-    async getCommande (req, res){        
-        const person = await db.query("SELECT nom, prenom, adr_client FROM client WHERE id_client = $1;", [id]);
-        res.json(person.rows);
+    async getOldestCommande (req, res){        
+        const oldest = await db.query(
+    "SELECT commande.id_commande, client.nom, client.adr_client, client.mobile, commande.prix_commande, livraison.prix_livraison FROM client INNER JOIN (commande INNER JOIN livraison ON commande.id_commande = livraison.id_commande) ON commande.id_client = client.id_client WHERE (livraison.effectue = FALSE) AND date_commande = (SELECT min(date_commande) FROM commande);");
+        res.json(oldest.rows[0]);
     };
-
-    async update (req, res){
-        const {id, nom, prenom, address} = req.body;
-        const updated = await db.query("UPDATE client SET nom = $2, prenom = $3, adr_client = $4 WHERE id_client = $1 RETURNING *;", [id, nom, prenom, address]);
-        res.json(updated.rows);
-    };
-
-    async deleteUser (req, res){
-        const id = req.params.id;
-        await db.query("DELETE FROM client WHERE id_client = $1;", [id]);
-    };
-   
 }
 
 module.exports = new Commande();

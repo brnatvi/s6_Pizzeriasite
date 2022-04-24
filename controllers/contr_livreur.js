@@ -4,23 +4,29 @@ const Commande = require("../model/commande.js");
 //----------- fonctionnality available to Livreur --------------------
 
 exports.registrLivreur = function (req, rep) {
-    const r = Livreur.registrLivreur();
-    //console.log(r);
-    //return(r);
-    rep.json(r);
+    Livreur.addLivreur(req, rep);
+};
+
+exports.updateLivreur = function (req, rep) {
+    if (req.body.nom) {
+        Livreur.updateNom(req, rep);
+    };
+    if (req.body.prenom) {
+        Livreur.updatePrenom(req, rep);
+    };
+    if (req.body.email) {
+        Livreur.updateMail(req, rep);
+    };
+    if (req.body.pw) {
+        Livreur.updatePassword(req, rep);
+    };
 };
 
 exports.connectLivreur = function (req, rep) {    
-    const r2 = Livreur.connectLivreur();
-    rep.json(r2 + " " + req.body.nom + " " + req.body.prenom);
+    Commande.getOldestCommande(req, rep);
 };
 
-exports.showCommande = function (req, rep) {
-    const c = Commande.showCommande();
-    rep.send(c);
-};
 
 exports.updateCommande = function (req, rep) {
-    const r2 = Livreur.updateCommandeHistory();
-    rep.send("In Livreur: " + r2);
+    
 };
