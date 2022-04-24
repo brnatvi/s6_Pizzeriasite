@@ -1,0 +1,36 @@
+body{
+    padding-top: 70px;
+}
+#bg-home{
+    height: calc(100vh - 70px);
+    width: 100vw;
+    background-image: linear-gradient(to top, black -2000px, transparent ), url('../img/pizza-bg-home.jpg');
+    background-position: right;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+#presentation{
+    height: 120px;
+    bottom: 0;
+    width: 100vw;
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 0;
+}
+#presentation div{
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+#presentation div img, #presentation div p{
+    margin-left: auto;
+    margin-right: auto;
+    color: #FFFFFF;
+}
+#presentation div p{
+    text-align: center;
+}
+#bg-home h1{
+    color: #FFFFFF;
+}

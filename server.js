@@ -1,5 +1,6 @@
 //Dependencies files required
 const express=require('express');
+const session = require('express-session');
 const app = express();
 
 //TODO: remove npm bootstrap and nodemon
@@ -32,7 +33,18 @@ app.use(express.urlencoded({extended: true}));
 //Trust first proxy
 app.set('trust proxy',1)
 
-//TODO: set express session
+//session parameter
+app.use(session({
+    secret: "VERYSECRETTOKENSESSION",
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        httpOnly: true,
+        secure: false,//true: fonctionne uniquement avec htpps
+        maxAge: 60 * 60 * 1000
+    }
+}))
 
 //Set the routes
 app.use('/', router);

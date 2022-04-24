@@ -33,6 +33,21 @@ body {
 }
 
 /*nav*/
+#style-logo{
+    margin: 0px;
+    height: 70px;
+}
+
+.rmv-style-btn{
+    padding: 1px 6px;
+    margin: 25px 10px;
+}
+
+.rmw-style-a:hover, .rmw-style-a{
+    color: #1C1C1E;
+    text-decoration: inherit;
+}
+
 .rmv-style-btn{
     border: none;
     height: 25px;
@@ -84,6 +99,20 @@ body {
     z-index: 100;
 }
 
+#modal-body-item{
+    min-height: 150px;
+    display: flex;
+}
+
+.modal-footer{
+    margin-top: 50px;
+}
+
+#modal-body-signin-user div, #modal-body-signup-user div, .modal-footer button {
+    max-width: 600px;
+    margin: auto;
+}
+
 /*responsive*/
 @media only screen and (max-width: 576px) {
     #menu-bar-left img{
@@ -105,6 +134,10 @@ body {
     }
     .rmv-style-btn{
         color: #F7F2F2;
+    }
+    .rmw-style-a:hover{
+        color: #F7F2F2;
+        text-decoration: inherit;
     }
     #blur-nav{
         background-color: rgba(28, 28, 30, 0.85);

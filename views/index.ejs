@@ -4,27 +4,27 @@
     <div id="container-navigation-bar" class="col-3">
         <div class="nav flex-row flex-lg-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <a class="nav-link d-flex" id="v-pills-salades-tab" data-toggle="pill" href="#v-pills-salades" role="tab" aria-controls="v-pills-home" aria-selected="true">
-                <img src="img/salades.png" height="35px" width="35px">
+                <img src="img/salades.png" height="35px" width="35px" alt="salades">
                 <p class="color-text">Nos salades</p>
             </a>
             <a class="nav-link d-flex" id="v-pills-boissons-tab" data-toggle="pill" href="#v-pills-boissons" role="tab" aria-controls="v-pills-profile" aria-selected="false">
-                <img src="img/boissons.png" height="35px" width="35px">
+                <img src="img/boissons.png" height="35px" width="35px" alt="boissons">
                 <p class="color-text">Nos boissons</p>
             </a>
             <a class="nav-link d-flex" id="v-pills-desserts-tab" data-toggle="pill" href="#v-pills-desserts" role="tab" aria-controls="v-pills-messages" aria-selected="false">
-                <img src="img/desserts.png" height="35px" width="35px">
+                <img src="img/desserts.png" height="35px" width="35px" alt="desserts">
                 <p class="color-text">Nos desserts</p>
             </a>
             <a class="nav-link d-flex" id="v-pills-menus-tab" data-toggle="pill" href="#v-pills-menus" role="tab" aria-controls="v-pills-settings" aria-selected="false">
-                <img src="img/menus.png" height="35px" width="35px">
+                <img src="img/menus.png" height="35px" width="35px" alt="menus">
                 <p class="color-text">Nos menus</p>
             </a>
             <a class="nav-link d-flex active" id="v-pills-pizzas-tab" data-toggle="pill" href="#v-pills-pizzas" role="tab" aria-controls="v-pills-settings" aria-selected="false">
-                <img src="img/pizzas.png" height="35px" width="35px">
+                <img src="img/pizzas.png" height="35px" width="35px" alt="pizzas">
                 <p class="color-text">Nos pizzas</p>
             </a>
             <a class="nav-link d-flex" id="v-pills-recommandations-tab" data-toggle="pill" href="#v-pills-recommandations" role="tab" aria-controls="v-pills-settings" aria-selected="false">
-                <img src="img/recommandations.png" height="35px" width="35px">
+                <img src="img/recommandations.png" height="35px" width="35px" alt="recommandations">
                 <p class="color-text">Recommandations</p>
             </a>
         </div>
@@ -60,10 +60,13 @@
                 <h1>Nos pizzas</h1>
                 <div class="row" id="all-pizzas">
                     <% for(let i=0; i<10; i++){ %>
-                        <div class="m-auto container-item-desc" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter"><!--TODO: onclick send request get sauce etc... -->
-                            <img class="item-description" src="img/pizza2.png">
+                        <div class="m-auto container-item-desc" type="button" data-toggle="modal" data-target="#modal-info-item">
+                            <img class="item-description" src="img/pizza2.png" alt="pizza">
                             <p class="name-pizza">Pizza Raclette</p>
                             <p class="price-pizza">5.54€</p>
+                            <form method="post" action="more-ifo-item">
+                                <input type="hidden" name="idPizza" value="<%-i%>">
+                            </form>
                         </div>
                     <% } %>
                 </div>
@@ -85,45 +88,54 @@
                 </div>
                 <div class="price">
                     <p>Total (TTC)</p>
-                    <p>11.08 &#8364;</p>
+                    <p id="total-price-cart-item"><%- (locals.params.price===undefined)?"0":locals.params.price.toFixed(2); %> &#8364;</p>
                 </div>
                 <button type="button" class="btn btn-primary">Valider mon panier</button>
             </div>
             <div id="header-border"></div>
-            <div>
-                <% for (var i = 0; i < 3; i++) {%>
-                    <div class="element">
-                        <p>Lorem Ipsum</p>
-                        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+            <div id="list-cart-item">
+                <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ %>
+                    <div id="<%- article.id %>" class="element">
+                        <p><%- article.name %></p>
+                        <p><%- article.ingredients %></p>
                         <div class="element-menu">
-                            <div>
-                                <img class="remove-img" src="img/remove_circle_outline.svg">
-                                <p>2</p>
-                                <img class="add-img" src="img/add_circle_outline.svg">
+                            <div class="menu-quantity">
+                                <form method="post" action="remove-cart-item">
+                                    <input type="hidden" value="<%- article.id %>">
+                                    <input type="image" class="remove-img" src="img/remove_circle_outline.svg" alt="Submit">
+                                </form>
+                                <p class="quantity-item"><%- (locals.params.quantity[article.id+""]!==undefined)?locals.params.quantity[article.id+""]:"0"; %></p>
+                                <form method="post" action="add-cart-item">
+                                    <input type="hidden" value="<%- article.id %>">
+                                    <input type="image" class="add-img" src="img/add_circle_outline.svg" alt="Submit">
+                                </form>
                             </div>
-                            <p>11.08 &#8364;</p>
+                            <p class="price-item"><%- article.price %> &#8364;</p>
                         </div>
                     </div>
-                <%}%>
+                <% })} %>
             </div>
         </div>
     </div>
 </div>
 <!--TODO: change the location of the modal-->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modal-info-item" tabindex="-1" role="dialog" aria-labelledby="modal-info-item-title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content secondary">
             <div class="modal-header">
-                <h5 class="modal-title text-center m-auto" id="exampleModalCenterTitle">Modal title</h5>
+                <h5 class="modal-title text-center m-auto" id="modal-info-item-title">Modal title</h5>
             </div>
-            <div class="modal-body">
-                ...
+            <div id="modal-body-item">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Valider mes choix</button>
+                <form class="form-add-dart-item" method="post" action="add-new-cart-item">
+                    <input type="hidden" class="input-hide-add-cart" value="">
+                    <button type="submit" class="btn btn-primary add-cart-item">Ajouter au panier</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/ajaxRequest.js"></script>
 <%- include('footer'); %>
