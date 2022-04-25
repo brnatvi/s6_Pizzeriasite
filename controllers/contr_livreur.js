@@ -3,24 +3,38 @@ const Commande = require("../model/commande.js");
 
 //----------- fonctionnality available to Livreur --------------------
 
+
 exports.registrLivreur = function (req, rep) {
-    const r = Livreur.registrLivreur();
-    //console.log(r);
-    //return(r);
-    rep.json(r);
+    Livreur.addLivreur(req, rep);
 };
 
-exports.connectLivreur = function (req, rep) {    
-    const r2 = Livreur.connectLivreur();
-    rep.json(r2 + " " + req.body.nom + " " + req.body.prenom);
+
+exports.connectLivreur = function (req, rep) { 
+    
+    // make connection (TODO need to add the security stuffs)
+
+    // get the oldest commande   
+    Commande.getOldestCommande(req, rep);       // it works, tested
 };
 
-exports.showCommande = function (req, rep) {
-    const c = Commande.showCommande();
-    rep.send(c);
-};
 
 exports.updateCommande = function (req, rep) {
-    const r2 = Livreur.updateCommandeHistory();
-    rep.send("In Livreur: " + r2);
+    
 };
+
+
+exports.updateLivreur = function (req, rep) {
+    if (req.body.nom) {
+        Livreur.updateNom(req, rep);
+    };
+    if (req.body.prenom) {
+        Livreur.updatePrenom(req, rep);
+    };
+    if (req.body.email) {
+        Livreur.updateMail(req, rep);
+    };
+    if (req.body.pw) {
+        Livreur.updatePassword(req, rep);
+    };
+};
+

@@ -1,5 +1,5 @@
 const Client = require("../model/client.js");
-const livreur = require("../model/livreur.js");
+const Livreur = require("../model/livreur.js");
 const Commande = require("../model/commande.js");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -7,6 +7,12 @@ const {log} = require("util");
 
 
 //----------- fonctionnality available to Client/User --------------------
+
+// create new commande
+exports.createCommande = function (req, rep) {
+    Commande.createCommande(req, rep);
+};
+
 
 exports.GetLogOut = async (req, rep) =>{
     if (req.session.user!==undefined){
@@ -31,6 +37,7 @@ exports.infoCartItem = function (req, rep) {
 
     rep.json(resRequestBdd);
 }
+
 
 exports.addCartItem = function (req, rep) {
     // TODO: request bdd
@@ -151,14 +158,14 @@ exports.deleteClient = function (req, rep) {
 };
 
 //---------------------- Registered client ----------------------------------------------
-
+/* connecttion for registered client */
 exports.signIn = function (req, rep) {
     let isDeliveryM=req.body.isDeliveryMan==="true";
     console.log(isDeliveryM+" isDeliveryM");
     console.log(isDeliveryM);
     console.log(isDeliveryM+" isDeliveryM");
     if (isDeliveryM){
-        livreur.getDeliveryManByEmail(req, rep).then(user => {
+        Livreur.getLivreurByEmail(req, rep).then(user => {
             if (user === null){
                 rep.status(401).send({messageError : "L'email ou le mot de passe est incorrecte."})
             }else{
@@ -209,12 +216,12 @@ exports.addRegisteredClient = function (req, rep) {
         rep.status(409).send({messageError : 'Votre mot de passe doit contenir au moins 8 caractères.'});
     }else{
         if (isDeliveryM){
-            livreur.getNbrDeliveryManByMail(req, rep).then(res=>{
+            Livreur.getNbrLivreurByMail(req, rep).then(res=>{
                 if (parseInt(res.rows[0].count)===0){
                     bcrypt.genSalt(10, function (err, salt) {
                         bcrypt.hash(req.body.pw, salt, function (err, hash) {
                             req.body.pw=hash;
-                            livreur.addRegisteredDeliveryMan(req, rep).then(() => {
+                            Livreur.addLivreur(req, rep).then(() => {
                                 createSession(req, isDeliveryM);
                                 rep.status(200).send({messageSuccess : 'Votre compte à bien été créé.'});
                             }).catch(()=>{
@@ -302,20 +309,20 @@ function createSession(req, isDeliveryMan, logIn){
 exports.updateRegisteredClient = function (req, rep) {
     if (req.body.nom) {
         Client.updateNom(req, rep);
-    }
-    else if (req.body.prenom) {
+    };
+    if (req.body.prenom) {
         Client.updatePrenom(req, rep);
-    }
-    else if (req.body.email) {
+    };
+    if (req.body.email) {
         Client.updateMail(req, rep);
-    }
-    else if (req.body.pw) {
+    };
+    if (req.body.pw) {
         Client.updatePassword(req, rep);
-    }
-    else if (req.body.mobile) {
+    };
+    if (req.body.mobile) {
         Client.updateMobile(req, rep);
-    }
-    else if (req.body.address) {
+    };
+    if (req.body.address) {
         Client.updateAddress(req, rep);
     };
 };
