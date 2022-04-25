@@ -21,6 +21,8 @@ router.get("/carte", controller_Client.showCarte);
 
 //------------- Client ---------------------
 router.post("/addClient", controller_Client.addClient);
+router.post("/addCommande", controller_Client.createCommande);
+
 router.get("/client/:id", controller_Client.getClient);
 router.get("/clients", controller_Client.getListClients);
 router.put("/update", controller_Client.updateRegisteredClient);

@@ -5,21 +5,24 @@ CREATE DATABASE pizzeria;
 
 DROP TABLE IF EXISTS security_client cascade;
 DROP TABLE IF EXISTS security_livreur cascade;
-DROP TABLE IF EXISTS livraison cascade;
 DROP TABLE IF EXISTS contenu_commande cascade;
 DROP TABLE IF EXISTS commande cascade;
 DROP TABLE IF EXISTS client cascade;
 DROP TABLE IF EXISTS livreur cascade; 
 DROP TABLE IF EXISTS plats cascade;
 
+SET lc_monetary TO "en_IE.utf8";
+
+CREATE TYPE eTypePlat AS ENUM ('salade', 'boisson', 'dessert', 'pizza');
+
 CREATE TABLE plats (
     id_plat SERIAL PRIMARY KEY,
+    type_plat eTypePlat,
     nom VARCHAR(255) NOT NULL UNIQUE,
     descript TEXT,
     link_picture TEXT,    
-    prix MONEY
-);
-
+    prix MONEY    
+);            
 
 CREATE TABLE client (
     id_client SERIAL PRIMARY KEY,
@@ -35,34 +38,23 @@ CREATE TABLE livreur (
     prenom VARCHAR(255) NOT NULL    
 );
 
+CREATE TYPE eStatusCommande AS ENUM ('undelivered', 'inprogress', 'delivered');
 
 CREATE TABLE commande (
     id_commande SERIAL PRIMARY KEY,
-    date_commande DATE NOT NULL,
-    id_client INT,
-    id_contenu INT UNIQUE,
-    prix_commande MONEY NOT NULL,
+    date_commande TIMESTAMP  NOT NULL,
+    id_client INT,   
+    status_commande eStatusCommande DEFAULT 'undelivered',  
+    sum_total MONEY,
     FOREIGN KEY (id_client) REFERENCES client (id_client)
 );
 
 CREATE TABLE contenu_commande (
-    id_contenu INT,
+    id_commande INT,
     id_plat INT ,
     quantite INT,
     FOREIGN KEY (id_plat) REFERENCES plats (id_plat), 
-    FOREIGN KEY (id_contenu) REFERENCES commande (id_contenu)
-);
-
-
-CREATE TABLE livraison (
-    id_livraison SERIAL PRIMARY KEY,
-    date_livraison DATE NOT NULL,
-    id_commande INT,
-    id_livr INT,
-    prix_livraison MONEY DEFAULT 0,
-    effectue BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (id_commande) REFERENCES commande(id_commande),
-    FOREIGN KEY (id_livr) REFERENCES livreur(id_livr)
+    FOREIGN KEY (id_commande) REFERENCES commande (id_commande)
 );
 
 CREATE TABLE security_client (
@@ -82,4 +74,4 @@ CREATE TABLE security_livreur (
 );
 
 
-\COPY plats(id_plat, nom, descript, link_picture, prix) FROM 'public/csv/plats.csv' (DELIMITER ',', FORMAT CSV, NULL '', ENCODING 'UTF8');;
+\COPY plats(id_plat, type_plat, nom, descript, link_picture, prix) FROM 'model/plats.csv' (DELIMITER ',', FORMAT CSV, NULL '', ENCODING 'UTF8');

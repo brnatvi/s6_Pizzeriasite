@@ -1,31 +1,43 @@
 const db = require('./db');
 
 class Commande {
-    
-    async addPlatToCommande (id_contenu, id_plat, quantite){  
-        const rez = await db.query("INSERT INTO contenu_commande (id_contenu, id_plat, quantite) VALUES ($1, $2, $3) RETURNING *;", [id_contenu, id_plat, quantite]);   
-        res.json(rez.rows[0]);
-    };
 
-    async deletePlatFromCommande (id_contenu, id_plat){ 
-        const plat = await db.query("DELETE FROM contenu_commande WHERE id_contenu = $1 AND id_plat = $2;", [id_contenu, id_plat]);       
-        res.json(plat.rows);
-    };
-
+    // create new commande and contenu_commande in BD
     async createCommande (req, res){
-        const now = new Date();       
-        const {client, contenu} = req.body;        
-        const prix = await db.query(
-    "SELECT sum(plats.prix * contenu_commande.quantite) FROM contenu_commande INNER JOIN plats ON (contenu_commande.id_plat = plats.id_plat) WHERE id_contenu = $1;", [contenu]);        
-        const newCommande = await db.query(
-    "INSERT INTO commande (date_commande, id_client, id_contenu, prix_commande) VALUES ($1, $2, $3, $4) RETURNING *;", [now, client, contenu, prix]);        
-        res.json(newCommande.rows[0]);
+
+        const {client, panier} = req.body;
+        // 1. create new commande -> 
+        const id_comm = await db.query("INSERT INTO commande (date_commande, id_client) VALUES (CURRENT_TIMESTAMP, $1) RETURNING id_commande;", [client]); 
+        res.json(id_comm.rows[0]);
+
+        // 2. fill contenu_commande with id_comm     TODO need to add panier fields (id_plat, quantite) for each item of panier
+       /* const id_contenu = await db.query("INSERT INTO contenu_commande (id_commande, id_plat, quantite) VALUES ($1, $2, $3) RETURNING id_contenu;", [id_comm]);
+
+        // 3. calculate total sum of commande        
+        const total = await db.query(
+    "SELECT sum(plats.prix * contenu_commande.quantite) FROM contenu_commande INNER JOIN plats ON (contenu_commande.id_plat = plats.id_plat) WHERE id_contenu = $1;", [id_contenu]);  
+        
+        // 4. insert total in table commande
+        await db.query("INSERT INTO commande (sum_total) VALUES ($1) WHERE id_commande = $2;", [total, id_comm]); */        
     };
 
-    async getOldestCommande (req, res){        
+    // get oldest commande from all undelivered
+    async getOldestCommande (req, res){         
         const oldest = await db.query(
-    "SELECT commande.id_commande, client.nom, client.adr_client, client.mobile, commande.prix_commande, livraison.prix_livraison FROM client INNER JOIN (commande INNER JOIN livraison ON commande.id_commande = livraison.id_commande) ON commande.id_client = client.id_client WHERE (livraison.effectue = FALSE) AND date_commande = (SELECT min(date_commande) FROM commande);");
-        res.json(oldest.rows[0]);
+    "SELECT id_commande, nom, adr_client, mobile FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE date_commande = (SELECT min(date_commande) FROM commande WHERE (commande.status_commande = 'undelivered'));");
+        res.json(oldest.rows);
+    };
+
+    // change status of commande to 'delivered'
+    async updateStatusDelivered (req, res){  
+        const {id_commande} = req.body;       
+        await db.query("UPDATE commande SET status_commande = 'delivered' WHERE id_commande = $1;", [id_commande]);        
+    };
+      
+    // change status of commande to 'inprogress'
+    async updateStatusInprogress (req, res){  
+        const {id_commande} = req.body;       
+        await db.query("UPDATE commande SET status_commande = 'inprogress' WHERE id_commande = $1;", [id_commande]);        
     };
 }
 

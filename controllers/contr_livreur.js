@@ -3,9 +3,25 @@ const Commande = require("../model/commande.js");
 
 //----------- fonctionnality available to Livreur --------------------
 
+
 exports.registrLivreur = function (req, rep) {
     Livreur.addLivreur(req, rep);
 };
+
+
+exports.connectLivreur = function (req, rep) { 
+    
+    // make connection (TODO need to add the security stuffs)
+
+    // get the oldest commande   
+    Commande.getOldestCommande(req, rep);       // it works, tested
+};
+
+
+exports.updateCommande = function (req, rep) {
+    
+};
+
 
 exports.updateLivreur = function (req, rep) {
     if (req.body.nom) {
@@ -22,11 +38,3 @@ exports.updateLivreur = function (req, rep) {
     };
 };
 
-exports.connectLivreur = function (req, rep) {    
-    Commande.getOldestCommande(req, rep);
-};
-
-
-exports.updateCommande = function (req, rep) {
-    
-};
