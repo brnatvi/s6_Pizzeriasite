@@ -31,7 +31,8 @@ router.delete("/client/:id", controller_Client.deleteClient);
 //system connexion user
 router.post("/signup", controller_Client.addRegisteredClient);
 router.post("/signin", controller_Client.signIn);//TODO: regex
-router.get('/logout', checkAuth, controller_Client.GetLogOut);
+router.get('/logout', checkAuth, controller_Client.GetLogOut);//TODO: add root
+router.get(':path/logout', checkAuth, controller_Client.GetLogOut);//TODO: add root
 
 //ajax request - cart item
 router.post("/more-ifo-item", justClient, controller_Client.infoCartItem);
@@ -42,8 +43,8 @@ router.post("/add-cart-item", justClient, controller_Client.addCartItem);
 
 //------------- Livreur ---------------------
 // 1 login/register pour livreur
-router.post("/livraison", controller_Livreur.registrLivreur);//TODO: move function client -> delivery man
-
+router.post("/livraisonsignin", controller_Livreur.registrLivreur);
+router.post("/livraisonsignup", controller_Livreur.cntRegistrLivreur);//TODO: move function client -> delivery man
 router.get("/livraison", controller_Livreur.connectLivreur);//TODO: "" ""
 
 // 2 afficher commande disponible

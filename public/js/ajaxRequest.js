@@ -230,6 +230,32 @@ $(document).ready(function() {
     });
 
     /**
+     * Enregistrement d'un nouveau livreur
+     */
+    $(document).on('click', '.signup-livraison', function(e) {
+        const form = $(this).parent().parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = {
+                nom : $("#livraisonFirstName").val(),
+                prenom : $("#livraisonLastName").val(),
+                email : $("#livraisonEmail").val(),
+                pw : $("#livraisonPassword").val()
+            }
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                window.location.reload(true);
+            }, error : function (data) {
+                console.log(data.responseJSON.messageError);
+            }
+        });
+    });
+
+    /**
      * Connexion d'un utilisateur
      */
     $(document).on('click', '.signin-user', function(e) {
@@ -248,6 +274,31 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
+            }, error : function (data) {
+                console.log(data.responseJSON.messageError);
+            }
+        });
+    });
+
+    /**
+     * Connexion d'un livreur
+     */
+    $(document).on('click', '.signin-livraison', function(e) {
+        const form = $(this).parent().parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = {
+                email : $("#livraisonEmailSignIn").val(),
+                pw : $("#livraisonPasswordSignIn").val()
+            }
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                window.location.reload(true);
+                window.location.replace(window.location.origin+"/commande");
             }, error : function (data) {
                 console.log(data.responseJSON.messageError);
             }

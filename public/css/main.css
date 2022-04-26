@@ -113,6 +113,10 @@ body {
     margin: auto;
 }
 
+#signup-modal-content{
+    display: none;
+}
+
 /*responsive*/
 @media only screen and (max-width: 576px) {
     #menu-bar-left img{

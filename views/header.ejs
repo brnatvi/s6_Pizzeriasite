@@ -34,7 +34,7 @@
                 <% } %>
                 <% if (!locals.params.isLogued){ %>
                 <button id="connection-user-signin" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
-                <button id="connection-user-signup" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signup">S'enregistrer</button>
+                <a class="rmv-style-btn rmw-style-a" href="/livraison">Livreur?</a>
                 <% }else{ %>
                 <button class="rmv-style-btn" id="logoutSession">Se déconnecter</button>
                 <button class="rmv-style-btn" id="settingSession" type="button" data-toggle="modal" data-target="#modal-setting-session">Paramètre</button>
@@ -42,10 +42,34 @@
             </div>
         </div>
     </nav>
-    <!-- Sign-Up -->
-    <div class="modal fade" id="modal-connexion-signup" tabindex="-1" role="dialog" aria-labelledby="modal-connexion-signup-user" aria-hidden="true">
+    <!-- Log-In -->
+    <div class="modal fade" id="modal-connexion-signin" tabindex="-1" role="dialog" aria-labelledby="modal-connexion-signin-user" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content secondary">
+
+            <div id="signin-modal-content" class="modal-content secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center m-auto" id="modal-connexion-signin-user">Sign-In</h5>
+                </div>
+                <form class="form-add-dart-item" method="post" action="signin">
+                    <div id="modal-body-signin-user">
+                        <div>
+                            <label for="userEmailSignIn">Email:</label><br>
+                            <input class="form-control" type="email" id="userEmailSignIn" name="userEmailSignIn">
+                        </div>
+
+                        <div>
+                            <label for="userPasswordSignIn">Mot de passe:</label><br>
+                            <input class="form-control" type="password" id="userPasswordSignIn" name="userPasswordSignIn">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary signin-user">Se Connecter</button>
+                    </div>
+                </form>
+                <a id="switch-signin-modal-content">Se connecter</a>
+            </div>
+
+            <div id="signup-modal-content" class="modal-content secondary">
                 <div class="modal-header">
                     <h5 class="modal-title text-center m-auto" id="modal-connexion-signup-user">Sign-Up</h5>
                 </div>
@@ -81,48 +105,18 @@
                             <input class="form-control" type="password" id="userPassword" name="userPassword" minlength="8">
                             <input type="checkbox" id="signup-show-password">Afficher le mot de passe
                         </div>
-                        <div>
-                            <input type="checkbox" id="is-delivery-man">Créer un compte en tant que livreur
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary signup-user">S'enregistrer</button>
                     </div>
                 </form>
+                <a id="switch-signup-modal-content">S'enregistrer</a>
             </div>
-        </div>
-    </div>
-    <!-- Log-In -->
-    <div class="modal fade" id="modal-connexion-signin" tabindex="-1" role="dialog" aria-labelledby="modal-connexion-signin-user" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content secondary">
-                <div class="modal-header">
-                    <h5 class="modal-title text-center m-auto" id="modal-connexion-signin-user">Sign-In</h5>
-                </div>
-                <form class="form-add-dart-item" method="post" action="signin">
-                    <div id="modal-body-signin-user">
-                        <div>
-                            <label for="userEmailSignIn">Email:</label><br>
-                            <input class="form-control" type="email" id="userEmailSignIn" name="userEmailSignIn">
-                        </div>
 
-                        <div>
-                            <label for="userPasswordSignIn">Mot de passe:</label><br>
-                            <input class="form-control" type="password" id="userPasswordSignIn" name="userPasswordSignIn">
-                        </div>
-                        <div>
-                            <input type="checkbox" id="is-delivery-man-login">Se connecter en tant que livreur
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary signin-user">Se Connecter</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
     <!-- TODO: set + session -->
-    <div class="modal fade" id="modal-setting-session" tabindex="-1" role="dialog" aria-labelledby="modal-setting-session-user" aria-hidden="true">
+    <!--<div class="modal fade" id="modal-setting-session" tabindex="-1" role="dialog" aria-labelledby="modal-setting-session-user" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content secondary">
                 <div class="modal-header">
@@ -146,4 +140,4 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div>-->

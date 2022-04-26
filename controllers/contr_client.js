@@ -160,52 +160,25 @@ exports.deleteClient = function (req, rep) {
 //---------------------- Registered client ----------------------------------------------
 /* connecttion for registered client */
 exports.signIn = function (req, rep) {
-    let isDeliveryM=req.body.isDeliveryMan==="true";
-    console.log(isDeliveryM+" isDeliveryM");
-    console.log(isDeliveryM);
-    console.log(isDeliveryM+" isDeliveryM");
-    if (isDeliveryM){
-        Livreur.getLivreurByEmail(req, rep).then(user => {
-            if (user === null){
-                rep.status(401).send({messageError : "L'email ou le mot de passe est incorrecte."})
-            }else{
-                bcrypt.compare(req.body.pw ,user.rows[0].pw).then(valid =>{
-                    if (valid){
-                        createSession(req, isDeliveryM, user.rows[0]);
-                        rep.status(200).send({messageSuccess : 'Vous êtes bien connecté.'})
-                    }else {
-                        rep.status(401).send({messageError : "L'email ou le mot de passe est incorrecte."})
-                    }
-                })
-            }
-        }).catch(() => {
-            rep.status(500).send({messageError : 'Email or password is incorrect.'})
-        })
-    }else{
-        console.log("----------------");
-        console.log("----------------");
-        console.log("----------------");
-        Client.getClientByEmail(req, rep).then(user => {
-            if (user === null){
-                rep.status(401).send({messageError : "L'email ou le mot de passe est incorrecte."})
-            }else{
-                bcrypt.compare(req.body.pw ,user.pw).then(valid =>{
-                    if (valid){
-                        createSession(req, isDeliveryM, user);//ici
-                        rep.status(200).send({messageSuccess : 'Vous êtes bien connecté.'})
-                    }else {
-                        rep.status(401).send({messageError : "L'email ou le mot de passe est incorrecte."})
-                    }
-                })
-            }
-        }).catch(() => {
-            rep.status(500).send({messageError : "L'email ou le mot de passe est incorrecte."})
-        })
-    }
+    Client.getClientByEmail(req, rep).then(user => {
+        if (user === null){
+            rep.status(401).send({messageError : "L'email ou le mot de passe est incorrecte."})
+        }else{
+            bcrypt.compare(req.body.pw ,user.pw).then(valid =>{
+                if (valid){
+                    createSession(req, user);//ici
+                    rep.status(200).send({messageSuccess : 'Vous êtes bien connecté.'})
+                }else {
+                    rep.status(401).send({messageError : "L'email ou le mot de passe est incorrecte."})
+                }
+            })
+        }
+    }).catch(() => {
+        rep.status(500).send({messageError : "L'email ou le mot de passe est incorrecte."})
+    })
 }
 
 exports.addRegisteredClient = function (req, rep) {
-    let isDeliveryM=req.body.isDeliveryMan==="true";
     if(! /^[a-zA-Z\-]+$/.test(req.body.nom)){
         rep.status(409).send({messageError : 'Votre nom doit contenir uniquement des caractères alphanumérique.'});
     }else if(! /^[a-zA-Z\-]+$/.test(req.body.prenom)){
@@ -215,94 +188,46 @@ exports.addRegisteredClient = function (req, rep) {
     }else if(req.body.pw.length<8){
         rep.status(409).send({messageError : 'Votre mot de passe doit contenir au moins 8 caractères.'});
     }else{
-        if (isDeliveryM){
-            Livreur.getNbrLivreurByMail(req, rep).then(res=>{
-                if (parseInt(res.rows[0].count)===0){
-                    bcrypt.genSalt(10, function (err, salt) {
-                        bcrypt.hash(req.body.pw, salt, function (err, hash) {
-                            req.body.pw=hash;
-                            Livreur.addLivreur(req, rep).then(() => {
-                                createSession(req, isDeliveryM);
-                                rep.status(200).send({messageSuccess : 'Votre compte à bien été créé.'});
-                            }).catch(()=>{
-                                rep.status(409).send({messageError : 'Impossible de créer votre compte.'});
-                            });
+        Client.getNbrClientByEmail(req, rep).then(res=>{
+            if (parseInt(res.rows[0].count)===0){
+                bcrypt.genSalt(10, function (err, salt) {
+                    bcrypt.hash(req.body.pw, salt, function (err, hash) {
+                        req.body.pw=hash;
+                        Client.addRegisteredClient(req, rep).then(() => {
+                            createSession(req);
+                            rep.status(200).send({messageSuccess : 'Votre compte à bien été créé.'});
+                        }).catch(()=>{
+                            rep.status(409).send({messageError : 'Impossible de créer votre compte.'});
                         });
                     });
-                }else{
-                    rep.status(409).send({messageError : "Cette adresse électronique est déjà utilisé."});
-                }
-            }).catch(() => {rep.status(409).send({messageError : "Veillez saisir correctement vos informations."})});
-        }else{
-            Client.getNbrClientByEmail(req, rep).then(res=>{
-                if (parseInt(res.rows[0].count)===0){
-                    bcrypt.genSalt(10, function (err, salt) {
-                        bcrypt.hash(req.body.pw, salt, function (err, hash) {
-                            req.body.pw=hash;
-                            Client.addRegisteredClient(req, rep).then(() => {
-                                createSession(req, isDeliveryM);
-                                rep.status(200).send({messageSuccess : 'Votre compte à bien été créé.'});
-                            }).catch(()=>{
-                                rep.status(409).send({messageError : 'Impossible de créer votre compte.'});
-                            });
-                        });
-                    });
-                }else{
-                    rep.status(409).send({messageError : "Cette adresse électronique est déjà utilisé."});
-                }
-            }).catch(() => {rep.status(409).send({messageError : "Veillez saisir correctement vos informations."})});
-        }
+                });
+            }else{
+                rep.status(409).send({messageError : "Cette adresse électronique est déjà utilisé."});
+            }
+        }).catch(() => {rep.status(409).send({messageError : "Veillez saisir correctement vos informations."})});
     }
 };
 
-function createSession(req, isDeliveryMan, logIn){
+function createSession(req, logIn){
     let user=req.body;
-    if (isDeliveryMan){
-        if (logIn!==undefined){
-            user=logIn;
-        }
-        req.session.user={
-            nom: user.nom,
-            prenom: user.prenom,
-            email: user.email,
-            tokenAuth: "Bearer "+jwt.sign(
-                { email: user.email },
-                "VERYSECRETTOKENSESSION",
-                { expiresIn: '24h' }
-            )
-        }
-    }else{
-        if (logIn!==undefined){
-            user=logIn;
-        }
-        console.log(logIn)
-        console.log(user)
-        console.log("----------------");
-        console.log("----------------");
-        console.log("----------------");
-        console.log(user.address);
-        console.log(user.mobile);
-        console.log("----------------");
-        console.log("----------------");
-        console.log("----------------");
-        req.session.user={
-            nom: user.nom,
-            prenom: user.prenom,
-            address: user.address,
-            mobile: user.mobile,
-            email: user.email,
-            cartItem: {
-                price: 0,
-                idQuantity: {/*id: quantity*/
+    if (logIn!==undefined) user=logIn;
+    req.session.user={
+        nom: user.nom,
+        prenom: user.prenom,
+        address: user.address,
+        mobile: user.mobile,
+        email: user.email,
+        cartItem: {
+            price: 0,
+            idQuantity: {/*id: quantity*/
 
-                }
-            },
-            tokenAuth: "Bearer "+jwt.sign(
-                { email: user.email },
-                "VERYSECRETTOKENSESSION",
-                { expiresIn: '24h' }
-            )
-        }
+            }
+        },
+        tokenAuth: "Bearer "+jwt.sign(
+            { email: user.email },
+            "VERYSECRETTOKENSESSION",
+            { expiresIn: '24h' }
+        )
     }
 }
 
