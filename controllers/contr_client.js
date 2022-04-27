@@ -9,66 +9,97 @@ const {log} = require("util");
 //----------- fonctionnality available to Client/User --------------------
 
 exports.parameters = function (req, rep) {
-    Client.getClientByEmail(req).then(user => {
-        if (user === null){
-            rep.status(401).send({messageError : "Le client n'existe pas."});
-        }else{
-            let flag=false;
-            bcrypt.compare(req.body.userPasswordSetCurrent ,user.rows[0].pw).then(valid =>{
-                if (valid){
-                    if(req.body.userEmailSet && /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.userEmailSet)){
-                        let user_info ={id:user.rows[0].id_client, email: req.body.userEmailSet}
-                        Client.updateMail(user_info).then(()=>{
-                            req.session.user.email=user_info.email
-                            req.session.save( function(err) {})
-                        }).catch(()=>{
-                            rep.status(401).send({messageError : "L'email n'a pas été mis à jour."});
-                            flag=true;
-                        });
-                        alert(flag);
-                    }
-                    if(req.body.userPasswordSet && req.body.userPasswordSet.length>=8){
-                        bcrypt.genSalt(10, function (err, salt) {
-                            bcrypt.hash(req.body.userPasswordSet, salt, function (err, hash) {
-                                let user_info ={id:user.rows[0].id_client, pw: hash}
-                                Client.updatePassword(user_info).catch(()=>{
-                                    rep.status(401).send({messageError : "Le mot de passe n'a pas été mis à jour."});
-                                    flag=true;
-                                });
-                            });
-                        });
-                    }
-                    if (req.body.userAdressSet){
-                        let user_info ={id:user.rows[0].id_client, address: req.body.userAdressSet}
-                        Client.updateAddress(user_info).then(()=>{
-                            req.session.user.address=user_info.address
-                            req.session.save( function(err) {})
-                        }).catch(()=>{
-                            rep.status(401).send({messageError : "L'adresse n'a pas été mise à jour."});
-                            flag=true;
-                        });
-                    }
-                    if (req.body.userPhoneSet){
-                        let user_info ={id:user.rows[0].id_client, mobile: req.body.userPhoneSet}
-                        Client.updateMobile(user_info).then(()=>{
-                            req.session.user.mobile=user_info.mobile
-                            req.session.save( function(err) {})
-                        }).catch(()=>{
-                            rep.status(401).send({messageError : "Le numéro de téléphone n'a pas été mis à jour."});
-                            flag=true;
-                        });
-                    }
-                    if (!flag) rep.status(200).send({messageSuccess : 'Les informations ont bien été misent à jour.'});
-                }else rep.status(401).send({messageError : "Le mot de passe courant est incorrecte."});
+
+    let user_req=Client.getClientByEmail(req.session.user.email).then(response => {
+        if (response === undefined) throw "L'email ou le mot de passe est incorrecte.";
+        else return response;
+    })
+
+    user_req.then(async user => {
+        const isValidPass = await comparePassword(req.body.userPasswordSetCurrent ,user.pw);
+        if (isValidPass) return user;
+        else throw "Le mot de passe courant est incorrecte.";
+    }).then(user=>{
+        console.log("aaaaaaaaaaaaaaaaa")
+        try{
+            console.log("aaaaaaaaaaaaaaaaa")
+            if(req.body.userEmailSet && /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.userEmailSet)){
+                let user_info ={id:user.id, email: req.body.userEmailSet}
+                console.log("aaaaaaaaaaaaaaaaa"+JSON.stringify(user_info))
+                Client.getNbrClientByEmail(user_info.email).then(user_nbr => {
+                    if (user_nbr !== undefined && user_nbr.rows[0].count==="0"){
+                        try{
+                            console.log("aaaaaaaaaaaaaaaaa")
+                            Client.updateMail(user_info).then(()=>{
+                                req.session.user.email=user_info.email
+                                req.session.save( function(err) {})
+                            })
+                        }catch(error){
+                            console.log(error)
+                        }
+                    }else throw "L'email est déjà utilisé.";
+                }).catch(()=>{
+                    rep.status(401).send({messageError : "Impossible de mettre à jour l'email."});
+                })
+            }
+        }catch (error) {
+            console.log(error)
+        }
+
+        if (req.body.userPasswordSet && req.body.userPasswordSet.length >= 8) {
+            user_req.then(async user => {
+                const hash = await hashPassword(req.body.userPasswordSet);
+                console.log("ps_res-----ps_res------->"+JSON.stringify(hash));
+                if (hash) return {hashU: hash, userU: user};
+                else throw "Impossible de créer votre compte.";
+            }).then(response=>{
+                console.log("ps_res-----ps_res------->"+JSON.stringify(response));
+                let ps_res={id:response.userU.id ,pw:response.hashU};
+                console.log("ps_res-----ps_res------->"+JSON.stringify(ps_res));
+                Client.updatePassword(ps_res).catch(()=>{
+                    rep.status(500).send({messageError : "Impossible de mettre à jour le mot de passe."});
+                })
             })
         }
-    }).catch(() => {rep.status(500).send({messageError : 'Impossible de mettre à jour les informations.'});});
+
+        if (req.body.userAdressSet) {
+            user_req.then(user=>{
+                let ps_res = {id: user.id, address: req.body.userAdressSet};
+                Client.updateAddress(ps_res).then(() => {
+                    req.session.user.address = ps_res.address
+                    req.session.save(function (err) {
+                    })
+                }).catch(() => {
+                    rep.status(500).send({messageError: "Impossible de mettre à jour l'adresse."});
+                })
+            })
+        }
+
+        if (req.body.userPhoneSet){
+            user_req.then(user=>{
+                let ps_res={id:user.id ,mobile:req.body.userPhoneSet};
+                Client.updateMobile(ps_res).then(()=>{
+                    req.session.user.mobile=ps_res.mobile
+                    req.session.save( function(err) {})
+                }).catch(()=>{
+                    rep.status(500).send({messageError : "Impossible de mettre à jour le numéro de téléphone."});
+                })
+            })
+        }
+
+        rep.status(200).send({messageSuccess: 'Vos informations ont bien été misent à jour.'});
+
+    }).catch(err => {
+        if (!(typeof err === 'string' || err instanceof String)) err="Veillez saisir correctement vos informations.";
+        rep.status(500).send({messageError : err});
+    });
+
 }
 
 // create new commande
-exports.createCommande = function (req, rep) {
+/*exports.createCommande = function (req, rep) {
     Commande.createCommande(req, rep);
-};
+};*/
 
 
 exports.GetLogOut = async (req, rep) =>{
@@ -188,52 +219,69 @@ exports.shop = function (req, rep) {
     }
 };
 
-exports.showCarte = function (req, rep) {
+/*exports.showCarte = function (req, rep) {
     rep.send('HOME: main menu page');
-};
+};*/
 
 //---------------------- Basic client --------------------------------------------------
 
-/* add new client to database */
+/*/!* add new client to database *!/
 exports.addClient = function (req, rep) {
     Client.addClient(req, rep);
 };
 
-/* get list of clients */
+/!* get list of clients *!/
 exports.getClient = function (req, rep) {
     Client.getClientByID(req, rep);
 };
 
-/* get list of clients */
+/!* get list of clients *!/
 exports.getListClients = function (req, rep) {
     Client.getListClients(req, rep);
 };
 
-/* remouve client from list */
+/!* remouve client from list *!/
 exports.deleteClient = function (req, rep) {
     Client.deleteClient(req, rep);
-};
+};*/
 
 //---------------------- Registered client ----------------------------------------------
 /* connecttion for registered client */
 exports.signIn = function (req, rep) {
-    Client.getClientByEmail(req, rep).then(user => {
-        if (user === null){
-            rep.status(401).send({messageError : "L'email ou le mot de passe est incorrecte."})
-        }else{
-            bcrypt.compare(req.body.pw ,user.pw).then(valid =>{
-                if (valid){
-                    createSession(req, user);//ici
-                    rep.status(200).send({messageSuccess : 'Vous êtes bien connecté.'})
-                }else {
-                    rep.status(401).send({messageError : "L'email ou le mot de passe est incorrecte."})
-                }
-            })
-        }
-    }).catch(() => {
-        rep.status(500).send({messageError : "L'email ou le mot de passe est incorrecte."})
-    })
+    Client.getClientByEmail(req.body.email).then(response => {
+        if (response === undefined) throw "L'email ou le mot de passe est incorrecte.";
+        else return response;
+    }).then(async user => {
+        const isValidPass = await comparePassword(req.body.pw ,user.pw);
+        if (isValidPass) return user;
+        else throw "L'email ou le mot de passe est incorrecte.";
+    }).then(user =>{
+        createSession(req, user);
+        rep.status(200).send({messageSuccess : 'Vous êtes bien connecté.'});
+    }).catch(err => {
+        if (!(typeof err === 'string' || err instanceof String)) err='Email or password is incorrect.';
+        rep.status(500).send({messageError : err});
+    });
 }
+
+const comparePassword = async (password, hash) => {
+    try {
+        return await bcrypt.compare(password, hash);
+    } catch (error) {
+        console.log(error);
+    }
+    return false;
+};
+
+const hashPassword = async (password, saltRounds = 10) => {
+    try {
+        const salt = await bcrypt.genSalt(saltRounds);
+        return await bcrypt.hash(password, salt);
+    } catch (error) {
+        console.log(error);
+    }
+    return null;
+};
 
 exports.addRegisteredClient = function (req, rep) {
     if(! /^[a-zA-Z\-]+$/.test(req.body.nom)){
@@ -245,23 +293,28 @@ exports.addRegisteredClient = function (req, rep) {
     }else if(req.body.pw.length<8){
         rep.status(409).send({messageError : 'Votre mot de passe doit contenir au moins 8 caractères.'});
     }else{
-        Client.getNbrClientByEmail(req, rep).then(res=>{
-            if (parseInt(res.rows[0].count)===0){
-                bcrypt.genSalt(10, function (err, salt) {
-                    bcrypt.hash(req.body.pw, salt, function (err, hash) {
-                        req.body.pw=hash;
-                        Client.addRegisteredClient(req, rep).then(() => {
-                            createSession(req);
-                            rep.status(200).send({messageSuccess : 'Votre compte à bien été créé.'});
-                        }).catch(()=>{
-                            rep.status(409).send({messageError : 'Impossible de créer votre compte.'});
-                        });
-                    });
-                });
-            }else{
-                rep.status(409).send({messageError : "Cette adresse électronique est déjà utilisé."});
+        Client.getNbrClientByEmail(req.body.email).then(res => {
+            if (parseInt(res.rows[0].count) === 0) return res;
+            else throw "Cette adresse électronique est déjà utilisé.";
+        }).then(async () => {
+            const hash = await hashPassword(req.body.pw);
+            if (hash) return hash;
+            else throw "Impossible de créer votre compte.";
+        }).then(hash=>{
+            req.body.pw = hash;
+            try{
+                Client.addRegisteredClient(req, rep).then(() => {
+                    createSession(req);
+                    console.log(JSON.stringify(req.session.user));
+                    rep.status(200).send({messageSuccess: 'Votre compte à bien été créé.'});
+                })
+            }catch (error) {
+                console.log(error)
             }
-        }).catch(() => {rep.status(409).send({messageError : "Veillez saisir correctement vos informations."})});
+        }).catch(err => {
+            if (!(typeof err === 'string' || err instanceof String)) err="Veillez saisir correctement vos informations.";
+            rep.status(500).send({messageError : err});
+        });
     }
 };
 
@@ -288,7 +341,7 @@ function createSession(req, logIn){
     }
 }
 
-exports.updateRegisteredClient = function (req, rep) {
+/*exports.updateRegisteredClient = function (req, rep) {
     if (req.body.nom) {
         Client.updateNom(req, rep);
     };
@@ -307,7 +360,7 @@ exports.updateRegisteredClient = function (req, rep) {
     if (req.body.address) {
         Client.updateAddress(req, rep);
     };
-};
+};*/
 
 exports.deleteRegisteredClient = function (req, rep) {
     Client.deleteRegisteredClient(req, rep);

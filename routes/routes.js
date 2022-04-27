@@ -15,7 +15,7 @@ const router = express.Router();
 // 1 logo -> home page
 router.get("/", controller_Client.index);
 router.get("/shop", justClient, controller_Client.shop);
-// 2 lien vers la carte
+/*// 2 lien vers la carte
 router.get("/carte", controller_Client.showCarte);
 
 
@@ -26,7 +26,7 @@ router.post("/addCommande", controller_Client.createCommande);
 router.get("/client/:id", controller_Client.getClient);
 router.get("/clients", controller_Client.getListClients);
 router.put("/update", controller_Client.updateRegisteredClient);
-router.delete("/client/:id", controller_Client.deleteClient);
+router.delete("/client/:id", controller_Client.deleteClient);*/
 
 //system connexion user
 router.post("/signup", controller_Client.addRegisteredClient);

@@ -49,15 +49,15 @@ exports.parameters = function (req, rep) {
         }else throw "Le mot de passe est trop court.";
     }).then(response=>{
         let ps_res={id:response.userU.id ,pw:response.hashU};
-        Livreur.updatePassword(ps_res).then(() => {
-            rep.status(200).send({messageSuccess: 'Votre mot de passe à bien été mis à jour.'});
-        }).catch(()=>{
+        Livreur.updatePassword(ps_res).catch(()=>{
             rep.status(500).send({messageError : "Impossible de mettre à jour le mot de passe."});
         })
     }).catch(err => {
         if (!(typeof err === 'string' || err instanceof String)) err="Veillez saisir correctement vos informations.";
         rep.status(500).send({messageError : err});
     });
+
+    rep.status(200).send({messageSuccess: 'Vos informations ont bien été misent à jour.'});
 }
 
 const comparePassword = async (password, hash) => {

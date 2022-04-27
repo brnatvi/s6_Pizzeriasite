@@ -23,16 +23,17 @@ class Client {
         res.json(person.rows[0]);
     };*/
 
-    async getNbrClientByEmail (req, res){
-        const email = req.body.email;
+    async getNbrClientByEmail (req){
+        const email = req;
         return await db.query("SELECT COUNT(*) FROM security_client WHERE email = $1;", [email]);
     }
 
     async getClientByEmail (req, res){
-        const emailreq = req.body.email;
+        const emailreq = req;
         let respsec= await db.query("SELECT id_client, pw FROM security_client WHERE email = $1;", [emailreq]);
+        if (respsec.rows[0]===undefined) return undefined;
         let respnrm= await db.query("SELECT nom, prenom, adr_client, mobile FROM client WHERE id_client = $1;", [respsec.rows[0].id_client]);
-        return {nom: respnrm.rows[0].nom, prenom: respnrm.rows[0].prenom, address: respnrm.rows[0].adr_client, mobile: respnrm.rows[0].mobile, email: emailreq, pw: respsec.rows[0].pw};
+        return {id: respsec.rows[0].id_client, nom: respnrm.rows[0].nom, prenom: respnrm.rows[0].prenom, address: respnrm.rows[0].adr_client, mobile: respnrm.rows[0].mobile, email: emailreq, pw: respsec.rows[0].pw};
     }
 
     /*async getListClients (req, res){
