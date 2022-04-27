@@ -23,12 +23,12 @@ class Client {
         res.json(person.rows[0]);
     };*/
 
-    async getNbrClientByEmail (req){
+    async getNbrUserByEmail (req){
         const email = req;
         return await db.query("SELECT COUNT(*) FROM security_client WHERE email = $1;", [email]);
     }
 
-    async getClientByEmail (req, res){
+    async getUserByEmail (req, res){
         const emailreq = req;
         let respsec= await db.query("SELECT id_client, pw FROM security_client WHERE email = $1;", [emailreq]);
         if (respsec.rows[0]===undefined) return undefined;
@@ -43,7 +43,7 @@ class Client {
 
     //-------------- Registred client -----------------------------------------    
     
-    async addRegisteredClient (req, res){
+    async addUser (req, res){
         const {nom, prenom, address, mobile, email, pw} = req.body;
         const newId = await db.query("INSERT INTO client (nom, prenom, adr_client, mobile) VALUES ($1, $2, $3, $4) RETURNING id_client;", [nom, prenom, address, mobile]);
         const id = newId.rows[0].id_client;       

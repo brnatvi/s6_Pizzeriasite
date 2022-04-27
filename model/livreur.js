@@ -4,15 +4,16 @@ class Livreur {
 
     //TODO remove RETURNING* (not all !!!!) and res.json at the end of debugging
 
-    async addLivreur(req) {
+    async addUser(req) {
         const { nom, prenom, email, pw } = req.body;
         const newId = await db.query("INSERT INTO livreur (nom, prenom) VALUES ($1, $2) RETURNING id_livr;", [nom, prenom]);
         const id = newId.rows[0].id_livr;
         await db.query("INSERT INTO security_livreur (id_livr, email, pw, resetToken) VALUES ($1, $2, $3, $4) RETURNING *;", [id, email, pw, ""]);
     }
 
-    async getNbrLivreurByMail(req) {
-        return await db.query("SELECT COUNT(*) FROM security_livreur WHERE email = $1;", [req]);
+    async getNbrUserByEmail(req) {
+        const email = req;
+        return await db.query("SELECT COUNT(*) FROM security_livreur WHERE email = $1;", [email]);
     }
 
     /*async getNbrLivreurByEmail (req){
@@ -34,7 +35,7 @@ class Livreur {
         return await db.query("SELECT email, pw FROM security_livreur WHERE email = $1;", [email]);
     }*/
 
-    async getLivreurByEmail(req) {
+    async getUserByEmail(req) {
         const emailreq = req;
         let respsec= await db.query("SELECT id_livr, pw FROM security_livreur WHERE email = $1;", [emailreq]);
         if (respsec.rows[0]===undefined)return undefined;

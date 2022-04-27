@@ -29,11 +29,11 @@ router.put("/update", controller_Client.updateRegisteredClient);
 router.delete("/client/:id", controller_Client.deleteClient);*/
 
 //system connexion user
-router.post("/signup", controller_Client.addRegisteredClient);
-router.post("/signin", controller_Client.signIn);//TODO: regex
-router.get('/logout', checkAuth, controller_Client.GetLogOut);//TODO: add root
-router.post("/parameters-client", checkAuth, justClient, controller_Client.parameters);
-router.post("/parameters-delivery-man", checkAuth, justDeliveryMan, controller_Livreur.parameters);
+router.post("/signup", controller_Client.signUpClient);
+router.post("/signin", controller_Client.signInClient);//TODO: regex
+router.get('/logout', checkAuth, controller_Client.logOutUser);//TODO: add root
+router.post("/parameters-client", checkAuth, justClient, controller_Client.updateProfileClient);
+router.post("/parameters-delivery-man", checkAuth, justDeliveryMan, controller_Livreur.updateProfileLivreur);
 
 
 //ajax request - cart item
@@ -45,9 +45,9 @@ router.post("/add-cart-item", justClient, controller_Client.addCartItem);
 
 //------------- Livreur ---------------------
 // 1 login/register pour livreur
-router.post("/livraisonsignin", controller_Livreur.registrLivreur);
-router.post("/livraisonsignup", controller_Livreur.cntRegistrLivreur);//TODO: move function client -> delivery man
-router.get("/livraison", controller_Livreur.connectLivreur);//TODO: "" ""
+router.post("/livraisonsignin", controller_Livreur.signInLivreur);
+router.post("/livraisonsignup", controller_Livreur.signUpLivreur);//TODO: move function client -> delivery man
+router.get("/livraison", controller_Livreur.livraisonLivreur);//TODO: "" ""
 
 // 2 afficher commande disponible
 router.get("/commande", checkAuth, justDeliveryMan, stuffControllers.GetCommande);
