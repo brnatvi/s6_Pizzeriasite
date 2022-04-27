@@ -1,6 +1,12 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+/*regex const*/
+const regex={
+    email:/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    nom_prenom: /^[a-zA-Z\-]+$/
+};
+
 class Connect {
 
     disconnectUser(session, res) {
@@ -28,11 +34,11 @@ class Connect {
     }
 
     signUp(User, req, res) {
-        if(! /^[a-zA-Z\-]+$/.test(req.body.nom)){
+        if(! regex.nom_prenom.test(req.body.nom)){
             res.status(409).send({messageError : 'Votre nom doit contenir uniquement des caractères alphanumérique.'});
-        }else if(! /^[a-zA-Z\-]+$/.test(req.body.prenom)){
+        }else if(! regex.nom_prenom.test(req.body.prenom)){
             res.status(409).send({messageError : 'Votre prénom doit contenir uniquement des caractères alphanumérique.'});
-        }else if(! /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.email)){
+        }else if(! regex.email.test(req.body.email)){
             res.status(409).send({messageError : 'Votre email est invalide.'});
         }else if(req.body.pw.length<8){
             res.status(409).send({messageError : 'Votre mot de passe doit contenir au moins 8 caractères.'});
@@ -67,14 +73,13 @@ class Connect {
             if (response === undefined) throw "L'email ou le mot de passe est incorrecte.";
             else return response;
         })
-
         user_req.then(async user => {
             const isValidPass = await Connect.comparePassword(req.body.userPasswordSetCurrent ,user.pw);
             if (isValidPass) return user;
             else throw "Le mot de passe courant est incorrecte.";
         }).then(user=>{
             try{
-                if(req.body.userEmailSet && /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.userEmailSet)){
+                if(req.body.userEmailSet && regex.email.test(req.body.userEmailSet)){
                     let user_info ={id:user.id, email: req.body.userEmailSet}
                     User.getNbrUserByEmail(user_info.email).then(user_nbr => {
                         if (user_nbr !== undefined && user_nbr.rows[0].count==="0"){
@@ -91,9 +96,7 @@ class Connect {
                         res.status(401).send({messageError : "Impossible de mettre à jour l'email."});
                     })
                 }
-            }catch (error) {
-                console.log(error)
-            }
+            }catch (error) {console.log(error)}
 
             if (req.body.userPasswordSet && req.body.userPasswordSet.length >= 8) {
                 user_req.then(async user => {
@@ -107,7 +110,6 @@ class Connect {
                     })
                 })
             }
-
             if (User.constructor.name==="Livreur"){
                 if (req.body.userAdressSet) {
                     user_req.then(user=>{
@@ -121,7 +123,6 @@ class Connect {
                         })
                     })
                 }
-
                 if (req.body.userPhoneSet){
                     user_req.then(user=>{
                         let ps_res={id:user.id ,mobile:req.body.userPhoneSet};
@@ -134,14 +135,12 @@ class Connect {
                     })
                 }
             }
-
-
             res.status(200).send({messageSuccess: 'Vos informations ont bien été misent à jour.'});
-
         }).catch(err => {
             if (!(typeof err === 'string' || err instanceof String)) err="Veillez saisir correctement vos informations.";
             res.status(500).send({messageError : err});
         });
+
     }
 
     static async comparePassword(password, hash){

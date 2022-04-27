@@ -12,22 +12,22 @@
     min-height: 100vh;
 }
 
-#all-pizzas div{
+#all-pizzas div, #all-salades div, #all-boissons div, #all-desserts div {
     padding: 12px;
 }
 
-#all-pizzas div img{
+#all-pizzas div img, #all-salades div img, #all-boissons div img, #all-desserts div img {
     object-fit: cover;
     border-radius: 12px;
 }
 
-.name-pizza{
+.name-pizza, .name-salade, .name-boisson, .name-dessert {
     font-weight: bold;
     margin-top: 8px;
     margin-bottom: 0;
 }
 
-.price-pizza{
+.price-pizza, .price-salade, .price-boisson, .price-dessert{
     opacity: 0.5;
     margin-bottom: 8px;
 }
@@ -126,7 +126,7 @@ button{
 }
 
 /*animation*/
-.name-pizza, .price-pizza{
+.name-pizza, .name-salade, .name-boisson, .name-dessert , .price-pizza, .price-salade, .price-boisson, .price-dessert{
     transition: all .5s;
 }
 
@@ -145,7 +145,13 @@ button{
 }
 
 .container-item-desc:hover .name-pizza,
-.container-item-desc:hover .price-pizza{
+.container-item-desc:hover .price-pizza,
+.container-item-desc:hover .name-salade,
+.container-item-desc:hover .price-salade,
+.container-item-desc:hover .name-boisson,
+.container-item-desc:hover .price-boisson,
+.container-item-desc:hover .name-dessert,
+.container-item-desc:hover .price-dessert{
     transition: all .5s;
     cursor: pointer;
     transform: scale(1.05);

@@ -1,10 +1,8 @@
 
 const express = require("express");
-const MFProtection = require('../middlewares/protection');
 const stuffControllers = require('../controllers/stuffControllers');
 const controller_Client = require("../controllers/contr_client.js");
 const controller_Livreur = require("../controllers/contr_livreur.js");
-const debugSession = require("../middlewares/debugSession.js");
 const checkAuth = require("../middlewares/checkAuth.js");
 const justClient = require("../middlewares/justClient.js");
 const justDeliveryMan = require("../middlewares/justDeliveryMan.js");
@@ -30,8 +28,8 @@ router.delete("/client/:id", controller_Client.deleteClient);*/
 
 //system connexion user
 router.post("/signup", controller_Client.signUpClient);
-router.post("/signin", controller_Client.signInClient);//TODO: regex
-router.get('/logout', checkAuth, controller_Client.logOutUser);//TODO: add root
+router.post("/signin", controller_Client.signInClient);
+router.get('/logout', checkAuth, controller_Client.logOutUser);
 router.post("/parameters-client", checkAuth, justClient, controller_Client.updateProfileClient);
 router.post("/parameters-delivery-man", checkAuth, justDeliveryMan, controller_Livreur.updateProfileLivreur);
 
@@ -46,8 +44,8 @@ router.post("/add-cart-item", justClient, controller_Client.addCartItem);
 //------------- Livreur ---------------------
 // 1 login/register pour livreur
 router.post("/livraisonsignin", controller_Livreur.signInLivreur);
-router.post("/livraisonsignup", controller_Livreur.signUpLivreur);//TODO: move function client -> delivery man
-router.get("/livraison", controller_Livreur.livraisonLivreur);//TODO: "" ""
+router.post("/livraisonsignup", controller_Livreur.signUpLivreur);
+router.get("/livraison", controller_Livreur.livraisonLivreur);
 
 // 2 afficher commande disponible
 router.get("/commande", checkAuth, justDeliveryMan, stuffControllers.GetCommande);
@@ -55,7 +53,6 @@ router.get("/commande", checkAuth, justDeliveryMan, stuffControllers.GetCommande
 // 3 changer le status de commande
 router.post("/commande/:id/update", controller_Livreur.updateCommande);//TODO: check dispo
 
-router.get('*', MFProtection, stuffControllers.GetError);
-//console.log(process);
+router.get('*', stuffControllers.GetError);
 
 module.exports = router;

@@ -92,6 +92,7 @@ $(document).ready(function() {
 
                     $('<input>', {
                         type: 'hidden',
+                        name: 'idArticle',
                         value: data.id,
                     }).appendTo(formRemove);
 
@@ -117,6 +118,7 @@ $(document).ready(function() {
 
                     $('<input>', {
                         type: 'hidden',
+                        name: 'idArticle',
                         value: data.id,
                     }).appendTo(formAdd);
 
@@ -136,7 +138,8 @@ $(document).ready(function() {
                 //update total
                 let totalpriceitem=$('#total-price-cart-item');
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
-                totalpriceitem.text((price+data.price).toFixed(2)+" €");
+                let total=(parseFloat(price)+parseFloat(data.price)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
                 //then hide modal
                 $('#modal-info-item').modal('hide');
             }, error : function () {
@@ -166,9 +169,10 @@ $(document).ready(function() {
                     qnttRemove.text(parseInt(qnttRemove.text())-1);
                 }
                 //update total
-                let totalpricecartitem=$('#total-price-cart-item');
-                let price=parseFloat(totalpricecartitem.text().substring(0, totalpricecartitem.text().length-2));
-                totalpricecartitem.text((price-data.price).toFixed(2)+" €");
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)-parseFloat(data.price)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }
@@ -191,9 +195,10 @@ $(document).ready(function() {
             success: function(data) {
                 let qnttRemove=form.parent().find('.quantity-item');
                 qnttRemove.text(parseInt(qnttRemove.text())+1);
-                let totalpriceitemcart=$('#total-price-cart-item');
-                let price=parseFloat(totalpriceitemcart.text().substring(0, totalpriceitemcart.text().length-2));
-                totalpriceitemcart.text((price+data.price).toFixed(2)+" €");
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)+parseFloat(data.price)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }
