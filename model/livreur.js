@@ -12,16 +12,39 @@ class Livreur {
     }
 
     async getNbrLivreurByMail(req) {
-        const email = req.body.email;
-        return await db.query("SELECT COUNT(*) FROM security_livreur WHERE email = $1;", [email]);
+        return await db.query("SELECT COUNT(*) FROM security_livreur WHERE email = $1;", [req]);
     }
 
-    async getLivreurByEmail(req) {
+    /*async getNbrLivreurByEmail (req){
+        const email = req.email;
+        return await db.query("SELECT COUNT(*) FROM security_livreur WHERE email = $1;", [email]);
+    }*/
+
+    /*async getLivreurByEmail(req, bool) {
+        let emailreq = (!bool)?req.body.email:req.session.user.email;
+        let respsec= await db.query("SELECT id_livr, pw FROM security_livreur WHERE email = $1;", [emailreq]);
+        let respnrm= await db.query("SELECT nom, prenom FROM livreur WHERE id_livr = $1;", [respsec.rows[0].id_livr]);
+        let res = {nom: respnrm.rows[0].nom, prenom: respnrm.rows[0].prenom, email: emailreq, pw: respsec.rows[0].pw};
+        //console.log("res--------------------->"+JSON.stringify(res));
+        return res;
+    }*/
+
+    /*async getLivreurByEmail(req) {
         const email = req.body.email;
         return await db.query("SELECT email, pw FROM security_livreur WHERE email = $1;", [email]);
+    }*/
+
+    async getLivreurByEmail(req) {
+        const emailreq = req;
+        let respsec= await db.query("SELECT id_livr, pw FROM security_livreur WHERE email = $1;", [emailreq]);
+        if (respsec.rows[0]===undefined)return undefined;
+        let respnrm= await db.query("SELECT nom, prenom FROM livreur WHERE id_livr = $1;", [respsec.rows[0].id_livr]);
+        let res = {id: respsec.rows[0].id_livr, nom: respnrm.rows[0].nom, prenom: respnrm.rows[0].prenom, email: emailreq, pw: respsec.rows[0].pw};
+        console.log("res--------------------->"+JSON.stringify(res));
+        return res;
     }
 
-    async getLivreurByID(req, res) {
+    /*async getLivreurByID(req, res) {
         const id = req.params.id;
         const person = await db.query("SELECT nom, prenom FROM livreur WHERE id_livr = $1;", [id]);
         res.json(person.rows[0]);
@@ -35,23 +58,21 @@ class Livreur {
     async deleteLivreur(req, res) {
         const id = req.params.id;
         await db.query("DELETE FROM livreur WHERE id_livr = $1;", [id]);
-    };
+    };*/
 
     /* ----------- Update info about livreur --------------- */
 
-    async updateMail(req, res) {
-        const { id, email } = req.body;
-        const updated = await db.query("UPDATE security_livreur SET email = $2 WHERE id_livr = $1 RETURNING *;", [id, email]);
-        res.json(updated.rows);
+    async updateMail(req) {
+        const { id, email } = req;
+        return await db.query("UPDATE security_livreur SET email = $2 WHERE id_livr = $1 RETURNING *;", [id, email]);
     };
 
-    async updatePassword(req, res) {
-        const { id, email, pw, resetToken } = req.body;
-        const updated = await db.query("UPDATE security_livreur SET pw = $4 WHERE (id_livr = $1 AND email = $2 AND resetToken = $3) RETURNING *;", [id, email, resetToken, pw]);
-        res.json(updated.rows);
+    async updatePassword(req) {
+        const { id, pw} = req;
+        return await db.query("UPDATE security_livreur SET pw = $2 WHERE (id_livr = $1) RETURNING *;", [id, pw]);
     };
 
-    async updateNom(req, res) {
+    /*async updateNom(req, res) {
         const { id, nom } = req.body;
         const updated = await db.query("UPDATE livreur SET nom = $2 WHERE id_livr = $1 RETURNING *;", [id, nom]);
         res.json(updated.rows);
@@ -61,7 +82,7 @@ class Livreur {
         const { id, prenom } = req.body;
         const updated = await db.query("UPDATE livreur SET prenom = $2 WHERE id_livr = $1 RETURNING *;", [id, prenom]);
         res.json(updated.rows);
-    };
+    };*/
 }
 
 

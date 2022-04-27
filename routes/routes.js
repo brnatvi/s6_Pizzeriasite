@@ -32,7 +32,9 @@ router.delete("/client/:id", controller_Client.deleteClient);
 router.post("/signup", controller_Client.addRegisteredClient);
 router.post("/signin", controller_Client.signIn);//TODO: regex
 router.get('/logout', checkAuth, controller_Client.GetLogOut);//TODO: add root
-router.get(':path/logout', checkAuth, controller_Client.GetLogOut);//TODO: add root
+router.post("/parameters-client", checkAuth, justClient, controller_Client.parameters);
+router.post("/parameters-delivery-man", checkAuth, justDeliveryMan, controller_Livreur.parameters);
+
 
 //ajax request - cart item
 router.post("/more-ifo-item", justClient, controller_Client.infoCartItem);

@@ -12,13 +12,6 @@
     min-width: 100vw;
 }
 
-.style-link{
-    text-decoration: underline;
-    cursor: pointer;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 #livraisonsignup-form{
     display: none;
 }

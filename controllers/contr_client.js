@@ -8,6 +8,63 @@ const {log} = require("util");
 
 //----------- fonctionnality available to Client/User --------------------
 
+exports.parameters = function (req, rep) {
+    Client.getClientByEmail(req).then(user => {
+        if (user === null){
+            rep.status(401).send({messageError : "Le client n'existe pas."});
+        }else{
+            let flag=false;
+            bcrypt.compare(req.body.userPasswordSetCurrent ,user.rows[0].pw).then(valid =>{
+                if (valid){
+                    if(req.body.userEmailSet && /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.userEmailSet)){
+                        let user_info ={id:user.rows[0].id_client, email: req.body.userEmailSet}
+                        Client.updateMail(user_info).then(()=>{
+                            req.session.user.email=user_info.email
+                            req.session.save( function(err) {})
+                        }).catch(()=>{
+                            rep.status(401).send({messageError : "L'email n'a pas été mis à jour."});
+                            flag=true;
+                        });
+                        alert(flag);
+                    }
+                    if(req.body.userPasswordSet && req.body.userPasswordSet.length>=8){
+                        bcrypt.genSalt(10, function (err, salt) {
+                            bcrypt.hash(req.body.userPasswordSet, salt, function (err, hash) {
+                                let user_info ={id:user.rows[0].id_client, pw: hash}
+                                Client.updatePassword(user_info).catch(()=>{
+                                    rep.status(401).send({messageError : "Le mot de passe n'a pas été mis à jour."});
+                                    flag=true;
+                                });
+                            });
+                        });
+                    }
+                    if (req.body.userAdressSet){
+                        let user_info ={id:user.rows[0].id_client, address: req.body.userAdressSet}
+                        Client.updateAddress(user_info).then(()=>{
+                            req.session.user.address=user_info.address
+                            req.session.save( function(err) {})
+                        }).catch(()=>{
+                            rep.status(401).send({messageError : "L'adresse n'a pas été mise à jour."});
+                            flag=true;
+                        });
+                    }
+                    if (req.body.userPhoneSet){
+                        let user_info ={id:user.rows[0].id_client, mobile: req.body.userPhoneSet}
+                        Client.updateMobile(user_info).then(()=>{
+                            req.session.user.mobile=user_info.mobile
+                            req.session.save( function(err) {})
+                        }).catch(()=>{
+                            rep.status(401).send({messageError : "Le numéro de téléphone n'a pas été mis à jour."});
+                            flag=true;
+                        });
+                    }
+                    if (!flag) rep.status(200).send({messageSuccess : 'Les informations ont bien été misent à jour.'});
+                }else rep.status(401).send({messageError : "Le mot de passe courant est incorrecte."});
+            })
+        }
+    }).catch(() => {rep.status(500).send({messageError : 'Impossible de mettre à jour les informations.'});});
+}
+
 // create new commande
 exports.createCommande = function (req, rep) {
     Commande.createCommande(req, rep);

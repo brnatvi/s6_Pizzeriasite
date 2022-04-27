@@ -66,7 +66,7 @@
                         <button type="submit" class="btn btn-primary signin-user">Se Connecter</button>
                     </div>
                 </form>
-                <a id="switch-signin-modal-content">Se connecter</a>
+                <a id="switch-signin-modal-content" class="style-link">Se connecter</a>
             </div>
 
             <div id="signup-modal-content" class="modal-content secondary">
@@ -85,12 +85,12 @@
                             <input class="form-control" type="text" id="userLastName" name="userLastName" pattern="text">
                         </div>
 
-                        <div class="is-client">
+                        <div>
                             <label for="userAdress">Adresse:</label><br>
                             <input class="form-control" type="text" id="userAdress" name="userAdress">
                         </div>
 
-                        <div class="is-client">
+                        <div>
                             <label for="userPhone">Numéro de téléphone:</label><br>
                             <input class="form-control" type="tel" id="userPhone" name="userPhone" pattern="tel">
                         </div>
@@ -110,34 +110,57 @@
                         <button type="submit" class="btn btn-primary signup-user">S'enregistrer</button>
                     </div>
                 </form>
-                <a id="switch-signup-modal-content">S'enregistrer</a>
+                <a id="switch-signup-modal-content" class="style-link">S'enregistrer</a>
             </div>
 
         </div>
     </div>
     <!-- TODO: set + session -->
-    <!--<div class="modal fade" id="modal-setting-session" tabindex="-1" role="dialog" aria-labelledby="modal-setting-session-user" aria-hidden="true">
+    <% if (locals.params.isLogued){ %>
+    <div class="modal fade" id="modal-setting-session" tabindex="-1" role="dialog" aria-labelledby="modal-setting-session-user" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content secondary">
                 <div class="modal-header">
                     <h5 class="modal-title text-center m-auto" id="modal-setting-session-user">Paramètres</h5>
                 </div>
-                <form class="form-add-dart-item" method="post" action="signin">
+                <form class="form-add-dart-item" method="post" action="<%- (locals.params.isClient)?'/parameters-client':'/parameters-delivery-man'; %>">
                     <div id="modal-body-signin-user">
                         <div>
                             <label for="userEmailSet">Email:</label><br>
                             <input class="form-control" type="email" id="userEmailSet" name="userEmailSet">
                         </div>
 
+                        <% if (locals.params.isClient){ %>
                         <div>
-                            <label for="userPasswordSet">Mot de passe:</label><br>
+                            <label for="userAdressSet">Adresse:</label><br>
+                            <input class="form-control" type="text" id="userAdressSet" name="userAdressSet">
+                        </div>
+
+                        <div>
+                            <label for="userPhoneSet">Numéro de téléphone:</label><br>
+                            <input class="form-control" type="tel" id="userPhoneSet" name="userPhoneSet" pattern="tel">
+                        </div>
+
+                        <input type="hidden" id="isClientSet" name="isClientSet" value="true">
+                        <% }else{ %>
+                        <input type="hidden" id="isClientSet" name="isClientSet" value="false">
+                        <% } %>
+
+                        <div>
+                            <label for="userPasswordSet">Nouveau mot de passe:</label><br>
                             <input class="form-control" type="password" id="userPasswordSet" name="userPasswordSet">
+                        </div>
+
+                        <div>
+                            <label for="userPasswordSetCurrent">Mot de passe courant:</label><br>
+                            <input class="form-control" type="password" id="userPasswordSetCurrent" name="userPasswordSetCurrent">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary signin-user">Se Connecter</button>
+                        <button type="submit" class="btn btn-primary parameters-user">Modifier mes informations</button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>-->
+    </div>
+    <% } %>
