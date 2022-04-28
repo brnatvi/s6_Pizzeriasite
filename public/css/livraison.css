@@ -1,12 +1,3 @@
-.login-livraison{
-    max-width: 750px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: calc( 25vh - 40px );
-    border-radius: 12px;
-    padding: 60px;
-}
-
 .container-form-login{
     min-height: calc( 100vh - 80px );
     min-width: 100vw;
