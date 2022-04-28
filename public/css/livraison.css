@@ -1,0 +1,12 @@
+.container-form-login{
+    min-height: calc( 100vh - 80px );
+    min-width: 100vw;
+}
+
+#livraisonsignup-form{
+    display: none;
+}
+
+#switch-connection-signin, #switch-connection-signup{
+    padding-left: 15px;
+}

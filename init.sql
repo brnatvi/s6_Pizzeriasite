@@ -21,7 +21,7 @@ CREATE TABLE plats (
     nom VARCHAR(255) NOT NULL UNIQUE,
     descript TEXT,
     link_picture TEXT,    
-    prix MONEY    
+    prix INT
 );            
 
 CREATE TABLE client (
@@ -45,7 +45,7 @@ CREATE TABLE commande (
     date_commande TIMESTAMP  NOT NULL,
     id_client INT,   
     status_commande eStatusCommande DEFAULT 'undelivered',  
-    sum_total MONEY,
+    sum_total INT,
     FOREIGN KEY (id_client) REFERENCES client (id_client)
 );
 

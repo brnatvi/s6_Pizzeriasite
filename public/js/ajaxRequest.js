@@ -92,6 +92,7 @@ $(document).ready(function() {
 
                     $('<input>', {
                         type: 'hidden',
+                        name: 'idArticle',
                         value: data.id,
                     }).appendTo(formRemove);
 
@@ -117,6 +118,7 @@ $(document).ready(function() {
 
                     $('<input>', {
                         type: 'hidden',
+                        name: 'idArticle',
                         value: data.id,
                     }).appendTo(formAdd);
 
@@ -136,7 +138,8 @@ $(document).ready(function() {
                 //update total
                 let totalpriceitem=$('#total-price-cart-item');
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
-                totalpriceitem.text((price+data.price).toFixed(2)+" €");
+                let total=(parseFloat(price)+parseFloat(data.price)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
                 //then hide modal
                 $('#modal-info-item').modal('hide');
             }, error : function () {
@@ -166,9 +169,10 @@ $(document).ready(function() {
                     qnttRemove.text(parseInt(qnttRemove.text())-1);
                 }
                 //update total
-                let totalpricecartitem=$('#total-price-cart-item');
-                let price=parseFloat(totalpricecartitem.text().substring(0, totalpricecartitem.text().length-2));
-                totalpricecartitem.text((price-data.price).toFixed(2)+" €");
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)-parseFloat(data.price)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }
@@ -191,9 +195,10 @@ $(document).ready(function() {
             success: function(data) {
                 let qnttRemove=form.parent().find('.quantity-item');
                 qnttRemove.text(parseInt(qnttRemove.text())+1);
-                let totalpriceitemcart=$('#total-price-cart-item');
-                let price=parseFloat(totalpriceitemcart.text().substring(0, totalpriceitemcart.text().length-2));
-                totalpriceitemcart.text((price+data.price).toFixed(2)+" €");
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)+parseFloat(data.price)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }
@@ -213,9 +218,55 @@ $(document).ready(function() {
                 address : $("#userAdress").val(),
                 mobile : $("#userPhone").val(),
                 email : $("#userEmail").val(),
-                isDeliveryMan : $("#is-delivery-man").is(":checked"),
                 pw : $("#userPassword").val()
             }
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                window.location.reload(true);
+            }, error : function (data) {
+                console.log(data.responseJSON.messageError);
+            }
+        });
+    });
+
+    /**
+     * Enregistrement d'un nouveau livreur
+     */
+    $(document).on('click', '.signup-livraison', function(e) {
+        const form = $(this).parent().parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = {
+                nom : $("#livraisonFirstName").val(),
+                prenom : $("#livraisonLastName").val(),
+                email : $("#livraisonEmail").val(),
+                pw : $("#livraisonPassword").val()
+            }
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                window.location.reload(true);
+            }, error : function (data) {
+                console.log(data.responseJSON.messageError);
+            }
+        });
+    });
+
+    /**
+     * Modifier les informations d'un utilisateur (client et livreur)
+     */
+    $(document).on('click', '.parameters-user', function(e) {
+        const form = $(this).parent().parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
         e.preventDefault();
         $.ajax({
             url: action,
@@ -238,8 +289,7 @@ $(document).ready(function() {
             method = form.attr('method'),
             data = {
                 email : $("#userEmailSignIn").val(),
-                pw : $("#userPasswordSignIn").val(),
-                isDeliveryMan : $("#is-delivery-man-login").is(":checked")
+                pw : $("#userPasswordSignIn").val()
             }
         e.preventDefault();
         $.ajax({
@@ -248,6 +298,31 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
+            }, error : function (data) {
+                console.log(data.responseJSON.messageError);
+            }
+        });
+    });
+
+    /**
+     * Connexion d'un livreur
+     */
+    $(document).on('click', '.signin-livraison', function(e) {
+        const form = $(this).parent().parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = {
+                email : $("#livraisonEmailSignIn").val(),
+                pw : $("#livraisonPasswordSignIn").val()
+            }
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                window.location.reload(true);
+                window.location.replace(window.location.origin+"/commande");
             }, error : function (data) {
                 console.log(data.responseJSON.messageError);
             }

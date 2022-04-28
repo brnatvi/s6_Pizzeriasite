@@ -34,20 +34,47 @@
         <div class="tab-content" id="v-pills-tabContent">
             <div class="tab-pane fade" id="v-pills-salades" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                 <h1>Nos salades</h1>
-                <div class="row">
-                    <!--TODO: salades-->
+                <div class="row" id="all-salades">
+                    <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(article.type_plat==="salade"){%>
+                        <div class="m-auto container-item-desc" type="button" data-toggle="modal" data-target="#modal-info-item">
+                            <img class="item-description" src="<%- article.link_picture %>" alt="salade">
+                            <p class="name-salade"><%- article.nom %></p>
+                            <p class="price-salade"><%- article.prix %> &#8364;</p>
+                            <form method="post" action="more-ifo-item">
+                                <input type="hidden" name="idArticle" value="<%- article.id_plat %>">
+                            </form>
+                        </div>
+                    <% }})} %>
                 </div>
             </div>
             <div class="tab-pane fade" id="v-pills-boissons" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                 <h1>Nos boissons</h1>
-                <div class="row">
-                    <!--TODO: boissons-->
+                <div class="row" id="all-boissons">
+                    <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(article.type_plat==="boisson"){%>
+                        <div class="m-auto container-item-desc" type="button" data-toggle="modal" data-target="#modal-info-item">
+                            <img class="item-description" src="<%- article.link_picture %>" alt="boisson">
+                            <p class="name-boisson"><%- article.nom %></p>
+                            <p class="price-boisson"><%- article.prix %> &#8364;</p>
+                            <form method="post" action="more-ifo-item">
+                                <input type="hidden" name="idArticle" value="<%- article.id_plat %>">
+                            </form>
+                        </div>
+                    <% }})} %>
                 </div>
             </div>
             <div class="tab-pane fade" id="v-pills-desserts" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                 <h1>Nos desserts</h1>
-                <div class="row">
-                    <!--TODO: desserts-->
+                <div class="row" id="all-desserts">
+                    <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(article.type_plat==="dessert"){%>
+                        <div class="m-auto container-item-desc" type="button" data-toggle="modal" data-target="#modal-info-item">
+                            <img class="item-description" src="<%- article.link_picture %>" alt="dessert">
+                            <p class="name-dessert"><%- article.nom %></p>
+                            <p class="price-dessert"><%- article.prix %> &#8364;</p>
+                            <form method="post" action="more-ifo-item">
+                                <input type="hidden" name="idArticle" value="<%- article.id_plat %>">
+                            </form>
+                        </div>
+                    <% }})} %>
                 </div>
             </div>
             <div class="tab-pane fade" id="v-pills-menus" role="tabpanel" aria-labelledby="v-pills-settings-tab">
@@ -59,16 +86,16 @@
             <div class="tab-pane fade show active" id="v-pills-pizzas" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <h1>Nos pizzas</h1>
                 <div class="row" id="all-pizzas">
-                    <% for(let i=0; i<10; i++){ %>
+                    <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(article.type_plat==="pizza"){%>
                         <div class="m-auto container-item-desc" type="button" data-toggle="modal" data-target="#modal-info-item">
-                            <img class="item-description" src="img/pizza2.png" alt="pizza">
-                            <p class="name-pizza">Pizza Raclette</p>
-                            <p class="price-pizza">5.54€</p>
+                            <img class="item-description" src="<%- article.link_picture%>" alt="pizza">
+                            <p class="name-pizza"><%- article.nom %></p>
+                            <p class="price-pizza"><%- article.prix %> &#8364;</p>
                             <form method="post" action="more-ifo-item">
-                                <input type="hidden" name="idPizza" value="<%-i%>">
+                                <input type="hidden" name="idArticle" value="<%- article.id_plat %>">
                             </form>
                         </div>
-                    <% } %>
+                    <% }})} %>
                 </div>
             </div>
             <div class="tab-pane fade" id="v-pills-recommandations" role="tabpanel" aria-labelledby="v-pills-settings-tab">
@@ -94,26 +121,29 @@
             </div>
             <div id="header-border"></div>
             <div id="list-cart-item">
-                <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ %>
-                    <div id="<%- article.id %>" class="element">
-                        <p><%- article.name %></p>
-                        <p><%- article.ingredients %></p>
+                <% if (locals.params.quantity!==undefined && locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(locals.params.quantity[article.id_plat]!==undefined){
+                    console.log("locals.params.quantity[article.id_plat]");
+                    console.log(locals.params.quantity[article.id_plat]);
+                    console.log(article.id_plat);%>
+                    <div id="<%- article.id_plat %>" class="element">
+                        <p><%- article.nom %></p>
+                        <p><%- article.descript %></p>
                         <div class="element-menu">
                             <div class="menu-quantity">
                                 <form method="post" action="remove-cart-item">
-                                    <input type="hidden" value="<%- article.id %>">
+                                    <input type="hidden" name="idArticle" value="<%- article.id_plat %>">
                                     <input type="image" class="remove-img" src="img/remove_circle_outline.svg" alt="Submit">
                                 </form>
-                                <p class="quantity-item"><%- (locals.params.quantity[article.id+""]!==undefined)?locals.params.quantity[article.id+""]:"0"; %></p>
+                                <p class="quantity-item"><%- (locals.params.quantity[article.id_plat+""]!==undefined)?locals.params.quantity[article.id_plat+""]:"0"; %></p>
                                 <form method="post" action="add-cart-item">
-                                    <input type="hidden" value="<%- article.id %>">
+                                    <input type="hidden" name="idArticle" value="<%- article.id_plat %>">
                                     <input type="image" class="add-img" src="img/add_circle_outline.svg" alt="Submit">
                                 </form>
                             </div>
-                            <p class="price-item"><%- article.price %> &#8364;</p>
+                            <p class="price-item"><%- article.prix %> &#8364;</p>
                         </div>
                     </div>
-                <% })} %>
+                <% }})} %>
             </div>
         </div>
     </div>
@@ -129,7 +159,7 @@
             </div>
             <div class="modal-footer">
                 <form class="form-add-dart-item" method="post" action="add-new-cart-item">
-                    <input type="hidden" class="input-hide-add-cart" value="">
+                    <input type="hidden" class="input-hide-add-cart" name="idArticle" value="">
                     <button type="submit" class="btn btn-primary add-cart-item">Ajouter au panier</button>
                 </form>
             </div>

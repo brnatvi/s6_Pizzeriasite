@@ -1,0 +1,51 @@
+<%- include('header'); %>
+<div class="container-form-login">
+    <form id="livraisonsignin-form" class="secondary form-add-dart-item login-livraison" method="post" action="livraisonsignin">
+        <h1>Se connecter</h1>
+        <div id="modal-body-signin-livraison">
+            <div>
+                <label for="userEmailSignIn">Email:</label><br>
+                <input class="form-control" type="email" id="livraisonEmailSignIn" name="userEmailSignIn">
+            </div>
+
+            <div>
+                <label for="userPasswordSignIn">Mot de passe:</label><br>
+                <input class="form-control" type="password" id="livraisonPasswordSignIn" name="userPasswordSignIn">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary signin-livraison">Se Connecter</button>
+        </div>
+        <a id="switch-connection-signin" class="style-link">S'enregistrer</a>
+    </form>
+    <form id="livraisonsignup-form" class="secondary form-add-dart-item login-livraison" method="post" action="livraisonsignup">
+        <h1>S'inscrire</h1>
+        <div>
+            <label for="userFirstName">Prénom:</label><br>
+            <input class="form-control" type="text" id="livraisonFirstName" name="userFirstName" pattern="text">
+        </div>
+
+        <div>
+            <label for="userLastName">Nom:</label><br>
+            <input class="form-control" type="text" id="livraisonLastName" name="userLastName" pattern="text">
+        </div>
+
+        <div>
+            <label for="userEmail">Email:</label><br>
+            <input class="form-control" type="email" id="livraisonEmail" name="userEmail" pattern="email">
+        </div>
+
+        <div>
+            <label for="userPassword">Mot de passe:</label><br>
+            <input class="form-control" type="password" id="livraisonPassword" name="userPassword" minlength="8">
+            <input type="checkbox" id="signup-show-password-livraison">Afficher le mot de passe
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary signup-livraison">S'enregistrer</button>
+        </div>
+        <a id="switch-connection-signup" class="style-link">Se connecter</a>
+    </form>
+</div>
+<script type="text/javascript" src="js/ajaxRequest.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<%- include('footer'); %>

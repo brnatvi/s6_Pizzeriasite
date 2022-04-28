@@ -34,7 +34,7 @@
                 <% } %>
                 <% if (!locals.params.isLogued){ %>
                 <button id="connection-user-signin" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
-                <button id="connection-user-signup" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signup">S'enregistrer</button>
+                <a class="rmv-style-btn rmw-style-a" href="/livraison">Livreur?</a>
                 <% }else{ %>
                 <button class="rmv-style-btn" id="logoutSession">Se déconnecter</button>
                 <button class="rmv-style-btn" id="settingSession" type="button" data-toggle="modal" data-target="#modal-setting-session">Paramètre</button>
@@ -42,10 +42,34 @@
             </div>
         </div>
     </nav>
-    <!-- Sign-Up -->
-    <div class="modal fade" id="modal-connexion-signup" tabindex="-1" role="dialog" aria-labelledby="modal-connexion-signup-user" aria-hidden="true">
+    <!-- Log-In -->
+    <div class="modal fade" id="modal-connexion-signin" tabindex="-1" role="dialog" aria-labelledby="modal-connexion-signin-user" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content secondary">
+
+            <div id="signin-modal-content" class="modal-content secondary login-client">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center m-auto" id="modal-connexion-signin-user">Sign-In</h5>
+                </div>
+                <form class="form-add-dart-item" method="post" action="signin">
+                    <div id="modal-body-signin-user">
+                        <div>
+                            <label for="userEmailSignIn">Email:</label><br>
+                            <input class="form-control" type="email" id="userEmailSignIn" name="userEmailSignIn">
+                        </div>
+
+                        <div>
+                            <label for="userPasswordSignIn">Mot de passe:</label><br>
+                            <input class="form-control" type="password" id="userPasswordSignIn" name="userPasswordSignIn">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary signin-user">Se Connecter</button>
+                    </div>
+                    <a id="switch-signin-modal-content" class="style-link">S'enregistrer</a>
+                </form>
+            </div>
+
+            <div id="signup-modal-content" class="modal-content secondary login-client">
                 <div class="modal-header">
                     <h5 class="modal-title text-center m-auto" id="modal-connexion-signup-user">Sign-Up</h5>
                 </div>
@@ -61,12 +85,12 @@
                             <input class="form-control" type="text" id="userLastName" name="userLastName" pattern="text">
                         </div>
 
-                        <div class="is-client">
+                        <div>
                             <label for="userAdress">Adresse:</label><br>
                             <input class="form-control" type="text" id="userAdress" name="userAdress">
                         </div>
 
-                        <div class="is-client">
+                        <div>
                             <label for="userPhone">Numéro de téléphone:</label><br>
                             <input class="form-control" type="tel" id="userPhone" name="userPhone" pattern="tel">
                         </div>
@@ -81,69 +105,62 @@
                             <input class="form-control" type="password" id="userPassword" name="userPassword" minlength="8">
                             <input type="checkbox" id="signup-show-password">Afficher le mot de passe
                         </div>
-                        <div>
-                            <input type="checkbox" id="is-delivery-man">Créer un compte en tant que livreur
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary signup-user">S'enregistrer</button>
                     </div>
+                    <a id="switch-signup-modal-content" class="style-link">Se connecter</a>
                 </form>
             </div>
-        </div>
-    </div>
-    <!-- Log-In -->
-    <div class="modal fade" id="modal-connexion-signin" tabindex="-1" role="dialog" aria-labelledby="modal-connexion-signin-user" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content secondary">
-                <div class="modal-header">
-                    <h5 class="modal-title text-center m-auto" id="modal-connexion-signin-user">Sign-In</h5>
-                </div>
-                <form class="form-add-dart-item" method="post" action="signin">
-                    <div id="modal-body-signin-user">
-                        <div>
-                            <label for="userEmailSignIn">Email:</label><br>
-                            <input class="form-control" type="email" id="userEmailSignIn" name="userEmailSignIn">
-                        </div>
 
-                        <div>
-                            <label for="userPasswordSignIn">Mot de passe:</label><br>
-                            <input class="form-control" type="password" id="userPasswordSignIn" name="userPasswordSignIn">
-                        </div>
-                        <div>
-                            <input type="checkbox" id="is-delivery-man-login">Se connecter en tant que livreur
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary signin-user">Se Connecter</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
     <!-- TODO: set + session -->
+    <% if (locals.params.isLogued){ %>
     <div class="modal fade" id="modal-setting-session" tabindex="-1" role="dialog" aria-labelledby="modal-setting-session-user" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content secondary">
                 <div class="modal-header">
                     <h5 class="modal-title text-center m-auto" id="modal-setting-session-user">Paramètres</h5>
                 </div>
-                <form class="form-add-dart-item" method="post" action="signin">
+                <form class="form-add-dart-item" method="post" action="<%- (locals.params.isClient)?'/parameters-client':'/parameters-delivery-man'; %>">
                     <div id="modal-body-signin-user">
                         <div>
                             <label for="userEmailSet">Email:</label><br>
                             <input class="form-control" type="email" id="userEmailSet" name="userEmailSet">
                         </div>
 
+                        <% if (locals.params.isClient){ %>
                         <div>
-                            <label for="userPasswordSet">Mot de passe:</label><br>
+                            <label for="userAdressSet">Adresse:</label><br>
+                            <input class="form-control" type="text" id="userAdressSet" name="userAdressSet">
+                        </div>
+
+                        <div>
+                            <label for="userPhoneSet">Numéro de téléphone:</label><br>
+                            <input class="form-control" type="tel" id="userPhoneSet" name="userPhoneSet" pattern="tel">
+                        </div>
+
+                        <input type="hidden" id="isClientSet" name="isClientSet" value="true">
+                        <% }else{ %>
+                        <input type="hidden" id="isClientSet" name="isClientSet" value="false">
+                        <% } %>
+
+                        <div>
+                            <label for="userPasswordSet">Nouveau mot de passe:</label><br>
                             <input class="form-control" type="password" id="userPasswordSet" name="userPasswordSet">
+                        </div>
+
+                        <div>
+                            <label for="userPasswordSetCurrent">Mot de passe courant:</label><br>
+                            <input class="form-control" type="password" id="userPasswordSetCurrent" name="userPasswordSetCurrent">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary signin-user">Se Connecter</button>
+                        <button type="submit" class="btn btn-primary parameters-user">Modifier mes informations</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <% } %>
