@@ -3,7 +3,15 @@ const Commande = require("../model/commande");
 const Connect=require("./Connect");
 const Article=require("../model/article");
 
+
 //----------- fonctionnality available to Client/User --------------------
+
+exports.signInClient = (req, rep) => {Connect.signIn(Client, req, rep)};
+exports.signUpClient = (req, rep) => {Connect.signUp(Client, req, rep)};
+exports.logOutUser = (req, rep) => {Connect.disconnectUser(req.session, rep)};
+exports.updateProfileClient = (req, rep) => {Connect.updateProfile(Client, req, rep)}
+
+//----------------- manipulation with items --------------------------------
 
 exports.infoCartItem = function (req, rep) {
     Article.getArticleById(req.body.idArticle).then(articles=>{
@@ -81,12 +89,6 @@ exports.shop = function (req, rep) {
 };
 
 
-//---------------------- Registered client ----------------------------------------------
-
-exports.signInClient = (req, rep) => {Connect.signIn(Client, req, rep)};
-exports.signUpClient = (req, rep) => {Connect.signUp(Client, req, rep)};
-exports.logOutUser = (req, rep) => {Connect.disconnectUser(req.session, rep)};
-exports.updateProfileClient = (req, rep) => {Connect.updateProfile(Client, req, rep)}
 
 
 //---------------------- TODO: WIP: Basic client --------------------------------------------------
@@ -98,25 +100,3 @@ exports.createCommande = function (req, rep) {
     Commande.createCommande(req, rep);
 };
 
-exports.showCarte = function (req, rep) {
-    rep.send('HOME: main menu page');
-};
-
-/* get list of clients */
-exports.getClient = function (req, rep) {
-    Client.getClientByID(req, rep);
-};
-
-/* get list of clients */
-exports.getListClients = function (req, rep) {
-    Client.getListClients(req, rep);
-};
-
-/* remouve client from list */
-exports.deleteClient = function (req, rep) {
-    Client.deleteClient(req, rep);
-};
-
-exports.deleteRegisteredClient = function (req, rep) {
-    Client.deleteRegisteredClient(req, rep);
-};
