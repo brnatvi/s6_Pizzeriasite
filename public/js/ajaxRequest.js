@@ -218,7 +218,6 @@ $(document).ready(function() {
                 address : $("#userAdress").val(),
                 mobile : $("#userPhone").val(),
                 email : $("#userEmail").val(),
-                isDeliveryMan : $("#is-delivery-man").is(":checked"),
                 pw : $("#userPassword").val()
             }
         e.preventDefault();
@@ -260,8 +259,6 @@ $(document).ready(function() {
         });
     });
 
-    //TODO: remove is checked
-
     /**
      * Modifier les informations d'un utilisateur (client et livreur)
      */
@@ -270,21 +267,13 @@ $(document).ready(function() {
         let action = form.attr('action'),
             method = form.attr('method'),
             data = form.serialize();
-                    /*{
-            address : $("#userAdressSet").val(),
-            mobile : $("#userPhoneSet").val(),
-            email : $("#userEmailSet").val(),
-            pw : $("#userPasswordSetCurrent").val(),
-            pwSet : $("#userPasswordSet").val()
-            };*/
         e.preventDefault();
-        console.log(data)
         $.ajax({
             url: action,
             type: method,
             data: data,
             success: function() {
-                //window.location.reload(true);
+                window.location.reload(true);
             }, error : function (data) {
                 console.log(data.responseJSON.messageError);
             }
@@ -300,8 +289,7 @@ $(document).ready(function() {
             method = form.attr('method'),
             data = {
                 email : $("#userEmailSignIn").val(),
-                pw : $("#userPasswordSignIn").val(),
-                isDeliveryMan : $("#is-delivery-man-login").is(":checked")
+                pw : $("#userPasswordSignIn").val()
             }
         e.preventDefault();
         $.ajax({

@@ -5,14 +5,3 @@ exports.GetError = (req, res) => {
         }
     })
 }
-
-//TODO: change location
-exports.GetCommande = (req, res) => {
-    res.status(404).render('commande',{
-        params: {
-            title: 'commande',
-            isClient: (req.session.user===undefined || req.session.user.mobile!==undefined),
-            isLogued: req.session.user!==undefined
-        }
-    })
-}

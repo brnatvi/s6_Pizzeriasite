@@ -1,20 +1,9 @@
-const Client = require("../model/client.js");
-const Livreur = require("../model/livreur.js");
-const Commande = require("../model/commande.js");
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const {log} = require("util");
-const Connect=require("./Connect.js");
+const Client = require("../model/client");
+const Commande = require("../model/commande");
+const Connect=require("./Connect");
 const Article=require("../model/article");
 
 //----------- fonctionnality available to Client/User --------------------
-
-// create new commande
-/*exports.createCommande = function (req, rep) {
-    Commande.createCommande(req, rep);
-};*/
-
-//TODO: pizza recommandation?
 
 exports.infoCartItem = function (req, rep) {
     Article.getArticleById(req.body.idArticle).then(articles=>{
@@ -22,9 +11,7 @@ exports.infoCartItem = function (req, rep) {
     }).catch(err=>{console.log("infoCartItem"+JSON.stringify(err))});
 }
 
-
 exports.addCartItem = function (req, rep) {
-    console.log("req.body.idArticle"+JSON.stringify(req.body))
     Article.getArticleById(req.body.idArticle).then(articles=>{
         //update session price
         let total=parseFloat(req.session.user.cartItem.price)+parseFloat(articles.price);
@@ -33,8 +20,6 @@ exports.addCartItem = function (req, rep) {
         if (req.session.user.cartItem.idQuantity[articles.id]!==undefined){
             req.session.user.cartItem.idQuantity[articles.id]+=1;
         }else req.session.user.cartItem.idQuantity[articles.id]=1;
-
-        console.log("JSON.stringify(req.session.user)>"+JSON.stringify(req.session.user))
 
         rep.json(articles);
     }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
@@ -95,31 +80,6 @@ exports.shop = function (req, rep) {
     }).catch(err=>{console.log("err"+JSON.stringify(err))})
 };
 
-/*exports.showCarte = function (req, rep) {
-    rep.send('HOME: main menu page');
-};*/
-
-//---------------------- Basic client --------------------------------------------------
-
-/*/!* add new client to database *!/
-exports.addClient = function (req, rep) {
-    Client.addClient(req, rep);
-};
-
-/!* get list of clients *!/
-exports.getClient = function (req, rep) {
-    Client.getClientByID(req, rep);
-};
-
-/!* get list of clients *!/
-exports.getListClients = function (req, rep) {
-    Client.getListClients(req, rep);
-};
-
-/!* remouve client from list *!/
-exports.deleteClient = function (req, rep) {
-    Client.deleteClient(req, rep);
-};*/
 
 //---------------------- Registered client ----------------------------------------------
 
@@ -128,7 +88,35 @@ exports.signUpClient = (req, rep) => {Connect.signUp(Client, req, rep)};
 exports.logOutUser = (req, rep) => {Connect.disconnectUser(req.session, rep)};
 exports.updateProfileClient = (req, rep) => {Connect.updateProfile(Client, req, rep)}
 
-/*
+
+//---------------------- TODO: WIP: Basic client --------------------------------------------------
+
+//TODO: pizza recommandation?
+
+// create new commande
+exports.createCommande = function (req, rep) {
+    Commande.createCommande(req, rep);
+};
+
+exports.showCarte = function (req, rep) {
+    rep.send('HOME: main menu page');
+};
+
+/* get list of clients */
+exports.getClient = function (req, rep) {
+    Client.getClientByID(req, rep);
+};
+
+/* get list of clients */
+exports.getListClients = function (req, rep) {
+    Client.getListClients(req, rep);
+};
+
+/* remouve client from list */
+exports.deleteClient = function (req, rep) {
+    Client.deleteClient(req, rep);
+};
+
 exports.deleteRegisteredClient = function (req, rep) {
     Client.deleteRegisteredClient(req, rep);
-};*/
+};
