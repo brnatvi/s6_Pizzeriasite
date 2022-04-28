@@ -26,7 +26,7 @@ exports.GetCommande = (req, res) => {
 };
 
 
-//---------------------- Registered client ----------------------------------------------
+//---------------------- Registered livreur ----------------------------------------------
 
 exports.updateProfileLivreur = function (req, rep) {Connect.updateProfile(Livreur, req, rep)}
 exports.signInLivreur = (req, rep) => {Connect.signIn(Livreur, req, rep)};

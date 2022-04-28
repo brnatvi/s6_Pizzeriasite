@@ -32,12 +32,6 @@ CREATE TABLE client (
     mobile VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE livreur (
-    id_livr SERIAL PRIMARY KEY,
-    nom VARCHAR(255) NOT NULL,
-    prenom VARCHAR(255) NOT NULL    
-);
-
 CREATE TYPE eStatusCommande AS ENUM ('undelivered', 'inprogress', 'delivered');
 
 CREATE TABLE commande (
@@ -47,6 +41,14 @@ CREATE TABLE commande (
     status_commande eStatusCommande DEFAULT 'undelivered',  
     sum_total NUMERIC(4, 2),
     FOREIGN KEY (id_client) REFERENCES client (id_client)
+);
+
+CREATE TABLE livreur (
+    id_livr SERIAL PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255) NOT NULL,
+    current_commande INT,
+    FOREIGN KEY (current_commande) REFERENCES commande (id_commande)
 );
 
 CREATE TABLE contenu_commande (
