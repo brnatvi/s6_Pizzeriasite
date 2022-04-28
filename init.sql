@@ -21,7 +21,7 @@ CREATE TABLE plats (
     nom VARCHAR(255) NOT NULL UNIQUE,
     descript TEXT,
     link_picture TEXT,    
-    prix INT
+    prix NUMERIC(4, 2)
 );            
 
 CREATE TABLE client (
@@ -32,12 +32,6 @@ CREATE TABLE client (
     mobile VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE livreur (
-    id_livr SERIAL PRIMARY KEY,
-    nom VARCHAR(255) NOT NULL,
-    prenom VARCHAR(255) NOT NULL    
-);
-
 CREATE TYPE eStatusCommande AS ENUM ('undelivered', 'inprogress', 'delivered');
 
 CREATE TABLE commande (
@@ -45,8 +39,16 @@ CREATE TABLE commande (
     date_commande TIMESTAMP  NOT NULL,
     id_client INT,   
     status_commande eStatusCommande DEFAULT 'undelivered',  
-    sum_total INT,
+    sum_total NUMERIC(4, 2),
     FOREIGN KEY (id_client) REFERENCES client (id_client)
+);
+
+CREATE TABLE livreur (
+    id_livr SERIAL PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255) NOT NULL,
+    current_commande INT,
+    FOREIGN KEY (current_commande) REFERENCES commande (id_commande)
 );
 
 CREATE TABLE contenu_commande (
@@ -74,4 +76,4 @@ CREATE TABLE security_livreur (
 );
 
 
-\COPY plats(id_plat, type_plat, nom, descript, link_picture, prix) FROM 'model/plats.csv' (DELIMITER ',', FORMAT CSV, NULL '', ENCODING 'UTF8');
+\COPY plats(id_plat, type_plat, nom, descript, link_picture, prix) FROM 'model/plats_UTF8_no_bom.csv' (DELIMITER ',', FORMAT CSV, ENCODING 'UTF8');
