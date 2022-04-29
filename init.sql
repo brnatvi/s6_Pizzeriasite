@@ -5,7 +5,6 @@ CREATE DATABASE pizzeria;
 
 DROP TABLE IF EXISTS security_client cascade;
 DROP TABLE IF EXISTS security_livreur cascade;
-DROP TABLE IF EXISTS plat_size cascade;
 DROP TABLE IF EXISTS contenu_commande cascade;
 DROP TABLE IF EXISTS commande cascade;
 DROP TABLE IF EXISTS client cascade;
