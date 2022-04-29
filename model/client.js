@@ -54,11 +54,6 @@ class Client {
 
     //--------------- TODO: WIP : Basic client --------------------------------------------
 
-    async deleteClient (req, res){
-        const id = req.params.id;
-        await db.query("DELETE FROM client WHERE id_client = $1;", [id]);
-    };
-
     async getClientByID (req, res){
         const id = req.params.id;
         const person = await db.query("SELECT nom, prenom, adr_client, mobile FROM client WHERE id_client = $1;", [id]);
@@ -69,24 +64,6 @@ class Client {
         const users = await db.query("SELECT * FROM client;");
         res.json(users.rows);
     };
-
-    async deleteRegisteredClient (req, res){
-        const id = req.params.id;
-        await db.query("DELETE FROM security_client WHERE id_client = $1;", [id]);
-    };
-
-    async updateNom(req, res){
-        const {id, nom} = req.body;
-        const updated = await db.query("UPDATE client SET nom = $2 WHERE id_client = $1 RETURNING *;", [id, nom]);
-        res.json(updated.rows);
-    };
-
-    async updatePrenom(req, res){
-        const {id, prenom} = req.body;
-        const updated = await db.query("UPDATE client SET prenom = $2 WHERE id_client = $1 RETURNING *;", [id, prenom]);
-        res.json(updated.rows);
-    };
-
 
 }
 
