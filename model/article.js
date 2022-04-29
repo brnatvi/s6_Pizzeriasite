@@ -25,8 +25,8 @@ class Article {
         for (let i = 0; i < count; i++){
             let prix = await db.query("SELECT prix FROM ingredients WHERE id_ingred = $1;", list_ingredients[i]);
             prix_ingredients.push(price);
-            total_ingredients += prix * coeff;
-            }   
+            if (i > 3) { total_ingredients += prix * coeff; }            
+        }   
         return {prix_ingredients, total_ingredients};
     }
 
