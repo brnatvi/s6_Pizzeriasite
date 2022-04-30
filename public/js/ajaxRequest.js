@@ -33,6 +33,12 @@ $(document).ready(function() {
                     .append(ingredientSpanList)
                     .appendTo('#modal-body-item');
 
+                $('#choiceSize').empty();
+                for (let sizeArticle in data.dimension){
+                    let priceArticle = data.dimension[sizeArticle];
+                    $('<option value="'+sizeArticle+'">'+sizeArticle + ': ' + priceArticle+'  &#8364;</option>').appendTo('#choiceSize');
+                }
+
                 $('.input-hide-add-cart').val(data.id);
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
@@ -56,7 +62,7 @@ $(document).ready(function() {
             success: function(data) {
                 let isPresent=false;
                 $("#list-cart-item").children().each(function(){
-                    if (parseInt($(this).attr('id'))===data.id){
+                    if ($(this).attr('id')===data[0].id+"_"+data[1]){
                         let quantity=$(this).find(".quantity-item");
                         quantity.text(parseInt(quantity.text())+1);
                         isPresent=true;
@@ -64,21 +70,21 @@ $(document).ready(function() {
                 });
                 if (!isPresent){
 
-                    $('<div>').attr('id', data.id)
+                    $('<div>').attr('id', data[0].id+"_"+data[1])
                         .addClass('element')
                         .appendTo('#list-cart-item');
 
-                    $('<p>').text(data.name)
-                        .appendTo('#'+data.id);
+                    $('<p>').text(data[0].name+" - "+data[1])
+                        .appendTo('#'+data[0].id+"_"+data[1]);
 
-                    $('<p>').text(data.ingredients)
-                        .appendTo('#'+data.id);
+                    $('<p>').text(data[0].ingredients)
+                        .appendTo('#'+data[0].id+"_"+data[1]);
 
-                    let elementMenu=$('<div>').attr('id', data.id)
+                    let elementMenu=$('<div>').attr('id', data[0].id+"_"+data[1])
                         .addClass('element-menu')
-                        .appendTo('#'+data.id);
+                        .appendTo('#'+data[0].id+"_"+data[1]);
 
-                    let elementQuantity=$('<div>').attr('id', data.id)
+                    let elementQuantity=$('<div>').attr('id', data[0].id+"_"+data[1])
                         .addClass('menu-quantity')
                         .appendTo(elementMenu);
 
@@ -93,7 +99,13 @@ $(document).ready(function() {
                     $('<input>', {
                         type: 'hidden',
                         name: 'idArticle',
-                        value: data.id,
+                        value: data[0].id,
+                    }).appendTo(formRemove);
+
+                    $('<input>', {
+                        type: 'hidden',
+                        name: 'choiceSize',
+                        value: data[1],
                     }).appendTo(formRemove);
 
                     $('<input>', {
@@ -119,7 +131,13 @@ $(document).ready(function() {
                     $('<input>', {
                         type: 'hidden',
                         name: 'idArticle',
-                        value: data.id,
+                        value: data[0].id,
+                    }).appendTo(formAdd);
+
+                    $('<input>', {
+                        type: 'hidden',
+                        name: 'choiceSize',
+                        value: data[1],
                     }).appendTo(formAdd);
 
                     $('<input>', {
@@ -130,7 +148,7 @@ $(document).ready(function() {
                     }).appendTo(formAdd);
 
 
-                    $('<p>').text(data.price+' €')
+                    $('<p>').text(data[0].dimension[data[1]]+' €')
                         .addClass('price-item')
                         .appendTo(elementMenu);
 
@@ -138,12 +156,12 @@ $(document).ready(function() {
                 //update total
                 let totalpriceitem=$('#total-price-cart-item');
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
-                let total=(parseFloat(price)+parseFloat(data.price)).toFixed(2);
+                let total=(parseFloat(price)+parseFloat(data[0].dimension[data[1]])).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
                 //then hide modal
                 $('#modal-info-item').modal('hide');
             }, error : function () {
-                console.log("Impossible d'ajouter l'article voulu");
+                console.log("Impossible d'ajouter l'article voulu ");
             }
         });
     });
@@ -171,7 +189,7 @@ $(document).ready(function() {
                 //update total
                 let totalpriceitem=$('#total-price-cart-item');
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
-                let total=(parseFloat(price)-parseFloat(data.price)).toFixed(2);
+                let total=(parseFloat(price)-parseFloat(data[0].dimension[form.find('input:hidden[name=choiceSize]').val()])).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
@@ -197,7 +215,7 @@ $(document).ready(function() {
                 qnttRemove.text(parseInt(qnttRemove.text())+1);
                 let totalpriceitem=$('#total-price-cart-item');
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
-                let total=(parseFloat(price)+parseFloat(data.price)).toFixed(2);
+                let total=(parseFloat(price)+parseFloat(data[0].dimension[form.find('input:hidden[name=choiceSize]').val()])).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");

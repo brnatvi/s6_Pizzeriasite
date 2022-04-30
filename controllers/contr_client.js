@@ -21,34 +21,41 @@ exports.infoCartItem = function (req, rep) {
 
 exports.addCartItem = function (req, rep) {
     Article.getArticleById(req.body.idArticle).then(articles=>{
-        //update session price
-        let total=parseFloat(req.session.user.cartItem.price)+parseFloat(articles.price);
-        req.session.user.cartItem.price=(total<0)?0:total;
-        //update session cart item
-        if (req.session.user.cartItem.idQuantity[articles.id]!==undefined){
-            req.session.user.cartItem.idQuantity[articles.id]+=1;
-        }else req.session.user.cartItem.idQuantity[articles.id]=1;
 
-        rep.json(articles);
+        //update session price
+        let total=parseFloat(req.session.user.cartItem.price)+parseFloat(articles.dimension[req.body.choiceSize]);
+        req.session.user.cartItem.price=(total<0)?0:total;
+        if (req.session.user.cartItem.idQuantity[articles.id]===undefined){
+            req.session.user.cartItem.idQuantity[articles.id]=JSON.parse('{"'+req.body.choiceSize+'":1}')
+        }else if(req.session.user.cartItem.idQuantity[articles.id][req.body.choiceSize]===undefined){
+            req.session.user.cartItem.idQuantity[articles.id][req.body.choiceSize]=1
+        }else req.session.user.cartItem.idQuantity[articles.id][req.body.choiceSize]+=1;
+
+        rep.json([articles,req.body.choiceSize]);
     }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
 }
 
 exports.removeCartItem = function (req, rep) {
+
     Article.getArticleById(req.body.idArticle).then(articles=>{
+
         //update session price
-        let total=parseFloat(req.session.user.cartItem.price)-parseFloat(articles.price);
+        let total=parseFloat(req.session.user.cartItem.price)-parseFloat(articles.dimension[req.body.choiceSize]);
         req.session.user.cartItem.price=(total<0)?0:total;
 
         //update session cart item
         if (req.session.user.cartItem.idQuantity[articles.id]!==undefined){
-            if (req.session.user.cartItem.idQuantity[articles.id]>1){
-                req.session.user.cartItem.idQuantity[articles.id]-=1;
-            }else{
-                delete req.session.user.cartItem.idQuantity[articles.id];
+            if(req.session.user.cartItem.idQuantity[articles.id][req.body.choiceSize]!==undefined){
+                if (req.session.user.cartItem.idQuantity[articles.id][req.body.choiceSize]===1){
+                    delete req.session.user.cartItem.idQuantity[articles.id][req.body.choiceSize];
+                    if (Object.keys(req.session.user.cartItem.idQuantity[articles.id]).length===0){
+                        delete req.session.user.cartItem.idQuantity[articles.id];
+                    }
+                }else req.session.user.cartItem.idQuantity[articles.id][req.body.choiceSize]-=1
             }
-        }else req.session.user.cartItem.idQuantity[articles.id]=1;
+        }
 
-        rep.json(articles);
+        rep.json([articles,req.body.choiceSize]);
     }).catch(err=>{console.log("removeCartItem"+JSON.stringify(err))});
 
 }

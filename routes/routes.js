@@ -22,8 +22,8 @@ router.post("/signin", controller_Client.signInClient);
 router.get('/logout', checkAuth, controller_Client.logOutUser);
 //------------- Cart item ---------------------
 router.post("/more-ifo-item", justClient, controller_Client.infoCartItem);
-router.post("/add-new-cart-item", checkAuth, justClient, controller_Client.addCartItem);
-router.post("/remove-cart-item", checkAuth, justClient, controller_Client.removeCartItem);
+router.post("/add-new-cart-item", justClient, controller_Client.addCartItem);
+router.post("/remove-cart-item", justClient, controller_Client.removeCartItem);
 router.post("/add-cart-item", justClient, controller_Client.addCartItem);
 
 
