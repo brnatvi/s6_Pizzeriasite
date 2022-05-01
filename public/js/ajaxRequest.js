@@ -47,6 +47,69 @@ $(document).ready(function() {
     });
 
     /**
+     * Ajouter un etxa menu au panier.
+     */
+    $(document).on('click','#form-extra-menu',function(e){
+        const form = $(this).parent('form');
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+                console.log("OKKAY");
+            }, error : function () {
+                console.log("Impossible d'accéder à l'article voulu");
+            }
+        });
+    });
+
+    /**
+     * Ajouter un mega menu au panier.
+     */
+    $(document).on('click','#form-mega-menu',function(e){
+        const form = $(this).parent('form');
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+                console.log("OKKAY "+data);
+            }, error : function () {
+                console.log("Impossible d'accéder à l'article voulu");
+            }
+        });
+    });
+
+    /**
+     * Ajouter un giga menu au panier.
+     */
+    $(document).on('click','#form-giga-menu',function(e){
+        const form = $(this).parent('form');
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+                console.log("OKKAY "+data);
+            }, error : function () {
+                console.log("Impossible d'accéder à l'article voulu");
+            }
+        });
+    });
+
+    /**
      * Ajouter un article au panier.
      **/
     $(document).on('click', '.add-cart-item', function(e) {

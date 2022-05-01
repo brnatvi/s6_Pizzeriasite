@@ -13,6 +13,27 @@ exports.updateProfileClient = (req, rep) => {Connect.updateProfile(Client, req, 
 
 //----------------- manipulation with items --------------------------------
 
+exports.addExtraMenuCartItem = function (req, rep) {
+    console.log("JSON.stringify(req.body)")
+    console.log(JSON.stringify(req.body))
+    console.log(/*TODO:*/"TODO: create bdd request")
+    rep.json(req.body)
+}
+
+exports.addMegaMenuCartItem = function (req, rep) {
+    console.log("JSON.stringify(req.body)")
+    console.log(JSON.stringify(req.body))
+    console.log(/*TODO:*/"TODO: create bdd request")
+    rep.json(req.body)
+}
+
+exports.addGigaMenuCartItem = function (req, rep) {
+    console.log("JSON.stringify(req.body)")
+    console.log(JSON.stringify(req.body))
+    console.log(/*TODO:*/"TODO: create bdd request")
+    rep.json(req.body)
+}
+
 exports.infoCartItem = function (req, rep) {
     Article.getArticleById(req.body.idArticle).then(articles=>{
         rep.json(articles);
@@ -71,27 +92,50 @@ exports.index = function (req, rep) {
 }
 
 exports.shop = function (req, rep) {
-    Article.getAllArticle().then(articles=>{
-        let resRequestBdd=articles.rows;
-        if(req.session.user!==undefined){
-            rep.render('../views/index',{
-                params: {
-                    title: 'index',
-                    quantity: req.session.user.cartItem.idQuantity,
-                    price: req.session.user.cartItem.price,
-                    list: resRequestBdd,
-                    isLogued: true
-                }
-            });
-        }else{
-            rep.render('../views/index',{
-                params: {
-                    title: 'index',
-                    list: resRequestBdd,
-                    isLogued: false
-                }
-            });
-        }
+    Article.getAllArticle().then(el=>{
+        return el.rows;
+    }).then(articlesrq =>{
+        Article.getAllPizzaMedium().then(el=>{
+            return el.rows;
+        }).then(pizzaMedium=>{
+            Article.getAllBoissonBySize("33").then(el=>{
+                return el.rows;
+            }).then(boissonMin=>{
+                Article.getAllBoissonBySize("100").then(el=>{
+                    return el.rows;
+                }).then(boissonMax=>{
+                    Article.getAllEntree().then(entrees=>{
+                        if(req.session.user!==undefined){
+                            rep.render('../views/index',{
+                                params: {
+                                    title: 'index',
+                                    quantity: req.session.user.cartItem.idQuantity,
+                                    price: req.session.user.cartItem.price,
+                                    list: articlesrq,
+                                    entreeMenu: entrees.rows,
+                                    pizzasMenu: pizzaMedium,
+                                    boissonMinMenu: boissonMin,
+                                    boissonMaxMenu: boissonMax,
+                                    isLogued: true
+                                }
+                            });
+                        }else{
+                            rep.render('../views/index',{
+                                params: {
+                                    title: 'index',
+                                    list: articlesrq,
+                                    entreeMenu: entrees.rows,
+                                    pizzasMenu: pizzaMedium,
+                                    boissonMinMenu: boissonMin,
+                                    boissonMaxMenu: boissonMax,
+                                    isLogued: false
+                                }
+                            });
+                        }
+                    }).catch(err=>{console.log("err"+JSON.stringify(err))})
+                }).catch(err=>{console.log("err"+JSON.stringify(err))})
+            }).catch(err=>{console.log("err"+JSON.stringify(err))})
+        }).catch(err=>{console.log("err"+JSON.stringify(err))})
     }).catch(err=>{console.log("err"+JSON.stringify(err))})
 };
 

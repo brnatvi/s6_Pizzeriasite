@@ -17,6 +17,18 @@ class Article {
         return {id: res.rows[0].id_plat, name: res.rows[0].nom, ingredients: res.rows[0].descript, dimension: dim};
     }
 
+    async getAllEntree() {
+        return await db.query("SELECT * FROM plats NATURAL JOIN plat_size WHERE type_plat = 'salade';");
+    }
+
+    async getAllPizzaMedium() {
+        return await db.query("SELECT * FROM plats NATURAL JOIN plat_size WHERE type_plat = 'pizza' AND size = 'medium';");
+    }
+
+    async getAllBoissonBySize(size_boisson) {
+        return await db.query("SELECT * FROM plats NATURAL JOIN plat_size WHERE type_plat = 'boisson' AND size = $1;", [size_boisson]);
+    }
+
     // return array of prices of ingredients for pizza composee + total, according the size of pizza
     async getPizzaComposee(list_ingredients, size) {
         const count = list_ingredients.length;
