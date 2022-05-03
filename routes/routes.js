@@ -25,6 +25,8 @@ router.post("/more-ifo-item", justClient, controller_Client.infoCartItem);
 router.post("/add-new-cart-item", justClient, controller_Client.addCartItem);
 router.post("/remove-cart-item", justClient, controller_Client.removeCartItem);
 router.post("/add-cart-item", justClient, controller_Client.addCartItem);
+router.post("/remove-menu-cart-item", justClient, controller_Client.removeMenuCartItem);
+router.post("/add-menu-cart-item", justClient, controller_Client.addMenuCartItem);
 router.post("/add-extra-menu-cart-item", justClient, controller_Client.addExtraMenuCartItem);
 router.post("/add-mega-menu-cart-item", justClient, controller_Client.addMegaMenuCartItem);
 router.post("/add-giga-menu-cart-item", justClient, controller_Client.addGigaMenuCartItem);

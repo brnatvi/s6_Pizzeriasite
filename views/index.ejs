@@ -91,36 +91,36 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-extra" role="tabpanel" aria-labelledby="nav-extra-tab">
                                 <!--Extra Menu (1 entrée, 1 pizza Médium, 2 boissons d’au plus 33cl)-->
-                                <form action="add-etxa-menu-cart-item" method="post">
-                                    <label for="entreeEtxaMenu">Choisissez une entrée</label><br>
-                                    <select id="entreeEtxaMenu" name="entreeEtxaMenu" class="custom-select">
+                                <form action="add-extra-menu-cart-item" method="post">
+                                    <label for="entreeExtraMenu">Choisissez une entrée</label><br>
+                                    <select id="entreeExtraMenu" name="entreeExtraMenu" class="custom-select">
                                         <% locals.params.entreeMenu.forEach(el=>{ %>
                                         <option value="<%- el.id_plat %>"><%- el.nom %></option>
                                         <% }) %>
                                     </select>
 
-                                    <label for="pizzaEtxaMenu">Choisissez une pizza medium</label><br>
-                                    <select id="pizzaEtxaMenu" name="pizzaA" class="custom-select">
+                                    <label for="pizzaExtraMenu">Choisissez une pizza medium</label><br>
+                                    <select id="pizzaExtraMenu" name="pizzaExtraMenu" class="custom-select">
                                         <% locals.params.pizzasMenu.forEach(el=>{ %>
                                             <option value="<%- el.id_plat %>"><%- el.nom %></option>
                                         <% }) %>
                                     </select>
 
-                                    <label for="boissonEtxaMenu">Choisissez une boisson</label><br>
-                                    <select id="boissonEtxaMenu" name="boissonEtxaMenu" class="custom-select">
+                                    <label for="boissonExtraMenu">Choisissez une boisson</label><br>
+                                    <select id="boissonExtraMenu" name="boissonExtraMenu" class="custom-select">
                                         <% locals.params.boissonMinMenu.forEach(el=>{ %>
                                             <option value="<%- el.id_plat %>"><%- el.nom %></option>
                                         <% }) %>
                                     </select>
 
-                                    <label for="boissonEtxaMenuB">Choisissez une boisson</label><br>
-                                    <select id="boissonEtxaMenuB" name="boissonEtxaMenuB" class="custom-select">
+                                    <label for="boissonExtraMenuB">Choisissez une boisson</label><br>
+                                    <select id="boissonExtraMenuB" name="boissonExtraMenuB" class="custom-select">
                                         <% locals.params.boissonMinMenu.forEach(el=>{ %>
                                             <option value="<%- el.id_plat %>"><%- el.nom %></option>
                                         <% }) %>
                                     </select>
 
-                                    <button id="form-extra-menu" type="submit" class="btn btn-primary add-cart-item">Ajouter au panier</button>
+                                    <button id="form-extra-menu" type="submit" class="btn btn-primary">Ajouter au panier</button>
 
                                 </form>
                             </div>
@@ -162,7 +162,7 @@
                                         <% }) %>
                                     </select>
 
-                                    <button id="form-mega-menu" type="submit" class="btn btn-primary add-cart-item">Ajouter au panier</button>
+                                    <button id="form-mega-menu" type="submit" class="btn btn-primary">Ajouter au panier</button>
 
                                 </form>
                             </div>
@@ -211,7 +211,7 @@
                                         <% }) %>
                                     </select>
 
-                                    <button id="form-giga-menu" type="submit" class="btn btn-primary add-cart-item">Ajouter au panier</button>
+                                    <button id="form-giga-menu" type="submit" class="btn btn-primary">Ajouter au panier</button>
 
                                 </form>
                             </div>
@@ -257,21 +257,20 @@
             </div>
             <div id="header-border"></div>
             <div id="list-cart-item">
-                <% if (locals.params.quantity!==undefined && locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(locals.params.quantity[article.id_plat]!==undefined){
-                    console.log("locals.params.quantity[article.id_plat]");
-                    console.log(locals.params.quantity[article.id_plat]);
-                    console.log(article.id_plat);%>
+                <% if (locals.params.quantity!==undefined && locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(locals.params.quantity[article.id_plat]!==undefined){%>
                     <div id="<%- article.id_plat %>" class="element">
-                        <p><%- article.nom %></p>
+                        <p><%- article.nom %> - <%- Object.keys(locals.params.quantity[article.id_plat+""]) %></p>
                         <p><%- article.descript %></p>
                         <div class="element-menu">
                             <div class="menu-quantity">
                                 <form method="post" action="remove-cart-item">
+                                    <input type="hidden" name="choiceSize" value="<%- Object.keys(locals.params.quantity[article.id_plat+""]) %>">
                                     <input type="hidden" name="idArticle" value="<%- article.id_plat %>">
                                     <input type="image" class="remove-img" src="img/remove_circle_outline.svg" alt="Submit">
                                 </form>
-                                <p class="quantity-item"><%- (locals.params.quantity[article.id_plat+""]!==undefined)?locals.params.quantity[article.id_plat+""]:"0"; %></p>
+                                <p class="quantity-item"><%- (locals.params.quantity[article.id_plat+""]!==undefined)?locals.params.quantity[article.id_plat+""][Object.keys(locals.params.quantity[article.id_plat+""])]:"0"; %></p>
                                 <form method="post" action="add-cart-item">
+                                    <input type="hidden" name="choiceSize" value="<%- Object.keys(locals.params.quantity[article.id_plat+""]) %>">
                                     <input type="hidden" name="idArticle" value="<%- article.id_plat %>">
                                     <input type="image" class="add-img" src="img/add_circle_outline.svg" alt="Submit">
                                 </form>
@@ -280,6 +279,33 @@
                         </div>
                     </div>
                 <% }})} %>
+
+                <% if (locals.params.menu!==undefined) { let menuItem=locals.params.menu; for (let i=0; i< menuItem.length; i++){  if (menuItem[i]!==null){%>
+                    <div id="<%- i %>" class="element">
+                        <p><%- menuItem[i].type %></p><!-- ajouter dans la session -->
+                        <p>
+                            <% for (let y=0; y<menuItem[i].name.length; y++){ %>
+                            <%-(y<menuItem[i].name.length-1)?menuItem[i].name[y]+" . ":menuItem[i].name[y]%>
+                            <% } %>
+                        </p>
+                        <div class="element-menu">
+                            <div class="menu-quantity">
+                                <form method="post" action="remove-menu-cart-item">
+                                    <input type="hidden" name="choiceSize" value="<%- menuItem[i].type %>">
+                                    <input type="hidden" name="idMenu" value="<%- i %>">
+                                    <input type="image" class="remove-menu-img" src="img/remove_circle_outline.svg" alt="Submit">
+                                </form>
+                                <p class="quantity-item"><%- menuItem[i].quantity %></p>
+                                <form method="post" action="add-menu-cart-item">
+                                    <input type="hidden" name="choiceSize" value="<%- menuItem[i].type %>">
+                                    <input type="hidden" name="idMenu" value="<%- i %>">
+                                    <input type="image" class="add-menu-img" src="img/add_circle_outline.svg" alt="Submit">
+                                </form>
+                            </div>
+                            <p class="price-item"><%- menuItem[i].price %> &#8364;</p><!-- ajouter dans la session -->
+                        </div>
+                    </div>
+                <% }}} %>
             </div>
         </div>
     </div>

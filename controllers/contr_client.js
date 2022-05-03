@@ -14,24 +14,93 @@ exports.updateProfileClient = (req, rep) => {Connect.updateProfile(Client, req, 
 //----------------- manipulation with items --------------------------------
 
 exports.addExtraMenuCartItem = function (req, rep) {
-    console.log("JSON.stringify(req.body)")
-    console.log(JSON.stringify(req.body))
-    console.log(/*TODO:*/"TODO: create bdd request")
-    rep.json(req.body)
+
+    Article.getArticleById(req.body.entreeExtraMenu).then(el=>{
+        return el.name;
+    }).then(entree=>{
+        Article.getArticleById(req.body.pizzaExtraMenu).then(el=>{
+            return el.name;
+        }).then(pizza=>{
+            Article.getArticleById(req.body.boissonExtraMenu).then(el=>{
+                return el.name;
+            }).then(boisson=>{
+                Article.getArticleById(req.body.boissonExtraMenuB).then(el=>{
+                    return el.name;
+                }).then(boissonB=>{
+                    let positionItem = Client.addMenuCartItem(req, 10, "extra", [entree, pizza, boisson, boissonB]);
+
+                    rep.json({
+                        typeMenu:"extra",
+                        listElementMenu:[entree, pizza, boisson, boissonB],
+                        priceMenu: 10,
+                        indexMenu:positionItem
+                    })
+                }).catch(err=>{console.log("AaddCartItem"+JSON.stringify(err))});
+            }).catch(err=>{console.log("BaddCartItem"+JSON.stringify(err))});
+        }).catch(err=>{console.log("CaddCartItem"+JSON.stringify(err))});
+    }).catch(err=>{console.log("DaddCartItem"+JSON.stringify(err))});
 }
 
 exports.addMegaMenuCartItem = function (req, rep) {
-    console.log("JSON.stringify(req.body)")
-    console.log(JSON.stringify(req.body))
-    console.log(/*TODO:*/"TODO: create bdd request")
-    rep.json(req.body)
+
+    Article.getArticleById(req.body.entreeMegaMenu).then(el=>{
+        return el.name;
+    }).then(entree=>{
+        Article.getArticleById(req.body.entreeMegaMenuB).then(el=>{
+            return el.name;
+        }).then(entreeB=>{
+            Article.getArticleById(req.body.pizzaMegaMenu).then(el=>{
+                return el.name;
+            }).then(pizza=>{
+                Article.getArticleById(req.body.boissonMegaMenu).then(el=>{
+                    return el.name;
+                }).then(boisson=>{
+                    let positionItem = Client.addMenuCartItem(req, 15, "mega", [entree, entreeB, pizza, boisson]);
+                    rep.json({
+                        typeMenu:"mega",
+                        listElementMenu:[entree, entreeB, pizza, boisson],
+                        priceMenu: 15,
+                        indexMenu:positionItem
+                    })
+                }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
+            }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
+        }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
+    }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
 }
 
 exports.addGigaMenuCartItem = function (req, rep) {
-    console.log("JSON.stringify(req.body)")
-    console.log(JSON.stringify(req.body))
-    console.log(/*TODO:*/"TODO: create bdd request")
-    rep.json(req.body)
+
+    Article.getArticleById(req.body.entreeGigaMenu).then(el=>{
+        return el.name;
+    }).then(entree=>{
+        Article.getArticleById(req.body.entreeGigaMenuB).then(el=>{
+            return el.name;
+        }).then(entreeB=>{
+            Article.getArticleById(req.body.pizzaGigaMenu).then(el=>{
+                return el.name;
+            }).then(pizza=>{
+                Article.getArticleById(req.body.pizzaGigaMenuB).then(el=>{
+                    return el.name;
+                }).then(pizzaB=>{
+                    Article.getArticleById(req.body.boissonGigaMenu).then(el=>{
+                        return el.name;
+                    }).then(boisson=>{
+                        Article.getArticleById(req.body.boissonGigaMenuB).then(el=>{
+                            return el.name;
+                        }).then(boissonB=>{
+                            let positionItem = Client.addMenuCartItem(req, 20, "giga", [entree, entreeB, pizza, pizzaB, boisson, boissonB]);
+                            rep.json({
+                                typeMenu:"giga",
+                                listElementMenu:[entree, entreeB, pizza, pizzaB, boisson, boissonB],
+                                priceMenu: 20,
+                                indexMenu:positionItem
+                            })
+                        }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
+                    }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
+                }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
+            }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
+        }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
+    }).catch(err=>{console.log("addCartItem"+JSON.stringify(err))});
 }
 
 exports.infoCartItem = function (req, rep) {
@@ -81,6 +150,39 @@ exports.removeCartItem = function (req, rep) {
 
 }
 
+exports.removeMenuCartItem = function (req, rep) {
+
+    //update session price
+    let menuSelected=req.session.user.cartItem.menu[req.body.idMenu];
+    let rmvprice=0;
+    if (menuSelected!==undefined){
+        rmvprice=menuSelected.price;
+        let total=parseFloat(req.session.user.cartItem.price)-parseFloat(menuSelected.price);
+        req.session.user.cartItem.price=(total<0)?0:total;
+        if (menuSelected.quantity<=1) delete req.session.user.cartItem.menu[req.body.idMenu];
+        else menuSelected.quantity-=1;
+    }
+
+    console.log("menuSelected "+JSON.stringify(req.session.user.cartItem.menu))
+
+    rep.json(rmvprice);
+
+}
+
+exports.addMenuCartItem = function (req, rep) {
+
+    //update session price
+    let menuSelected=req.session.user.cartItem.menu[req.body.idMenu];
+    if (menuSelected!==undefined){
+        let total=parseFloat(req.session.user.cartItem.price)+parseFloat(menuSelected.price);
+        req.session.user.cartItem.price=(total<0)?0:total;
+        req.session.user.cartItem.menu[req.body.idMenu].quantity+=1;
+    }
+
+    rep.json(menuSelected.price);
+
+}
+
 exports.index = function (req, rep) {
     rep.render('../views/home',{
         params: {
@@ -109,6 +211,7 @@ exports.shop = function (req, rep) {
                             rep.render('../views/index',{
                                 params: {
                                     title: 'index',
+                                    menu: req.session.user.cartItem.menu,
                                     quantity: req.session.user.cartItem.idQuantity,
                                     price: req.session.user.cartItem.price,
                                     list: articlesrq,

@@ -1,3 +1,97 @@
+const isPresentCartItem = (divName) => {
+    let isPresent=false;
+    $("#list-cart-item").children().each(function(){
+        if ($(this).attr('id')===divName){
+            let quantity=$(this).find(".quantity-item");
+            quantity.text(parseInt(quantity.text())+1);
+            isPresent=true;
+        }
+    });
+    return isPresent;
+}
+
+const updateGraphCartItem = (divId, divName, divList, actionForm, inputName, isChoice, priceDiv, numDiv, numBisDiv) => {
+    $('<div>').attr('id', divId)
+        .addClass('element')
+        .appendTo('#list-cart-item');
+
+    $('<p>').text(divName)
+        .appendTo('#'+ divId);
+
+    $('<p>')
+        .text(divList)
+        .appendTo('#'+ divId);
+
+    let elementMenu=$('<div>').attr('id', divId)
+        .addClass('element-menu')
+        .appendTo('#'+ divId);
+
+    let elementQuantity=$('<div>').attr('id', divId)
+        .addClass('menu-quantity')
+        .appendTo(elementMenu);
+
+    let formRemove= $('<form>', {
+        method: 'post',
+        action: 'remove'+actionForm,
+    }).appendTo(elementQuantity);
+
+    $('<input>', {
+        type: 'hidden',
+        name: inputName,
+        value: numDiv,
+    }).appendTo(formRemove);
+
+    if (isChoice) {
+        $('<input>', {
+            type: 'hidden',
+            name: 'choiceSize',
+            value: numBisDiv,
+        }).appendTo(formRemove);
+    }
+
+    $('<input>', {
+        type: 'image',
+        class: (isChoice)?'remove-img':'remove-menu-img',
+        src: 'img/remove_circle_outline.svg',
+        alt: 'Submit',
+    }).appendTo(formRemove);
+
+    $('<p>').text('1')
+        .addClass('quantity-item')
+        .appendTo(elementQuantity);
+
+    let formAdd= $('<form>', {
+        method: 'post',
+        action: 'add'+actionForm,
+    }).appendTo(elementQuantity);
+
+    $('<input>', {
+        type: 'hidden',
+        name: inputName,
+        value: numDiv,
+    }).appendTo(formAdd);
+
+    if (isChoice){
+        $('<input>', {
+            type: 'hidden',
+            name: 'choiceSize',
+            value: numBisDiv,
+        }).appendTo(formAdd);
+    }
+
+    $('<input>', {
+        type: 'image',
+        class: (isChoice)?'add-img':'add-menu-img',
+        src: 'img/add_circle_outline.svg',
+        alt: 'Submit',
+    }).appendTo(formAdd);
+
+
+    $('<p>').text(priceDiv+' €')
+        .addClass('price-item')
+        .appendTo(elementMenu);
+}
+
 $(document).ready(function() {
 
     /**
@@ -47,7 +141,7 @@ $(document).ready(function() {
     });
 
     /**
-     * Ajouter un etxa menu au panier.
+     * Ajouter un extra menu au panier.
      */
     $(document).on('click','#form-extra-menu',function(e){
         const form = $(this).parent('form');
@@ -60,9 +154,25 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                console.log("OKKAY");
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
+                let divList="";
+                for (let i=0; i<data.listElementMenu.length; i++){
+                    divList+=(i<data.listElementMenu.length-1)?data.listElementMenu[i]+" . ":data.listElementMenu[i];
+                }
+                if (!isPresentCartItem(data.indexMenu+"_"+data.typeMenu)){
+                    updateGraphCartItem(
+                        data.indexMenu+"_"+data.typeMenu, "Menu "+data.typeMenu, divList,
+                        '-menu-cart-item', 'idMenu', false,
+                        data.priceMenu, data.indexMenu, "null"
+                    )
+                }
+                //update total
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)+parseFloat(data.priceMenu)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
+
+            }, error : function (data) {
+                console.log("Impossible d'accéder à l'article voulu:"+JSON.stringify(data));
             }
         });
     });
@@ -123,98 +233,11 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                let isPresent=false;
-                $("#list-cart-item").children().each(function(){
-                    if ($(this).attr('id')===data[0].id+"_"+data[1]){
-                        let quantity=$(this).find(".quantity-item");
-                        quantity.text(parseInt(quantity.text())+1);
-                        isPresent=true;
-                    }
-                });
-                if (!isPresent){
-
-                    $('<div>').attr('id', data[0].id+"_"+data[1])
-                        .addClass('element')
-                        .appendTo('#list-cart-item');
-
-                    $('<p>').text(data[0].name+" - "+data[1])
-                        .appendTo('#'+data[0].id+"_"+data[1]);
-
-                    $('<p>').text(data[0].ingredients)
-                        .appendTo('#'+data[0].id+"_"+data[1]);
-
-                    let elementMenu=$('<div>').attr('id', data[0].id+"_"+data[1])
-                        .addClass('element-menu')
-                        .appendTo('#'+data[0].id+"_"+data[1]);
-
-                    let elementQuantity=$('<div>').attr('id', data[0].id+"_"+data[1])
-                        .addClass('menu-quantity')
-                        .appendTo(elementMenu);
-
-
-
-
-                    let formRemove= $('<form>', {
-                        method: 'post',
-                        action: 'remove-cart-item',
-                    }).appendTo(elementQuantity);
-
-                    $('<input>', {
-                        type: 'hidden',
-                        name: 'idArticle',
-                        value: data[0].id,
-                    }).appendTo(formRemove);
-
-                    $('<input>', {
-                        type: 'hidden',
-                        name: 'choiceSize',
-                        value: data[1],
-                    }).appendTo(formRemove);
-
-                    $('<input>', {
-                        type: 'image',
-                        class: 'remove-img',
-                        src: 'img/remove_circle_outline.svg',
-                        alt: 'Submit',
-                    }).appendTo(formRemove);
-
-
-
-                    $('<p>').text('1')
-                        .addClass('quantity-item')
-                        .appendTo(elementQuantity);
-
-
-
-                    let formAdd= $('<form>', {
-                        method: 'post',
-                        action: 'add-cart-item',
-                    }).appendTo(elementQuantity);
-
-                    $('<input>', {
-                        type: 'hidden',
-                        name: 'idArticle',
-                        value: data[0].id,
-                    }).appendTo(formAdd);
-
-                    $('<input>', {
-                        type: 'hidden',
-                        name: 'choiceSize',
-                        value: data[1],
-                    }).appendTo(formAdd);
-
-                    $('<input>', {
-                        type: 'image',
-                        class: 'add-img',
-                        src: 'img/add_circle_outline.svg',
-                        alt: 'Submit',
-                    }).appendTo(formAdd);
-
-
-                    $('<p>').text(data[0].dimension[data[1]]+' €')
-                        .addClass('price-item')
-                        .appendTo(elementMenu);
-
+                if (!isPresentCartItem(data[0].id+"_"+data[1])){
+                    updateGraphCartItem(data[0].id+"_"+data[1],
+                        data[0].name+" - "+data[1], data[0].ingredients, '-cart-item',
+                        'idArticle', true, data[0].dimension[data[1]], data[0].id, data[1]
+                    )
                 }
                 //update total
                 let totalpriceitem=$('#total-price-cart-item');
@@ -285,6 +308,66 @@ $(document).ready(function() {
             }
         });
     });
+
+    /**
+     * Modification de la quantité d'un article - Ajouter un article au panier
+     */
+    $(document).on('click', '.add-menu-img', function(e) {
+        const form = $(this).parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+                let qnttRemove=form.parent().find('.quantity-item');
+                qnttRemove.text(parseInt(qnttRemove.text())+1);
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)+parseFloat(data)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
+            }, error : function () {
+                console.log("Impossible d'accéder à l'article voulu");
+            }
+        });
+    });
+
+    /**
+     * Modification de la quantité d'un article - Ajouter un article au panier
+     */
+    $(document).on('click', '.remove-menu-img', function(e) {
+        const form = $(this).parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+
+                let qnttRemove=form.parent().find('.quantity-item');
+                if (parseInt(qnttRemove.text())-1<=0){
+                    form.parent().parent().parent().remove();
+                }else{
+                    qnttRemove.text(parseInt(qnttRemove.text())-1);
+                }
+                //update total
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)-parseFloat(data)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
+
+            }, error : function () {
+                console.log("Impossible d'accéder à l'article voulu");
+            }
+        });
+    });
+
 
     /**
      * Enregistrement d'un nouvel utilisateur
