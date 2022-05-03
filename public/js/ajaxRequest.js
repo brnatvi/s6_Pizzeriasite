@@ -92,6 +92,25 @@ const updateGraphCartItem = (divId, divName, divList, actionForm, inputName, isC
         .appendTo(elementMenu);
 }
 
+const addMenu = (data) => {
+    let divList="";
+    for (let i=0; i<data.listElementMenu.length; i++){
+        divList+=(i<data.listElementMenu.length-1)?data.listElementMenu[i]+" . ":data.listElementMenu[i];
+    }
+    if (!isPresentCartItem(data.indexMenu+"_"+data.typeMenu)){
+        updateGraphCartItem(
+            data.indexMenu+"_"+data.typeMenu, "Menu "+data.typeMenu, divList,
+            '-menu-cart-item', 'idMenu', false,
+            data.priceMenu, data.indexMenu, "null"
+        )
+    }
+    //update total
+    let totalpriceitem=$('#total-price-cart-item');
+    let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+    let total=(parseFloat(price)+parseFloat(data.priceMenu)).toFixed(2);
+    totalpriceitem.text(((total<0)?"0":total)+" €");
+}
+
 $(document).ready(function() {
 
     /**
@@ -154,23 +173,7 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                let divList="";
-                for (let i=0; i<data.listElementMenu.length; i++){
-                    divList+=(i<data.listElementMenu.length-1)?data.listElementMenu[i]+" . ":data.listElementMenu[i];
-                }
-                if (!isPresentCartItem(data.indexMenu+"_"+data.typeMenu)){
-                    updateGraphCartItem(
-                        data.indexMenu+"_"+data.typeMenu, "Menu "+data.typeMenu, divList,
-                        '-menu-cart-item', 'idMenu', false,
-                        data.priceMenu, data.indexMenu, "null"
-                    )
-                }
-                //update total
-                let totalpriceitem=$('#total-price-cart-item');
-                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
-                let total=(parseFloat(price)+parseFloat(data.priceMenu)).toFixed(2);
-                totalpriceitem.text(((total<0)?"0":total)+" €");
-
+                addMenu(data)
             }, error : function (data) {
                 console.log("Impossible d'accéder à l'article voulu:"+JSON.stringify(data));
             }
@@ -191,7 +194,7 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                console.log("OKKAY "+data);
+                addMenu(data)
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }
@@ -212,7 +215,7 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                console.log("OKKAY "+data);
+                addMenu(data)
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }
