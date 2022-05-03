@@ -1,17 +1,32 @@
-const { each } = require("jquery");
 const db = require("./db");
 
 class Article {
 
     async getAllArticle(){
-        let res= await db.query("SELECT * FROM plats NATURAL JOIN plat_size;");
-        console.log("res--->"+JSON.stringify(res.rows));
-        return res;
+        return await db.query("SELECT * FROM plats NATURAL JOIN (SELECT id_plat, MIN(prix) AS prix FROM plat_size GROUP BY id_plat) AS min_price;");
     }
 
     async getArticleById(article_id) {
         let res= await db.query("SELECT * FROM plats NATURAL JOIN plat_size WHERE id_plat = $1;", [article_id]);
-        return {id: res.rows[0].id_plat, name: res.rows[0].nom, ingredients: res.rows[0].descript, price: res.rows[0].prix};
+
+        let dim={};
+        for (let i=0; i<res.rows.length; i++){
+            dim[res.rows[i].size]=res.rows[i].prix;
+        }
+
+        return {id: res.rows[0].id_plat, name: res.rows[0].nom, ingredients: res.rows[0].descript, dimension: dim};
+    }
+
+    async getAllEntree() {
+        return await db.query("SELECT * FROM plats NATURAL JOIN plat_size WHERE type_plat = 'salade';");
+    }
+
+    async getAllPizzaMedium() {
+        return await db.query("SELECT * FROM plats NATURAL JOIN plat_size WHERE type_plat = 'pizza' AND size = 'medium';");
+    }
+
+    async getAllBoissonBySize(size_boisson) {
+        return await db.query("SELECT * FROM plats NATURAL JOIN plat_size WHERE type_plat = 'boisson' AND size = $1;", [size_boisson]);
     }
 
     // return array of prices of ingredients for pizza composee + total, according the size of pizza

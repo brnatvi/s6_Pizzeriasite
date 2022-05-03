@@ -125,9 +125,32 @@ button{
     max-width: 1050px;
 }
 
+#form-giga-menu, #form-mega-menu, #form-extra-menu{
+    margin-top: 60px;
+}
+
+.menu-menu{
+    margin-bottom: 40px;
+}
+
+#container-menu label{
+    margin-top: 20px;
+}
+
 /*animation*/
 .name-pizza, .name-salade, .name-boisson, .name-dessert , .price-pizza, .price-salade, .price-boisson, .price-dessert{
     transition: all .5s;
+}
+
+.container-item-desc p{
+    width: 200px;
+}
+
+#container-menu{
+    margin: auto;
+    margin-top: 25px;
+    min-height: 100vh;
+    width: 95%;
 }
 
 .item-description {
