@@ -37,7 +37,7 @@ CREATE TYPE eStatusCommande AS ENUM ('undelivered', 'inprogress', 'delivered');
 
 CREATE TABLE commande (
     id_commande SERIAL PRIMARY KEY,
-    date_commande TIMESTAMP  NOT NULL,
+    date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     id_client INT,   
     status_commande eStatusCommande DEFAULT 'undelivered',  
     sum_total NUMERIC(4, 2),
@@ -48,7 +48,7 @@ CREATE TABLE livreur (
     id_livr SERIAL PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     prenom VARCHAR(255) NOT NULL,
-    current_commande INT,
+    current_commande INT,    
     FOREIGN KEY (current_commande) REFERENCES commande (id_commande)
 );
 
