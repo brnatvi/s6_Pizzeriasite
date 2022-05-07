@@ -8,11 +8,14 @@ class Commande {
         // 1. find client id
         const client = req.session.user;
         console.log(client);
-        const id_client = await db.query("SELECT id_client FROM client WHERE nom = $1 AND prenom = $2 AND adr_client = $3 AND mobile = $4;", [client.nom, client.prenom, client.address, client.mobile]);
-        
+        const id_client = (await db.query("SELECT id_client FROM security_client WHERE email = $1;", [client.email])).rows[0].id_client;
+
         // 2. create new commande -> obtain id_commande
-        const id_comm = await db.query("INSERT INTO commande (date_commande, id_client) VALUES (CURRENT_TIMESTAMP, $1) RETURNING id_commande;", [id_client]); 
+        const id_comm = (await db.query("INSERT INTO commande (date_commande, id_client) VALUES (CURRENT_TIMESTAMP, $1) RETURNING id_commande;", [id_client])).rows[0].id_commande;
         console.log(id_comm);
+
+        //TODO: revoir le code ci-dessous
+
         // 3. fill contenu_commande
         if (client.cartItem !== null)
         {
@@ -20,7 +23,7 @@ class Commande {
             let k = 0;
             while (client.cartItem.idQuantity !== null)
             {   
-                await db.query("INSERT INTO contenu_commande (id_commande, id_plat, size) VALUES ($1, $2, $3);", [id_comm, client.cartItem.idQuantity[k], req.session.user.cartItem.idQuantity[k][SIZE]]);                
+                await db.query("INSERT INTO contenu_commande (id_commande, id_plat, size) VALUES ($1, $2, $3);", [id_comm, client.cartItem.idQuantity[k], req.session.user.cartItem.idQuantity[k][SIZE]]);
                 k++;
                 
             }
@@ -29,11 +32,11 @@ class Commande {
             const len = client.cartItem.menu.length;
             for (let i = 0; i < len; i++)
             {
-                if (client.cartItem.menu[i] !== null) 
-                {    
-                    await db.query("INSERT INTO contenu_commande (id_commande, id_plat, quantite) VALUES ($1, $2, $3);", [id_comm, client.cartItem.menu[i], client.cartItem.menu[i]["quantity"]]);                    
+                if (client.cartItem.menu[i] !== null)
+                {
+                    await db.query("INSERT INTO contenu_commande (id_commande, id_plat, quantite) VALUES ($1, $2, $3);", [id_comm.rows[0].id_commande, client.cartItem.menu[i], client.cartItem.menu[i]["quantity"]]);
                 }
-            }            
+            }
         }        
         
         // 4. calculate total sum of commande        
