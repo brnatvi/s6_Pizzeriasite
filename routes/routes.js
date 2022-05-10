@@ -31,6 +31,8 @@ router.post("/add-extra-menu-cart-item", justClient, controller_Client.addExtraM
 router.post("/add-mega-menu-cart-item", justClient, controller_Client.addMegaMenuCartItem);
 router.post("/add-giga-menu-cart-item", justClient, controller_Client.addGigaMenuCartItem);
 
+router.post("/addCommande", justClient, controller_Client.createCommande);
+
 
 //------------- Livreur ---------------------
 //------------- Just livreur ---------------------
@@ -48,8 +50,8 @@ router.get('*', stuffControllers.GetError);
 //------------- TODO: WIP ---------------------
 /*// 2 lien vers la carte*///TODO: 1 logo -> home page
 /*router.get("/carte", controller_Client.showCarte);*/
-/*router.post("/addCommande", controller_Client.createCommande);
-router.get("/client/:id", controller_Client.getClient);
+
+/*router.get("/client/:id", controller_Client.getClient);
 router.get("/clients", controller_Client.getListClients);
 router.delete("/client/:id", controller_Client.deleteClient);
 // 3 changer le status de commande

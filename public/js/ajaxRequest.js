@@ -180,6 +180,27 @@ $(document).ready(function() {
         });
     });
 
+
+    /**
+     * Créer une commande dans la base de donnée
+     */
+    $(document).on('click','#addCommande',function(e){
+        let action = "addCommande",
+            method = "post";
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            success: function(data) {
+                //TODO: changer console.log
+                console.log("OKAYY---------------------------------");
+            }, error : function (data) {
+                console.log("NOPE----------------------------------");
+                console.log("Impossible d'accéder à l'article voulu:"+JSON.stringify(data));
+            }
+        });
+    });
+
     /**
      * Ajouter un mega menu au panier.
      */

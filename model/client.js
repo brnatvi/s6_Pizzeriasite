@@ -75,6 +75,8 @@ class Client {
         return positionItem;
     }
 
+      
+
     //--------------- TODO: WIP : Basic client --------------------------------------------
 
     async getClientByID (req, res){
