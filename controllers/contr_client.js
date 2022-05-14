@@ -13,10 +13,6 @@ exports.updateProfileClient = (req, rep) => {Connect.updateProfile(Client, req, 
 
 //----------------- manipulation with items --------------------------------
 
-exports.createCommande = function (req, rep) {
-    Commande.createCommande(req, rep);
-};
-
 exports.addExtraMenuCartItem = function (req, rep) {
 
     Article.getArticleById(req.body.entreeExtraMenu).then(el=>{
@@ -254,5 +250,7 @@ exports.shop = function (req, rep) {
 //TODO: pizza recommandation?
 
 // create new commande
-
+exports.createCommande = function (req, rep) {
+    Commande.createCommande(req, rep);
+};
 
