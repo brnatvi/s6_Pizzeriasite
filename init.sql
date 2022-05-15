@@ -3,6 +3,7 @@ CREATE DATABASE pizzeria;
 
 \connect pizzeria
 
+DROP TABLE IF EXISTS pizza_composition cascade;
 DROP TABLE IF EXISTS ingredients cascade;
 DROP TABLE IF EXISTS security_client cascade;
 DROP TABLE IF EXISTS security_livreur cascade;
@@ -87,7 +88,7 @@ CREATE TABLE security_livreur (
     FOREIGN KEY (id_livr) REFERENCES livreur (id_livr)
 );
 
-CREATE TYPE eTypeInredient AS ENUM ('legumes', 'base', 'fromage');
+CREATE TYPE eTypeInredient AS ENUM ('legumes', 'base', 'fromage', 'sauses');
 
 CREATE TABLE ingredients (
     id_ingred SERIAL PRIMARY KEY,   
@@ -96,7 +97,15 @@ CREATE TABLE ingredients (
     prix NUMERIC(4, 2)
 );
 
+CREATE TABLE pizza_composition (
+    id_plat INT,   
+    id_ingred INT,    
+    FOREIGN KEY (id_plat) REFERENCES plats(id_plat),
+    FOREIGN KEY (id_ingred) REFERENCES ingredients(id_ingred)
+);
+
 
 \COPY plats(id_plat, type_plat, nom, descript, link_picture) FROM 'model/csv/plats_UTF8_no_bom.csv' (DELIMITER ',', FORMAT CSV, ENCODING 'UTF8');
 \COPY plat_size(id_plat, size, prix) FROM 'model/csv/size_UTF8_no_bom.csv' (DELIMITER ',', FORMAT CSV, ENCODING 'UTF8');
 \COPY ingredients(id_ingred, type_ingred, nom, prix) FROM 'model/csv/ingredients_UTF8_no_bom.csv' (DELIMITER ',', FORMAT CSV, ENCODING 'UTF8');
+\COPY pizza_composition(id_plat, id_ingred) FROM 'model/csv/pizza_ingredients.csv' (DELIMITER ',', FORMAT CSV);

@@ -1,23 +1,42 @@
-1,legumes,olives noires,1.00
-2,legumes,tomate,1.00
-3,legumes,tomates séchées,1.50
-4,legumes,oignon,1.00
-5,legumes,roquette,1.00
-6,legumes,poivrons mélangées,1.20
-7,legumes,artichauts,1.50
-8,legumes,légumes grillés,1.20
-9,legumes,asperge,1.60
-10,base,champignons,2.00
-11,base,chorizo,3.50
-12,base,poulet,3.50
-13,base,jambon,4.00
-14,base,prosciutto,6.40
-15,base,saumon,5.80
-16,base,thon,5.80
-17,base,anchois,4.10
-18,base,fruits de mer,5.50
-19,base,viande fumée,5.00
-20,fromage,fromage de chèvre,3.00
-21,fromage,mozzarella,3.00
-22,fromage,feta,3.00
-23,fromage,gruyère,3.00
+1,legumes,Olives noires,1.00
+2,legumes,Tomate,1.00
+3,legumes,Tomates séchées,1.50
+4,legumes,Oignon,1.00
+5,legumes,Roquette,1.00
+6,legumes,Poivrons mélangées,1.20
+7,legumes,Artichauts,1.50
+8,legumes,Légumes grillés,1.20
+9,legumes,Asperge,1.60
+10,base,Champignons,2.00
+11,base,Chorizo,3.50
+12,base,Poulet,3.50
+13,base,Jambon,4.00
+14,base,Prosciutto,6.40
+15,base,Saumon,5.80
+16,base,Thon,5.80
+17,base,Anchois,4.10
+18,base,Fruits de mer,5.50
+19,base,Viande fumée,5.00
+20,fromage,Fromage de chèvre,3.00
+21,fromage,Mozzarella,3.00
+22,fromage,Feta,3.00
+23,fromage,Gruyère,3.00
+24,legumes,Persil,1.00
+25,legumes,Pousses d’épinard,1.00
+26,fromage,Ricotta,3.00
+27,sauses,Crème,1.00
+28,sauses,Sause tomate,1.00
+29,sauses,Pesto de roquette,1.00
+30,sauses,Sauce crustacés,1.50
+31,sauses,Huile d'olive,1.00
+32,fromage,Fromage italien râpé,2.00
+33,fromage,Burrata,3.50
+34,base,Mortadelle de Bologne,5.30
+35,legumes,Pistaches,1.00
+36,base,Saucisse,3.00
+37,base,Spianata piccante,5.30
+38,base,Merguez de bœuf et mouton,5.50
+39,base,Œuf,2.10
+40,fromage,Gorgonzola,2.80
+41,fromage,Taleggio de Lombardie,2.60
+42,fromage,Scamorza fumée,2.70
