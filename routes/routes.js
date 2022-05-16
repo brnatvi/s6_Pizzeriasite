@@ -42,6 +42,8 @@ router.post("/livraisonsignup", controller_Livreur.signUpLivreur);
 router.get("/livraison", controller_Livreur.livraisonLivreur);
 
 
+router.get("/test", controller_Client.getPizzaByListIngredients);
+
 //------------- Default ---------------------
 router.get('*', stuffControllers.GetError);
 

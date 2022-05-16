@@ -3,7 +3,6 @@ const Commande = require("../model/commande");
 const Connect=require("./Connect");
 const Article=require("../model/article");
 
-
 //----------- fonctionnality available to Client/User --------------------
 
 exports.signInClient = (req, rep) => {Connect.signIn(Client, req, rep)};
@@ -12,6 +11,17 @@ exports.logOutUser = (req, rep) => {Connect.disconnectUser(req.session, rep)};
 exports.updateProfileClient = (req, rep) => {Connect.updateProfile(Client, req, rep)}
 
 //----------------- manipulation with items --------------------------------
+
+
+// looking for match the list if ingredients (for exemple [28, 21, 18, 30, 25]) with some prepared pizza and return this pizza
+exports.getPizzaByListIngredients = function (req, rep) {    
+    const match = Article.isTheSame([28, 21, 18, 30, 25]);  
+    console.log(match);  
+    if ( match !== undefined ){        
+        rep.json(Article.returnPizzaMatch(match));
+    }    
+};
+
 
 exports.addExtraMenuCartItem = function (req, rep) {
 
