@@ -2,6 +2,8 @@ const db = require("./db");
 
 class Article {
 
+    list_ingredients = [];
+
     async getAllArticle(){
         return await db.query("SELECT * FROM plats NATURAL JOIN (SELECT id_plat, MIN(prix) AS prix FROM plat_size GROUP BY id_plat) AS min_price;");
     }
@@ -52,24 +54,34 @@ class Article {
     };
 
     // match ingredients of incoming listIngredients with list inredients of some "Pizza prete"
-    async isTheSame(listIngredients) {         
-        let first = await db.query("SELECT id_plat FROM pizza_composition WHERE id_ingred = $1;", [listIngredients[0]]);        
+    async isTheSame(listIngredients) {
+        let first = await db.query("SELECT id_plat FROM pizza_composition WHERE id_ingred = $1;", [listIngredients[0]]); 
         let intersection = [];
 
-        for (let k = 0; k < first.rows.length; k++){
-            intersection.push(first.rows[k].id_plat);                
-        }
+        for (let k = first.rows.length - 1; k > -1; k--){  
+            intersection.push(first.rows[k].id_plat);  
+        }        
 
         for (let i = 1; i < listIngredients.length; i++){
             let next = await db.query("SELECT id_plat FROM pizza_composition WHERE id_ingred = $1;", [listIngredients[i]]); 
             let secondary = [];
-            for (let j = 0; j < next.rows.length; j++){
+            for (let j = next.rows.length - 1; j > -1 ; j--){                             
                 secondary.push(next.rows[j].id_plat);
             }
+                        
             const inters = intersection.filter(x => secondary.includes(x));
-            intersection = inters; 
-        }         
-        return intersection[0];      
+            intersection = inters;             
+        }
+        
+        if ((intersection.length === 0) || (intersection.length > 1 && intersection[0] !== 9)) {
+            return undefined;
+        }
+        else if ((intersection.length === 1) || (intersection.length > 1 && intersection[0] === 9)) {
+            return intersection[0];
+        }
+        else {
+            return undefined;
+        }
     };
 
     // return pizza by id_plat

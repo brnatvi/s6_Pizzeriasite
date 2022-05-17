@@ -20,7 +20,7 @@ class Livreur {
     }
 
 
-    //-------------- Create client -----------------------------------------
+    //-------------- Create livreur -----------------------------------------
 
     async addUser(req) {
         const { nom, prenom, email, pw } = req.body;
