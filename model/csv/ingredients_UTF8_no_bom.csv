@@ -10,13 +10,13 @@
 10,base,Champignons,2.00
 11,base,Chorizo,3.50
 12,base,Poulet,3.50
-13,base,Jambon,4.00
-14,base,Prosciutto,6.40
-15,base,Saumon,5.80
-16,base,Thon,5.80
-17,base,Anchois,4.10
-18,base,Fruits de mer,5.50
-19,base,Viande fumée,5.00
+13,base,Jambon,2.80
+14,base,Prosciutto,4.40
+15,base,Saumon,4.80
+16,base,Thon,4.80
+17,base,Anchois,3.10
+18,base,Fruits de mer,4.50
+19,base,Viande fumée,4.00
 20,fromage,Fromage de chèvre,3.00
 21,fromage,Mozzarella,3.00
 22,fromage,Feta,3.00
@@ -30,12 +30,12 @@
 30,sauses,Sauce crustacés,1.50
 31,sauses,Huile d'olive,1.00
 32,fromage,Fromage italien râpé,2.00
-33,fromage,Burrata,3.50
-34,base,Mortadelle de Bologne,5.30
+33,fromage,Burrata,2.50
+34,base,Mortadelle de Bologne,4.30
 35,legumes,Pistaches,1.00
 36,base,Saucisse,3.00
-37,base,Spianata piccante,5.30
-38,base,Merguez de bœuf et mouton,5.50
+37,base,Spianata piccante,3.30
+38,base,Merguez de bœuf et mouton,3.50
 39,base,Œuf,2.10
 40,fromage,Gorgonzola,2.80
 41,fromage,Taleggio de Lombardie,2.60

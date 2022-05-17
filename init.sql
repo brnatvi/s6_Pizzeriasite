@@ -109,3 +109,7 @@ CREATE TABLE pizza_composition (
 \COPY plat_size(id_plat, size, prix) FROM 'model/csv/size_UTF8_no_bom.csv' (DELIMITER ',', FORMAT CSV, ENCODING 'UTF8');
 \COPY ingredients(id_ingred, type_ingred, nom, prix) FROM 'model/csv/ingredients_UTF8_no_bom.csv' (DELIMITER ',', FORMAT CSV, ENCODING 'UTF8');
 \COPY pizza_composition(id_plat, id_ingred) FROM 'model/csv/pizza_ingredients.csv' (DELIMITER ',', FORMAT CSV);
+
+/*
+SELECT id_plat, (sum(prix) + 3) AS price_small, (sum(prix) + 3)*1.2 AS price_medium, (sum(prix) + 3)*1.5 AS price_large FROM pizza_composition NATURAL JOIN ingredients GROUP BY id_plat ORDER BY id_plat;
+*/
