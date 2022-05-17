@@ -241,39 +241,60 @@
                     <form id="frm-custom" action="add-pizza-custom-cart-item" method="post">
                         <label for="sizePizzaCustom">Choisissez une taille</label>
                         <select id="sizePizzaCustom" name="sizePizzaCustom" class="custom-select">
-                            <option value=""></option>
+                            <option priceing="10" value="small">small</option>
+                            <option priceing="12" value="medium">medium</option>
+                            <option priceing="15" value="large">large</option>
                         </select>
 
                         <label for="ingredientPizzaCustom1">Ajouter un premier ingrédient (inclus)</label>
                         <select id="ingredientPizzaCustom1" name="ingredientPizzaCustom1" class="custom-select">
-                            <option value=""></option>
+                            <option priceing="0" value="none">Aucun</option>
+                            <% locals.params.listIngredients.forEach(ing=>{ %>
+                                <option iding="<%-ing.id_ingred%>" priceing="<%-0%>" value="<%-ing.nom%>"><%-ing.nom%></option>
+                            <% }) %>
                         </select>
 
                         <label for="ingredientPizzaCustom2">Ajouter un second ingrédient (inclus)</label>
                         <select id="ingredientPizzaCustom2" name="ingredientPizzaCustom2" class="custom-select">
-                            <option value=""></option>
+                            <option priceing="0" value="none">Aucun</option>
+                            <% locals.params.listIngredients.forEach(ing=>{ %>
+                            <option iding="<%-ing.id_ingred%>" priceing="<%-0%>" value="<%-ing.nom%>"><%-ing.nom%></option>
+                            <% }) %>
                         </select>
 
                         <label for="ingredientPizzaCustom3">Ajouter un troisième ingrédient (inclus)</label>
                         <select id="ingredientPizzaCustom3" name="ingredientPizzaCustom3" class="custom-select">
-                            <option value=""></option>
+                            <option priceing="0" value="none">Aucun</option>
+                            <% locals.params.listIngredients.forEach(ing=>{ %>
+                            <option iding="<%-ing.id_ingred%>" priceing="<%-0%>" value="<%-ing.nom%>"><%-ing.nom%></option>
+                            <% }) %>
                         </select>
 
                         <label for="ingredientPizzaCustom4">Ajouter un quatrième ingrédient</label>
                         <select id="ingredientPizzaCustom4" name="ingredientPizzaCustom4" class="custom-select">
-                                <option value=""></option>
+                            <option priceing="0" value="none">Aucun</option>
+                            <% locals.params.listIngredients.forEach(ing=>{ %>
+                            <option iding="<%-ing.id_ingred%>" priceing="<%-ing.prix%>" value="<%-ing.nom%>"><%-ing.nom + " +"+ing.prix%> &#8364;</option>
+                            <% }) %>
                         </select>
 
                         <label for="ingredientPizzaCustom5">Ajouter un cinquième ingrédient</label>
                         <select id="ingredientPizzaCustom5" name="ingredientPizzaCustom5" class="custom-select">
-                            <option value=""></option>
+                            <option priceing="0" value="none">Aucun</option>
+                            <% locals.params.listIngredients.forEach(ing=>{ %>
+                            <option iding="<%-ing.id_ingred%>" priceing="<%-ing.prix%>" value="<%-ing.nom%>"><%-ing.nom + " +"+ing.prix%> &#8364;</option>
+                            <% }) %>
                         </select>
 
                         <label for="ingredientPizzaCustom6">Ajouter un sixième ingrédient</label>
                         <select id="ingredientPizzaCustom6" name="ingredientPizzaCustom6" class="custom-select">
-                            <option value=""></option>
+                            <option priceing="0" value="none">Aucun</option>
+                            <% locals.params.listIngredients.forEach(ing=>{ %>
+                            <option iding="<%-ing.id_ingred%>" priceing="<%-ing.prix%>" value="<%-ing.nom%>"><%-ing.nom + " +"+ing.prix%> &#8364;</option>
+                            <% }) %>
                         </select>
-
+                        <input id="total-custom-hidden" type="hidden" value="10">
+                        <p id="total-pizza-custom">total: <span>10</span> &#8364;</p>
                         <button id="form-pizza-custom" type="submit" class="btn btn-primary">Valider mes choix</button>
 
                     </form>

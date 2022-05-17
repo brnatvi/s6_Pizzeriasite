@@ -14,15 +14,14 @@ exports.updateProfileClient = (req, rep) => {Connect.updateProfile(Client, req, 
 
 
 // looking for match the list if ingredients (for exemple [28, 21, 18, 30, 25]) with some prepared pizza and return this pizza's ID with its prices
-exports.getPizzaByListIngredients = function (req, rep) {    
-    Article.isTheSame([28, 21, 18, 30, 25]).then(function(result){
+exports.getPizzaByListIngredients = function (req, rep) {
+    Article.isTheSame(req.body.listIng).then(function(result){
         const match = result;
-        console.log(result);
         if ( match !== undefined ){        
             Article.returnPizzaMatch(match).then(function(result){
-            console.log(result.rows);
+            rep.send(result.rows);
           })
-        }
+        }else rep.send([]);
     })
 };
 
@@ -220,35 +219,42 @@ exports.shop = function (req, rep) {
                 Article.getAllBoissonBySize("100").then(el=>{
                     return el.rows;
                 }).then(boissonMax=>{
-                    Article.getAllEntree().then(entrees=>{
-                        if(req.session.user!==undefined){
-                            rep.render('../views/index',{
-                                params: {
-                                    title: 'index',
-                                    menu: req.session.user.cartItem.menu,
-                                    quantity: req.session.user.cartItem.idQuantity,
-                                    price: req.session.user.cartItem.price,
-                                    list: articlesrq,
-                                    entreeMenu: entrees.rows,
-                                    pizzasMenu: pizzaMedium,
-                                    boissonMinMenu: boissonMin,
-                                    boissonMaxMenu: boissonMax,
-                                    isLogued: true
-                                }
-                            });
-                        }else{
-                            rep.render('../views/index',{
-                                params: {
-                                    title: 'index',
-                                    list: articlesrq,
-                                    entreeMenu: entrees.rows,
-                                    pizzasMenu: pizzaMedium,
-                                    boissonMinMenu: boissonMin,
-                                    boissonMaxMenu: boissonMax,
-                                    isLogued: false
-                                }
-                            });
-                        }
+                    Article.getAllEntree().then(el=>{
+                        return el;
+                    }).then(entrees=>{
+                        Article.getAllIngredients().then(ingredients=>{
+                            console.log("ingredients: "+JSON.stringify(ingredients))
+                            if(req.session.user!==undefined){
+                                rep.render('../views/index',{
+                                    params: {
+                                        title: 'index',
+                                        menu: req.session.user.cartItem.menu,
+                                        quantity: req.session.user.cartItem.idQuantity,
+                                        price: req.session.user.cartItem.price,
+                                        list: articlesrq,
+                                        entreeMenu: entrees.rows,
+                                        pizzasMenu: pizzaMedium,
+                                        boissonMinMenu: boissonMin,
+                                        boissonMaxMenu: boissonMax,
+                                        listIngredients: ingredients,
+                                        isLogued: true
+                                    }
+                                });
+                            }else{
+                                rep.render('../views/index',{
+                                    params: {
+                                        title: 'index',
+                                        list: articlesrq,
+                                        entreeMenu: entrees.rows,
+                                        pizzasMenu: pizzaMedium,
+                                        boissonMinMenu: boissonMin,
+                                        boissonMaxMenu: boissonMax,
+                                        listIngredients: ingredients,
+                                        isLogued: false
+                                    }
+                                });
+                            }
+                        })
                     }).catch(err=>{console.log("err"+JSON.stringify(err))})
                 }).catch(err=>{console.log("err"+JSON.stringify(err))})
             }).catch(err=>{console.log("err"+JSON.stringify(err))})

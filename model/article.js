@@ -74,7 +74,7 @@ class Article {
 
     // return pizza by id_plat
     async returnPizzaMatch(id) {
-        return await db.query("SELECT  id_plat, prix FROM plats NATURAL JOIN plat_size WHERE id_plat = $1;", [id]);                
+        return await db.query("SELECT  id_plat, prix, plat_size.size FROM plats NATURAL JOIN plat_size WHERE id_plat = $1;", [id]);
     };
 
 

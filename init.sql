@@ -22,7 +22,7 @@ CREATE TABLE plats (
     id_plat SERIAL PRIMARY KEY,
     type_plat eTypePlat,
     nom VARCHAR(255) NOT NULL UNIQUE,
-    descript TEXT,    
+    descript TEXT,
     link_picture TEXT
 );            
 
