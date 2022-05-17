@@ -33,22 +33,22 @@ class Article {
 
     // return list of ingredients of some defined pizza (to compare composition and prices)
     async getIngedientsPizza(idPizza) {       
-        ingredients_prete = await db.query("SELECT * FROM pizza_composition NATURAL JOIN ingredients WHERE id_plat = $1;", [idPizza]);
+        let ingredients_prete = await db.query("SELECT * FROM pizza_composition NATURAL JOIN ingredients WHERE id_plat = $1;", [idPizza]);
         let idIngredients = [];
         for (let i = 0; i < ingredients_prete.rows.length; i++){
             idIngredients.push(ingredients_prete.rows[i]);            
-        }
-        console.log(ingredients_prete);
+        }        
+        return ingredients_prete.rows;
     };
 
     // return list of all possible ingredients for page "Pizza composee"
     async getAllIngredients() {       
-        ingredients_composee = await db.query("SELECT * FROM ingredients;");
+        let ingredients_composee = await db.query("SELECT * FROM ingredients;");
         let idIngredients = [];
-        for (let i = 0; i < listIngred.rows.length; i++){
-            idIngredients.push(listIngred.rows[i]);            
-        }
-        console.log(ingredients_composee);
+        for (let i = 0; i < ingredients_composee.rows.length; i++){
+            idIngredients.push(ingredients_composee.rows[i]);            
+        }        
+        return ingredients_composee.rows;
     };
 
     // match ingredients of incoming listIngredients with list inredients of some "Pizza prete"
@@ -68,13 +68,13 @@ class Article {
             }
             const inters = intersection.filter(x => secondary.includes(x));
             intersection = inters; 
-        } 
+        }         
         return intersection[0];      
     };
 
     // return pizza by id_plat
     async returnPizzaMatch(id) {
-        return await db.query("SELECT * FROM plats WHERE id_plat = $1;", [id]);                
+        return await db.query("SELECT  id_plat, prix, plat_size.size FROM plats NATURAL JOIN plat_size WHERE id_plat = $1;", [id]);
     };
 
 

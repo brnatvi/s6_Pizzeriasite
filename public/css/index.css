@@ -125,7 +125,7 @@ button{
     max-width: 1050px;
 }
 
-#form-giga-menu, #form-mega-menu, #form-extra-menu{
+#form-giga-menu, #form-mega-menu, #form-extra-menu, #total-pizza-custom{
     margin-top: 60px;
 }
 
@@ -133,7 +133,7 @@ button{
     margin-bottom: 40px;
 }
 
-#container-menu label{
+#container-menu label, #frm-custom label{
     margin-top: 20px;
 }
 
