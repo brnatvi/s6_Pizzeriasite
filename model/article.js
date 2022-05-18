@@ -61,20 +61,9 @@ class Article {
         for (let i = 0; i < ingredrow.rows.length; i++) {
             idIngredients.push(ingredrow.rows[i].id_ingred);
         }
-        console.log("3__isItPizza__ : Checking ingredients of pizza found :");
-        console.log(idIngredients);
-
-        console.log("4__isItPizza__ : Difference with initial list has to be empty :");
         const inters = idIngredients.filter(x => !listIngredients.includes(x));
-        console.log(inters);
-        if (inters.length === 0) {
-            console.log(true);
-            return true;
-        }
-        else {
-            console.log(false);
-            return false;
-        }
+        if (inters.length === 0) return true;
+        else return false;
     };
 
     // match ingredients of incoming listIngredients with list inredients of some "Pizza prete"
@@ -85,8 +74,6 @@ class Article {
         for (let k = first.rows.length - 1; k > -1; k--) {
             intersection.push(first.rows[k].id_plat);
         }
-        console.log("1__isTheSame__ : This ingredients appaired to first pizza :");
-        console.log(intersection);
 
         for (let i = 1; i < listIngredients.length; i++) {
             let next = await db.query("SELECT id_plat FROM pizza_composition WHERE id_ingred = $1;", [listIngredients[i]]);
@@ -94,27 +81,15 @@ class Article {
             for (let j = next.rows.length - 1; j > -1; j--) {
                 secondary.push(next.rows[j].id_plat);
             }
-
-            const inters = intersection.filter(x => secondary.includes(x));
-            intersection = inters;
+            intersection = intersection.filter(x => secondary.includes(x));
         }
-        console.log("2__isTheSame__ : Finaly intersection is :");
-        console.log(intersection);
 
         if ((intersection.length === 1) || (intersection.length > 1 && intersection[0] === 9)) {
             const isPizza = await this.isItPizza(listIngredients, intersection[0]);
-                if (isPizza === true) {
-                    console.log("5__isTheSame__ : it's a pizza!!");
-                    console.log(intersection[0]);                    
-                    return (intersection[0]);
-                }
-                else {
-                    console.log("5__isTheSame__ : it's not a pizza!!");
-                    return undefined;
-                }
-            
+            if (isPizza === true) return (intersection[0]);
+            else return undefined;
         }
-        else { return undefined };
+        else return undefined;
     };
 
 
@@ -126,20 +101,16 @@ class Article {
 
     async getPizzaByListIngredients(list) {
         if (list.length > 1) {
-            this.isTheSame(list).then(res => {
-                console.log("6__getPizzaByListIngredients__ : res from isTheSame:");
-                console.log(res);
+            return this.isTheSame(JSON.parse(JSON.stringify(list))).then(res => {
+                return res;
+            }).then(res => {
                 if (res !== undefined) {
-                    this.returnPizzaMatch(res).then(pizza => {
-                        console.log("7__getPizzaByListIngredients__ : pizza:");
-                        console.log(pizza.rows);
+                    return this.returnPizzaMatch(res).then(pizza => {
                         return pizza.rows;
-                    }).catch((err) => { console.log("getPizzaByListIngredients" + JSON.stringify(err)) });
-                }
-                else return ([]);
-            }).catch((err) => { console.log("getPizzaByListIngredients" + JSON.stringify(err)) });
-        }
-        else return ([]);
+                    }).catch((err) => {console.log("getPizzaByListIngredients" + JSON.stringify(err))});
+                } else return ([]);
+            }).catch((err) => {console.log("getPizzaByListIngredients" + JSON.stringify(err))});
+        } else return [];
     };
 
 
