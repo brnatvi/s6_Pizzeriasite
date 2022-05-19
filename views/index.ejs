@@ -380,7 +380,7 @@
             </div>
             <div id="modal-body-item">
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" id="menu-custom-add-pizza">
                 <form class="form-add-dart-item" method="post" action="add-new-cart-item">
                     <label for="choiceSize">Choisir une taille:</label>
                     <select name="choiceSize" id="choiceSize" class="custom-select">
@@ -388,6 +388,11 @@
                     </select>
                     <input type="hidden" class="input-hide-add-cart" name="idArticle" value="">
                     <button type="submit" class="btn btn-primary add-cart-item">Ajouter au panier</button>
+                </form>
+                <!-- responsive 505px column + don't print form if != pizza -->
+                <form id="form-custom-cart-item">
+                    <!-- crash si clique deux fois sur la même pizza -->
+                    <button id="custom-cart-item-ok" type="submit" class="btn btn-primary custom-cart-item">Personaliser l'article</button>
                 </form>
             </div>
         </div>

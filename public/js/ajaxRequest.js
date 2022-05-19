@@ -127,12 +127,28 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                $("#modal-info-item-title").text(data.name);
+
+                console.log("dataaaa"+JSON.stringify(data));
+
+                //remove all data-ingredient before click
+                $('.data-ingredient').remove();
+
+                //add hidden input data-ingredient
+                for (let i = 0; i < ((data.ingredients.length<=6)?data.ingredients.length:6); i++) {
+                    $('<input>', {
+                        type: 'hidden',
+                        name: data.ingredients[i].nom,
+                        value: data.ingredients[i].id_ingred,
+                        class: 'data-ingredient',
+                    }).appendTo($("#form-custom-cart-item"));
+                }
+
+                $("#modal-info-item-title").text(data.articles.name);
 
                 $("#modal-body-item").empty();
 
                 let ingredientSpanList= $('<span>').attr('id', 'ingredients-list')
-                    .text(data.ingredients)
+                    .text(data.articles.ingredients)
                     .css({
                         fontWeight: "normal"
                     });
@@ -147,12 +163,12 @@ $(document).ready(function() {
                     .appendTo('#modal-body-item');
 
                 $('#choiceSize').empty();
-                for (let sizeArticle in data.dimension){
-                    let priceArticle = data.dimension[sizeArticle];
+                for (let sizeArticle in data.articles.dimension){
+                    let priceArticle = data.articles.dimension[sizeArticle];
                     $('<option value="'+sizeArticle+'">'+sizeArticle + ': ' + priceArticle+'  &#8364;</option>').appendTo('#choiceSize');
                 }
 
-                $('.input-hide-add-cart').val(data.id);
+                $('.input-hide-add-cart').val(data.articles.id);
             }, error : function () {
                 console.log("Impossible d'accéder à l'article voulu");
             }

@@ -101,15 +101,11 @@ class Article {
 
     async getPizzaByListIngredients(list) {
         if (list.length > 1) {
-            return this.isTheSame(JSON.parse(JSON.stringify(list))).then(res => {
-                return res;
-            }).then(res => {
-                if (res !== undefined) {
-                    return this.returnPizzaMatch(res).then(pizza => {
-                        return pizza.rows;
-                    }).catch((err) => {console.log("getPizzaByListIngredients" + JSON.stringify(err))});
-                } else return ([]);
-            }).catch((err) => {console.log("getPizzaByListIngredients" + JSON.stringify(err))});
+            let isSame = await this.isTheSame(list);
+            if (isSame !== undefined) {
+                let pizzaMatch = await this.returnPizzaMatch(isSame);
+                return pizzaMatch.rows;
+            } else return ([]);
         } else return [];
     };
 

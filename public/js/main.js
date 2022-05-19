@@ -74,14 +74,9 @@ const total = () => {
     return total.toFixed(2);
 }
 
-const pizzaExist = async (e) => {
-    let listIng=[];
-    for (let i=0; i<=6; i++){
-        let ingrPCustomId=$('#ingredientPizzaCustom'+i+' :selected').attr('iding')
-        if (ingrPCustomId!==undefined){
-            listIng.push(parseInt(ingrPCustomId));
-        }
-    }
+const pizzaExist = async (listIng, e) => {
+
+    //console.log("list send : " + JSON.stringify(listIng))
     //SEND REQUEST CHECK IF EXIST PIZZA
     e.preventDefault();
     return await $.ajax({
@@ -96,39 +91,54 @@ const pizzaExist = async (e) => {
     });
 }
 
-const isPizzaStandard = (e) => {
-    pizzaExist(e).then(tmp=>{
-        console.log(JSON.stringify(tmp))
-        if (tmp.length>0){
-            let currSize=$('#sizePizzaCustom :selected').attr("value")
-            for (let i=0; i<tmp.length; i++){
-                if (tmp[i]["size"]===currSize){
-                    $('#total-pizza-custom span').text(tmp[i]["prix"])
-                    $('#total-custom-hidden').attr("value", tmp[i]["prix"])
-                    break;
-                }
+const isPizzaStandard = (listIng, e) => {
+    if (listIng===undefined){
+        listIng = [];
+        for (let i = 0; i <= 6; i++) {
+            let ingrPCustomId = $('#ingredientPizzaCustom' + i + ' :selected').attr('iding')
+            if (ingrPCustomId !== undefined) {
+                listIng.push(parseInt(ingrPCustomId));
             }
-        }else {
-            $('#total-pizza-custom span').text(total())
-            $('#total-custom-hidden').attr("value", total())
         }
-    }).catch(()=>{console.log("Impossible d'actualiser correctement le prix")})
+    }
+
+
+    //console.log("\n\nlistIng: "+listIng+"\n\n");
+
+    if (listIng!==[]){
+        /*await */pizzaExist(listIng, e).then(tmp=>{
+            //console.log("list receive : "+JSON.stringify(tmp))
+            if (tmp.length>0){
+                let currSize=$('#sizePizzaCustom :selected').attr("value")
+                for (let i=0; i<tmp.length; i++){
+                    if (tmp[i]["size"]===currSize){
+                        $('#total-pizza-custom span').text(tmp[i]["prix"])
+                        $('#total-custom-hidden').attr("value", tmp[i]["prix"])//TODO: mauvaise actualisation champs au deuxieme click
+                        break;
+                    }
+                }
+            }else {
+                $('#total-pizza-custom span').text(total())
+                $('#total-custom-hidden').attr("value", total())
+            }
+        }).catch(()=>{console.log("Impossible d'actualiser correctement le prix")})
+    }else console.log("empty")
 }
 
 $(document).on('change', '#sizePizzaCustom', function(e) {
     $('#total-pizza-custom span').text(total())
-    isPizzaStandard(e)
+    isPizzaStandard(undefined, e)
 });
 
 $(document).on('change', '#ingredientPizzaCustom1', function(e) {
     update(1)
-    isPizzaStandard(e)
+    isPizzaStandard(undefined, e)
 });
 
 $(document).on('change', '#ingredientPizzaCustom2', function(e) {
     check(2)
     update(2)
-    isPizzaStandard(e)
+    isPizzaStandard(undefined, e)
 });
 
 $(document).on('change', '#ingredientPizzaCustom3', function(e) {
@@ -140,17 +150,46 @@ $(document).on('change', '#ingredientPizzaCustom3', function(e) {
 $(document).on('change', '#ingredientPizzaCustom4', function(e) {
     check(4)
     update(4)
-    isPizzaStandard(e)
+    isPizzaStandard(undefined, e)
 });
 
 $(document).on('change', '#ingredientPizzaCustom5', function(e) {
     check(5)
     update(5)
-    isPizzaStandard(e)
+    isPizzaStandard(undefined, e)
 });
 
 $(document).on('change', '#ingredientPizzaCustom6', function(e) {
     check(6)
     update(6)
-    isPizzaStandard(e)
+    isPizzaStandard(undefined, e)
 });
+
+$(document).on('click', '#custom-cart-item-ok', function (e){
+    e.preventDefault()
+    //checkout tab pizza custom
+    //get saved ingredient
+    for (let i = 0; i < 6; i++) {
+        $('#ingredientPizzaCustom'+(i+1)).prop('selectedIndex',0);
+    }
+    /*check(6)
+    update(6)*/
+    //console.log("AAAAAA "+$('.data-ingredient').length+" AAAAAA")
+    let arrResp = [];
+    //console.log("LLLLLLLLLLL"+$('.data-ingredient').length)
+    for (let i = 0; i < $('.data-ingredient').length; i++) {
+        //console.log("BBBBBB "+$('.data-ingredient')[i].value+" BBBBBB")
+        arrResp.push(parseInt($('.data-ingredient')[i].value))
+        $('#ingredientPizzaCustom'+(i+1)+' option[iding='+arrResp[i]+']').attr('selected','selected');
+        //console.log('#ingredientPizzaCustom'+(i+1)+' option[iding='+$('.data-ingredient')[i].value+']')
+    }
+
+    $('#modal-info-item').modal('toggle');
+    $('#v-pills-pizza-custom-tab').click();
+    isPizzaStandard(arrResp, e);//get
+    //ne marche pas car return -1
+    //set les options a aucune
+    //set les options avec la liste
+})
+
+//Personaliser une pizza

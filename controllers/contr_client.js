@@ -14,9 +14,10 @@ exports.updateProfileClient = (req, rep) => { Connect.updateProfile(Client, req,
 
 // looking for match the list if ingredients (for exemple [28, 21, 18, 30, 25]) with some prepared pizza and return this pizza's ID with its prices
 exports.getPizzaByListIngredients = function (req, rep) {
-    Article.getPizzaByListIngredients(req.body.listIng.map(Number)).then(rez => {
-        rep.send(rez);
-    }).catch((err) => { console.log("getPizzaByListIngredients" + JSON.stringify(err)) });
+    console.log("listttt"+req.body.listIng)
+    Article.getPizzaByListIngredients((req.body.listIng!==undefined)?req.body.listIng.map(Number):[]).then(rez => {
+        return rez
+    }).then(rez=>{rep.send(rez);}).catch((err) => { console.log("getPizzaByListIngredients" + JSON.stringify(err)) });
 };
 
 exports.addExtraMenuCartItem = function (req, rep) {
@@ -111,7 +112,12 @@ exports.addGigaMenuCartItem = function (req, rep) {
 
 exports.infoCartItem = function (req, rep) {
     Article.getArticleById(req.body.idArticle).then(articles => {
-        rep.json(articles);
+        return articles;
+    }).then(articles=>{
+        Article.getIngedientsPizza(req.body.idArticle).then(ingredients => {
+            console.log(JSON.stringify({articles, ingredients}))
+            rep.json({articles, ingredients});
+        }).catch(err => { console.log("infoCartItem" + JSON.stringify(err)) });
     }).catch(err => { console.log("infoCartItem" + JSON.stringify(err)) });
 }
 

@@ -167,6 +167,21 @@ button{
     cursor: pointer;
 }
 
+#menu-custom-add-pizza {
+    display: flex;
+    flex-direction: row;
+}
+
+#form-custom-cart-item{
+    width: 40%;
+    margin-top: 70px;
+}
+
+.form-add-dart-item{
+    width: 40%;
+    margin: auto;
+}
+
 .container-item-desc:hover .name-pizza,
 .container-item-desc:hover .price-pizza,
 .container-item-desc:hover .name-salade,
@@ -220,6 +235,20 @@ button{
     }
     #container-cart{
         max-width: 100%;
+    }
+}
+
+@media only screen and (max-width: 505px){
+    #menu-custom-add-pizza {
+        display: flex;
+        flex-direction: column;
+    }
+    #form-custom-cart-item{
+        margin-top: 10px;
+        width: 100%;
+    }
+    .form-add-dart-item{
+        width: 100%;
     }
 }
 
