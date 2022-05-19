@@ -248,7 +248,7 @@
 
                         <label for="ingredientPizzaCustom1">Ajouter un premier ingrédient (inclus)</label>
                         <select id="ingredientPizzaCustom1" name="ingredientPizzaCustom1" class="custom-select">
-                            <option priceing="0" value="none">Aucun</option>
+                            <option priceing="0" value="none" selected>Aucun</option>
                             <% locals.params.listIngredients.forEach(ing=>{ %>
                                 <option iding="<%-ing.id_ingred%>" priceing="<%-0%>" value="<%-ing.nom%>"><%-ing.nom%></option>
                             <% }) %>
@@ -256,7 +256,7 @@
 
                         <label for="ingredientPizzaCustom2">Ajouter un second ingrédient (inclus)</label>
                         <select id="ingredientPizzaCustom2" name="ingredientPizzaCustom2" class="custom-select">
-                            <option priceing="0" value="none">Aucun</option>
+                            <option priceing="0" value="none" selected>Aucun</option>
                             <% locals.params.listIngredients.forEach(ing=>{ %>
                             <option iding="<%-ing.id_ingred%>" priceing="<%-0%>" value="<%-ing.nom%>"><%-ing.nom%></option>
                             <% }) %>
@@ -264,7 +264,7 @@
 
                         <label for="ingredientPizzaCustom3">Ajouter un troisième ingrédient (inclus)</label>
                         <select id="ingredientPizzaCustom3" name="ingredientPizzaCustom3" class="custom-select">
-                            <option priceing="0" value="none">Aucun</option>
+                            <option priceing="0" value="none" selected>Aucun</option>
                             <% locals.params.listIngredients.forEach(ing=>{ %>
                             <option iding="<%-ing.id_ingred%>" priceing="<%-0%>" value="<%-ing.nom%>"><%-ing.nom%></option>
                             <% }) %>
@@ -272,7 +272,7 @@
 
                         <label for="ingredientPizzaCustom4">Ajouter un quatrième ingrédient</label>
                         <select id="ingredientPizzaCustom4" name="ingredientPizzaCustom4" class="custom-select">
-                            <option priceing="0" value="none">Aucun</option>
+                            <option priceing="0" value="none" selected>Aucun</option>
                             <% locals.params.listIngredients.forEach(ing=>{ %>
                             <option iding="<%-ing.id_ingred%>" priceing="<%-ing.prix%>" value="<%-ing.nom%>"><%-ing.nom + " +"+ing.prix%> &#8364;</option>
                             <% }) %>
@@ -280,7 +280,7 @@
 
                         <label for="ingredientPizzaCustom5">Ajouter un cinquième ingrédient</label>
                         <select id="ingredientPizzaCustom5" name="ingredientPizzaCustom5" class="custom-select">
-                            <option priceing="0" value="none">Aucun</option>
+                            <option priceing="0" value="none" selected>Aucun</option>
                             <% locals.params.listIngredients.forEach(ing=>{ %>
                             <option iding="<%-ing.id_ingred%>" priceing="<%-ing.prix%>" value="<%-ing.nom%>"><%-ing.nom + " +"+ing.prix%> &#8364;</option>
                             <% }) %>
@@ -288,7 +288,7 @@
 
                         <label for="ingredientPizzaCustom6">Ajouter un sixième ingrédient</label>
                         <select id="ingredientPizzaCustom6" name="ingredientPizzaCustom6" class="custom-select">
-                            <option priceing="0" value="none">Aucun</option>
+                            <option priceing="0" value="none" selected>Aucun</option>
                             <% locals.params.listIngredients.forEach(ing=>{ %>
                             <option iding="<%-ing.id_ingred%>" priceing="<%-ing.prix%>" value="<%-ing.nom%>"><%-ing.nom + " +"+ing.prix%> &#8364;</option>
                             <% }) %>

@@ -170,7 +170,14 @@ $(document).on('click', '#custom-cart-item-ok', function (e){
     //checkout tab pizza custom
     //get saved ingredient
     for (let i = 0; i < 6; i++) {
-        $('#ingredientPizzaCustom'+(i+1)).prop('selectedIndex',0);
+        //$('#ingredientPizzaCustom'+(i+1)).prop('selectedIndex',0);
+        $('#ingredientPizzaCustom'+(i+1)+' option').prop('selected', function() {
+            return this.defaultSelected;
+        });
+        //$('#ingredientPizzaCustom'+(i+1)).attr('selected',false);
+
+        //$('#ingredientPizzaCustom'+(i+1)+' option[value=none]').attr('selected','selected');
+        //console.log($('#ingredientPizzaCustom'+(i+1)));
     }
     /*check(6)
     update(6)*/
@@ -180,8 +187,14 @@ $(document).on('click', '#custom-cart-item-ok', function (e){
     for (let i = 0; i < $('.data-ingredient').length; i++) {
         //console.log("BBBBBB "+$('.data-ingredient')[i].value+" BBBBBB")
         arrResp.push(parseInt($('.data-ingredient')[i].value))
-        $('#ingredientPizzaCustom'+(i+1)+' option[iding='+arrResp[i]+']').attr('selected','selected');
+        $('#ingredientPizzaCustom'+(i+1)+' option[iding='+arrResp[i]+']').attr('selected',true);
+        console.log(arrResp[i])
+        console.log($('#ingredientPizzaCustom'+(i+1)).val());
         //console.log('#ingredientPizzaCustom'+(i+1)+' option[iding='+$('.data-ingredient')[i].value+']')
+    }
+
+    for (let i = $('.data-ingredient').length; i < 6; i++) {
+        $('#ingredientPizzaCustom'+(i+1)).val("none")
     }
 
     $('#modal-info-item').modal('toggle');
