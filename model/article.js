@@ -110,7 +110,13 @@ class Article {
     };
 
 
-
+    async getIngredientsListInfo(list){
+        let rq = "SELECT * FROM ingredients WHERE id_ingred = $1";
+        for (let i = 2; i < list.length+1; i++) {
+            rq+=" OR id_ingred = $"+i;
+        }
+        return (await db.query(rq, list)).rows;
+    }
 
 
 

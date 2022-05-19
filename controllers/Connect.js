@@ -185,7 +185,8 @@ class Connect {
                 cartItem: {
                     price: 0,
                     idQuantity: {/*id: {size : quantity}*/},
-                    menu: [/*{{menu} : quantity}*/]
+                    menu: [/*{{menu} : quantity}*/],
+                    custom: [/*{{menu} : quantity}*/]
                 },
                 tokenAuth: "Bearer "+jwt.sign(
                     { email: user.email },

@@ -13,7 +13,6 @@ $(document).on('click', '#signup-show-password-livraison', function () {
 });
 
 $(document).on('click', '#is-delivery-man', function () {
-    console.log('ed')
     if($(this).is(":checked")){
         $('.is-client').css({
             "display":"none"
@@ -75,12 +74,10 @@ const total = () => {
 }
 
 const pizzaExist = async (listIng, e) => {
-
-    //console.log("list send : " + JSON.stringify(listIng))
     //SEND REQUEST CHECK IF EXIST PIZZA
     e.preventDefault();
     return await $.ajax({
-        url: 'test',
+        url: 'ingredient-to-pizza',
         type: 'post',
         data: {listIng},
         success: function (data) {
@@ -102,12 +99,8 @@ const isPizzaStandard = (listIng, e) => {
         }
     }
 
-
-    //console.log("\n\nlistIng: "+listIng+"\n\n");
-
     if (listIng!==[]){
-        /*await */pizzaExist(listIng, e).then(tmp=>{
-            //console.log("list receive : "+JSON.stringify(tmp))
+        pizzaExist(listIng, e).then(tmp=>{
             if (tmp.length>0){
                 let currSize=$('#sizePizzaCustom :selected').attr("value")
                 for (let i=0; i<tmp.length; i++){
@@ -167,42 +160,24 @@ $(document).on('change', '#ingredientPizzaCustom6', function(e) {
 
 $(document).on('click', '#custom-cart-item-ok', function (e){
     e.preventDefault()
-    //checkout tab pizza custom
-    //get saved ingredient
+    //select default items
     for (let i = 0; i < 6; i++) {
-        //$('#ingredientPizzaCustom'+(i+1)).prop('selectedIndex',0);
         $('#ingredientPizzaCustom'+(i+1)+' option').prop('selected', function() {
             return this.defaultSelected;
         });
-        //$('#ingredientPizzaCustom'+(i+1)).attr('selected',false);
-
-        //$('#ingredientPizzaCustom'+(i+1)+' option[value=none]').attr('selected','selected');
-        //console.log($('#ingredientPizzaCustom'+(i+1)));
     }
-    /*check(6)
-    update(6)*/
-    //console.log("AAAAAA "+$('.data-ingredient').length+" AAAAAA")
+    //retrieve the list of ingredients for the pizza to customize
     let arrResp = [];
-    //console.log("LLLLLLLLLLL"+$('.data-ingredient').length)
     for (let i = 0; i < $('.data-ingredient').length; i++) {
-        //console.log("BBBBBB "+$('.data-ingredient')[i].value+" BBBBBB")
         arrResp.push(parseInt($('.data-ingredient')[i].value))
         $('#ingredientPizzaCustom'+(i+1)+' option[iding='+arrResp[i]+']').attr('selected',true);
-        console.log(arrResp[i])
-        console.log($('#ingredientPizzaCustom'+(i+1)).val());
-        //console.log('#ingredientPizzaCustom'+(i+1)+' option[iding='+$('.data-ingredient')[i].value+']')
     }
-
+    //clearing empty fields
     for (let i = $('.data-ingredient').length; i < 6; i++) {
         $('#ingredientPizzaCustom'+(i+1)).val("none")
     }
-
+    //update user view
     $('#modal-info-item').modal('toggle');
     $('#v-pills-pizza-custom-tab').click();
-    isPizzaStandard(arrResp, e);//get
-    //ne marche pas car return -1
-    //set les options a aucune
-    //set les options avec la liste
+    isPizzaStandard(arrResp, e);
 })
-
-//Personaliser une pizza

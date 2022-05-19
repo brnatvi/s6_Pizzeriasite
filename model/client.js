@@ -51,6 +51,32 @@ class Client {
         return await db.query("UPDATE client SET mobile = $2 WHERE id_client = $1 RETURNING *;", [id, mobile]);
     };
 
+    addCustomCartItem(req, pricePizza, sizePizza, ingredients, ingredientsInfo) {
+        let flag=false;
+        let nbrCustom=req.session.user.cartItem.custom.length;
+        let positionItem;
+        for (let i=0; i<nbrCustom; i++){
+            if (req.session.user.cartItem.custom[i]!==null){
+                let el=req.session.user.cartItem.custom[i];
+                if (JSON.stringify(el["ingredients"]) === JSON.stringify(ingredients)){
+                    if (JSON.stringify(el["size"]) === JSON.stringify(sizePizza)){
+                        flag=true;
+                        el["quantity"]+=1;
+                        positionItem=i;
+                        break;
+                    }
+                }
+            }
+        }
+        //add new menu
+        if (!flag){
+            req.session.user.cartItem.custom.splice(nbrCustom, 0, {"ingredients":ingredients, "ingredientsInfo":ingredientsInfo, "size":sizePizza, "quantity":1, "price":pricePizza});
+            positionItem=nbrCustom;
+        }
+        req.session.user.cartItem.price+=pricePizza;
+        return positionItem;
+    }
+
     addMenuCartItem(req, updatePrice, menuName, listAllItemName){
         let flag=false;
         let nbrMenu=req.session.user.cartItem.menu.length;

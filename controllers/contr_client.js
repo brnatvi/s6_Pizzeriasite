@@ -14,11 +14,41 @@ exports.updateProfileClient = (req, rep) => { Connect.updateProfile(Client, req,
 
 // looking for match the list if ingredients (for exemple [28, 21, 18, 30, 25]) with some prepared pizza and return this pizza's ID with its prices
 exports.getPizzaByListIngredients = function (req, rep) {
-    console.log("listttt"+req.body.listIng)
     Article.getPizzaByListIngredients((req.body.listIng!==undefined)?req.body.listIng.map(Number):[]).then(rez => {
         return rez
     }).then(rez=>{rep.send(rez);}).catch((err) => { console.log("getPizzaByListIngredients" + JSON.stringify(err)) });
 };
+
+exports.addCustomCartItem = function (req, rep) {
+    console.log(req.body);
+    let pricePizza = req.body.pricePizza;
+    let sizePizza = req.body.sizePizzaCustom;
+    let ingredients = [];
+    console.log("length : "+req.body.length-1)
+    for (let i = 1; i <= 6; i++) {
+        console.log(req.body["ingredientPizzaCustom"+i])
+        if (req.body["ingredientPizzaCustom"+i]!=='none'){
+            ingredients.push(parseInt(req.body["ingredientPizzaCustom"+i]))
+        }else break;
+    }
+    Article.getIngredientsListInfo(ingredients).then(ingredientsInfo=>{
+
+        console.log("ingredientsInfo : "+JSON.stringify(ingredientsInfo))
+
+        console.log("sizePizzas : "+sizePizza)
+        console.log("ingredients : "+ingredients)
+        console.log("pricePizza : "+parseFloat(pricePizza).toFixed(2))
+        let positionItem = Client.addCustomCartItem(req, parseFloat(pricePizza), sizePizza, ingredients, ingredientsInfo);
+        rep.json({
+            sizepizza: sizePizza,
+            ingredientsId: ingredients,
+            priceCustom: pricePizza,
+            indexCustom: positionItem,
+            ingredientsInfo: ingredientsInfo
+        })
+    }).catch(err=>{console.log("ERRRR")})
+
+}
 
 exports.addExtraMenuCartItem = function (req, rep) {
 
@@ -115,7 +145,6 @@ exports.infoCartItem = function (req, rep) {
         return articles;
     }).then(articles=>{
         Article.getIngedientsPizza(req.body.idArticle).then(ingredients => {
-            console.log(JSON.stringify({articles, ingredients}))
             rep.json({articles, ingredients});
         }).catch(err => { console.log("infoCartItem" + JSON.stringify(err)) });
     }).catch(err => { console.log("infoCartItem" + JSON.stringify(err)) });
@@ -162,6 +191,23 @@ exports.removeCartItem = function (req, rep) {
 
 }
 
+exports.removeCustomCartItemQuantity = function (req, rep) {
+
+    //update session price
+    let customSelected = req.session.user.cartItem.custom[req.body.idCustom];
+    let rmvprice = 0;
+    if (customSelected !== undefined) {
+        rmvprice = customSelected.price;
+        let total = parseFloat(req.session.user.cartItem.price) - parseFloat(customSelected.price);
+        req.session.user.cartItem.price = (total < 0) ? 0 : total;
+        if (customSelected.quantity <= 1) delete req.session.user.cartItem.custom[req.body.idCustom];
+        else customSelected.quantity -= 1;
+    }
+
+    rep.json(rmvprice);
+
+}
+
 exports.removeMenuCartItem = function (req, rep) {
 
     //update session price
@@ -175,9 +221,24 @@ exports.removeMenuCartItem = function (req, rep) {
         else menuSelected.quantity -= 1;
     }
 
-    console.log("menuSelected " + JSON.stringify(req.session.user.cartItem.menu))
-
     rep.json(rmvprice);
+
+}
+
+
+
+exports.addCustomCartItemQuantity = function (req, rep) {
+
+    //update session price
+    let customSelected = req.session.user.cartItem.custom[req.body.idCustom];
+    console.log(customSelected)
+    if (customSelected !== undefined) {
+        let total = parseFloat(req.session.user.cartItem.price) + parseFloat(customSelected.price);
+        req.session.user.cartItem.price = (total < 0) ? 0 : total;
+        req.session.user.cartItem.custom[req.body.idCustom].quantity += 1;
+    }
+
+    rep.json(customSelected.price);
 
 }
 
@@ -196,6 +257,11 @@ exports.addMenuCartItem = function (req, rep) {
 }
 
 exports.index = function (req, rep) {
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log(req.session.user === undefined);
+    if (req.session.user !== undefined)console.log(req.session.user.mobile !== undefined);
+    console.log(req.session.user !== undefined);
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     rep.render('../views/home', {
         params: {
             title: 'home',
@@ -226,6 +292,7 @@ exports.shop = function (req, rep) {
                                 rep.render('../views/index', {
                                     params: {
                                         title: 'index',
+                                        custom: req.session.user.cartItem.custom,
                                         menu: req.session.user.cartItem.menu,
                                         quantity: req.session.user.cartItem.idQuantity,
                                         price: req.session.user.cartItem.price,
@@ -235,6 +302,7 @@ exports.shop = function (req, rep) {
                                         boissonMinMenu: boissonMin,
                                         boissonMaxMenu: boissonMax,
                                         listIngredients: ingredients,
+                                        isClient: (req.session.user.mobile !== undefined),
                                         isLogued: true
                                     }
                                 });
@@ -248,6 +316,7 @@ exports.shop = function (req, rep) {
                                         boissonMinMenu: boissonMin,
                                         boissonMaxMenu: boissonMax,
                                         listIngredients: ingredients,
+                                        isClient: true,
                                         isLogued: false
                                     }
                                 });

@@ -111,6 +111,37 @@ const addMenu = (data) => {
     totalpriceitem.text(((total<0)?"0":total)+" €");
 }
 
+const cntDupVal = (number, array) => {
+    let cpt = 0;
+    for (let i = 0; i < array.length; i++) {
+        if (array[i]===number)cpt++;
+    }
+    return cpt;
+}
+
+const addCustom = (data) => {
+    console.log(data)
+    console.log(data.ingredientsInfo)
+    console.log(data.ingredientsInfo.length)
+    let divList="";
+    for (let i=0; i<data.ingredientsInfo.length; i++){
+        divList+=cntDupVal(data.ingredientsInfo[i].id_ingred, data.ingredientsId)+" x ";
+        divList+=(i<data.ingredientsInfo.length-1)?data.ingredientsInfo[i].nom+" . ":data.ingredientsInfo[i].nom;
+    }
+    if (!isPresentCartItem(data.indexMenu+"_"+data.typeMenu)){
+        updateGraphCartItem(
+            data.indexCustom+"_Custom", "Pizza personnalisée - "+data.sizepizza, divList,
+            '-custom-cart-item', 'idCustom', false,
+            data.priceCustom, data.indexCustom, "null"
+        )
+    }
+    //update total
+    let totalpriceitem=$('#total-price-cart-item');
+    let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+    let total=(parseFloat(price)+parseFloat(data.priceCustom)).toFixed(2);
+    totalpriceitem.text(((total<0)?"0":total)+" €");
+}
+
 $(document).ready(function() {
 
     /**
@@ -127,8 +158,6 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-
-                console.log("dataaaa"+JSON.stringify(data));
 
                 //remove all data-ingredient before click
                 $('.data-ingredient').remove();
@@ -194,6 +223,29 @@ $(document).ready(function() {
                 console.log("Impossible d'accéder à l'article voulu:"+JSON.stringify(data));
             }
         });
+    });
+
+    /**
+     * Ajouter une pizza custom au panier.
+     */
+    $(document).on('click','#form-pizza-custom',function(e){
+        e.preventDefault();
+        if ($('#ingredientPizzaCustom1 option:selected').text()!=='Aucun') {
+            const form = $(this).parent('form');
+            let action = form.attr('action'),
+                method = form.attr('method'),
+                data = form.serialize();
+            $.ajax({
+                url: action,
+                type: method,
+                data: data,
+                success: function (data) {
+                    addCustom(data)
+                }, error: function (data) {
+                    console.log("Impossible d'accéder à l'article voulu:" + JSON.stringify(data));
+                }
+            });
+        }else alert("Il faut sélectionner au moins un article")
     });
 
     /**
@@ -331,7 +383,7 @@ $(document).ready(function() {
     /**
      * Modification de la quantité d'un article - Ajouter un article au panier
      */
-    $(document).on('click', '.add-menu-img', function(e) {
+    $(document).on('click', '.add-custom-img', function(e) {
         const form = $(this).parent();
         let action = form.attr('action'),
             method = form.attr('method'),
@@ -356,6 +408,65 @@ $(document).ready(function() {
 
     /**
      * Modification de la quantité d'un article - Ajouter un article au panier
+     */
+    $(document).on('click', '.add-menu-img', function(e) {
+        const form = $(this).parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+                let qnttRemove=form.parent().find('.quantity-item');
+                qnttRemove.text(parseInt(qnttRemove.text())+1);
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)+parseFloat(data)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
+            }, error : function () {
+                console.log("Impossible d'accéder à l'article voulu");
+            }
+        });
+    });
+
+    /**
+     * Modification de la quantité d'un article - Supprimer un article au panier
+     */
+    $(document).on('click', '.remove-custom-img', function(e) {
+        const form = $(this).parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+
+                let qnttRemove=form.parent().find('.quantity-item');
+                if (parseInt(qnttRemove.text())-1<=0){
+                    form.parent().parent().parent().remove();
+                }else{
+                    qnttRemove.text(parseInt(qnttRemove.text())-1);
+                }
+                //update total
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)-parseFloat(data)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
+
+            }, error : function () {
+                console.log("Impossible d'accéder à l'article voulu");
+            }
+        });
+    });
+
+    /**
+     * Modification de la quantité d'un article - Supprimer un article au panier
      */
     $(document).on('click', '.remove-menu-img', function(e) {
         const form = $(this).parent();
