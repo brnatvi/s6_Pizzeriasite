@@ -142,6 +142,31 @@ const addCustom = (data) => {
     totalpriceitem.text(((total<0)?"0":total)+" €");
 }
 
+const alertUser = (message, color) =>{
+    if (document.getElementById('alert').textContent===''){
+        document.getElementById('alert').style.borderLeft = "10px solid "+color;
+        const para = document.createElement('p');
+        para.style.margin = 'auto';
+        const node = document.createTextNode(message);
+        para.appendChild(node);
+        document.getElementById('alert').appendChild(para);
+
+        /*animation*/
+        document.getElementById('alert').style.visibility = 'visible';
+        document.getElementById('alert').style.opacity = '1';
+        setTimeout(function(){
+            document.getElementById('alert').style.opacity = '0';
+        },2000);
+
+        /*Clear div*/
+        setTimeout(function(){
+            document.getElementById('alert').style.visibility = 'hidden';
+            document.getElementById('alert').style.borderLeft = "unset";
+            document.getElementById('alert').textContent = '';
+        },2500);
+    }
+}
+
 $(document).ready(function() {
 
     /**
@@ -241,9 +266,7 @@ $(document).ready(function() {
                 data: data,
                 success: function (data) {
                     addCustom(data)
-                }, error: function (data) {
-                    console.log("Impossible d'accéder à l'article voulu:" + JSON.stringify(data));
-                }
+                }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
             });
         }else alert("Il faut sélectionner au moins un article")
     });
@@ -317,9 +340,7 @@ $(document).ready(function() {
                 totalpriceitem.text(((total<0)?"0":total)+" €");
                 //then hide modal
                 $('#modal-info-item').modal('hide');
-            }, error : function () {
-                console.log("Impossible d'ajouter l'article voulu ");
-            }
+            }, error : function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 

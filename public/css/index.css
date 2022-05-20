@@ -182,6 +182,10 @@ button{
     margin: auto;
 }
 
+#dateTimeCommande-time{
+    width: 100%;
+}
+
 .container-item-desc:hover .name-pizza,
 .container-item-desc:hover .price-pizza,
 .container-item-desc:hover .name-salade,

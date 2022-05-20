@@ -1,5 +1,6 @@
 <%- include('header'); %>
-<div class="container-fluid d-flex flex-column flex-lg-row justify-content-center" id="main-container">
+<div class="container-fluid d-flex flex-column flex-lg-row justify-content-center" id="main-container"
+     xmlns="http://www.w3.org/1999/html">
     <!-- Navigation Bar -->
     <div id="container-navigation-bar" class="col-3">
         <div class="nav flex-row flex-lg-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -313,7 +314,16 @@
                     <p>Total (TTC)</p>
                     <p id="total-price-cart-item"><%- (locals.params.price===undefined)?"0":locals.params.price.toFixed(2); %> &#8364;</p>
                 </div>
-                <button type="button" class="btn btn-primary">Valider mon panier</button>
+                <form action="create-new-commande" method="post">
+                    <label for="dateTimeCommande">Date de livraison:</label>
+                    <input type="datetime-local" id="dateTimeCommande-time" name="dateTimeCommande"
+                    <%let dateMin =new Date(new Date().getTime() + 60*60*1000);
+                    let dateMinCl = dateMin.toJSON().slice(0,10).replace('/','-')+'T'+("00"+dateMin.getHours()).slice(-2)+":"+("00"+dateMin.getMinutes()).slice(-2)%>
+                    value="<%-dateMinCl%>"
+                    min="<%-dateMinCl%>"
+                    max="<%-new Date(new Date().getTime() + 60*60*24*1000).toJSON().slice(0,10).replace('/','-');%>T00:00">
+                    <input type="submit" class="btn btn-primary">Valider mon panier</input>
+                </form>
             </div>
             <div id="header-border"></div>
             <div id="list-cart-item">

@@ -33,8 +33,10 @@ router.post("/add-extra-menu-cart-item", justClient, controller_Client.addExtraM
 router.post("/add-mega-menu-cart-item", justClient, controller_Client.addMegaMenuCartItem);
 router.post("/add-giga-menu-cart-item", justClient, controller_Client.addGigaMenuCartItem);
 //------------- Personalisation Pizza ---------------------
-router.post("/ingredient-to-pizza", controller_Client.getPizzaByListIngredients);
-router.post("/add-pizza-custom-cart-item", controller_Client.addCustomCartItem)
+router.post("/ingredient-to-pizza", justClient, controller_Client.getPizzaByListIngredients);
+router.post("/add-pizza-custom-cart-item", justClient, controller_Client.addCustomCartItem)
+//------------- Créer une commande ---------------------
+router.post("/create-new-commande", justClient, controller_Client.saveCommande)
 
 //------------- Livreur ---------------------
 //------------- Just livreur ---------------------
