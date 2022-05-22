@@ -21,8 +21,8 @@ body {
     padding: 25px 50px;
     margin: 25px;
     border-radius: 8px;
-    background-color: #252526;
-    border: solid 1px #2C2C31;
+    background-color: #D8D8DC;
+    border: solid 1px #c3c3c9;
 }
 
 .secondary{
@@ -183,5 +183,9 @@ body {
     }
     .color-text{
         color: #F7F2F2;
+    }
+    #alert{
+        background-color: #252526;
+        border: solid 1px #2C2C31;
     }
 }
