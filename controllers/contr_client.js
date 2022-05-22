@@ -25,7 +25,7 @@ exports.getPizzaByListIngredients = function (req, rep) {
  * Changer la quantité d'un extra menu dans le panier (ajout)
  */
 exports.addCustomCartItem = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         let pricePizza = req.body.pricePizza;
         let sizePizza = req.body.sizePizzaCustom;
         let ingredients = [];
@@ -47,14 +47,14 @@ exports.addCustomCartItem = function (req, rep) {
                 ingredientsInfo: ingredientsInfo
             })
         }).catch(()=>{rep.status(500).send({messageError : "Impossible d'ajouter la pizza personalisée au panier"})})
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 }
 
 /**
  * Changer la quantité d'un extra menu dans le panier (ajout)
  */
 exports.addExtraMenuCartItem = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         Article.getArticleById(req.body.entreeExtraMenu).then(el => {
             return el.name;
         }).then(entree => {
@@ -80,14 +80,14 @@ exports.addExtraMenuCartItem = function (req, rep) {
                 }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver la boisson"})});
             }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver la pizza"})});
         }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver l'entrée sélectionnée"})});
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 }
 
 /**
  * Changer la quantité d'un giga menu dans le panier (ajout)
  */
 exports.addMegaMenuCartItem = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         Article.getArticleById(req.body.entreeMegaMenu).then(el => {
             return el.name;
         }).then(entree => {
@@ -113,14 +113,14 @@ exports.addMegaMenuCartItem = function (req, rep) {
                 }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver la pizza"})});
             }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver l'entrée sélectionnée"})});
         }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver l'entrée sélectionnée"})});
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 }
 
 /**
  * Changer la quantité d'un giga menu dans le panier (ajout)
  */
 exports.addGigaMenuCartItem = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         Article.getArticleById(req.body.entreeGigaMenu).then(el => {
             return el.name;
         }).then(entree => {
@@ -154,13 +154,14 @@ exports.addGigaMenuCartItem = function (req, rep) {
                 }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver la pizza"})});
             }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver l'entrée sélectionnée"})});
         }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver l'entrée sélectionnée"})});
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 }
 
 /**
  * Obtenir plus d'informations sur un article
  */
 exports.infoCartItem = function (req, rep) {
+    console.log("--->"+JSON.stringify(req.body)+"\n\n")
     Article.getArticleById(req.body.idArticle).then(articles => {
         return articles;
     }).then(articles=>{
@@ -174,7 +175,7 @@ exports.infoCartItem = function (req, rep) {
  * Changer la quantité d'un article dans le panier (ajout)
  */
 exports.addCartItem = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         Article.getArticleById(req.body.idArticle).then(articles => {
             //update session price
             let total = parseFloat(req.session.user.cartItem.price) + parseFloat(articles.dimension[req.body.choiceSize]);
@@ -187,14 +188,14 @@ exports.addCartItem = function (req, rep) {
             //send response
             rep.json([articles, req.body.choiceSize]);
         }).catch(() => {rep.status(500).send({messageError : "Impossible d'ajouter larticle au panier"})});
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 }
 
 /**
  * Changer la quantité d'un article dans le panier (suppression)
  */
 exports.removeCartItem = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         Article.getArticleById(req.body.idArticle).then(articles => {
             //update session price
             let total = parseFloat(req.session.user.cartItem.price) - parseFloat(articles.dimension[req.body.choiceSize]);
@@ -213,14 +214,14 @@ exports.removeCartItem = function (req, rep) {
             //send response
             rep.json([articles, req.body.choiceSize]);
         }).catch(()=>{ rep.status(500).send({messageError : "Impossible de trouver la composition de la pizza"})});
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 }
 
 /**
  * Changer la quantité d'une pizza personnalisée dans le panier (suppression)
  */
 exports.removeCustomCartItemQuantity = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         //update session price
         let customSelected = req.session.user.cartItem.custom[req.body.idCustom];
         let rmvprice = 0;
@@ -233,14 +234,14 @@ exports.removeCustomCartItemQuantity = function (req, rep) {
         }
         //send response
         rep.json(rmvprice);
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 }
 
 /**
  * Changer la quantité d'un menu dans le panier (suppression)
  */
 exports.removeMenuCartItem = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         //update session price
         let menuSelected = req.session.user.cartItem.menu[req.body.idMenu];
         let rmvprice = 0;
@@ -253,7 +254,7 @@ exports.removeMenuCartItem = function (req, rep) {
         }
         //send response
         rep.json(rmvprice);
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 }
 
 
@@ -261,7 +262,7 @@ exports.removeMenuCartItem = function (req, rep) {
  * Changer la quantité d'une pizza personnalisée dans le panier (ajout)
  */
 exports.addCustomCartItemQuantity = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         //update session price
         let customSelected = req.session.user.cartItem.custom[req.body.idCustom];
         if (customSelected !== undefined) {
@@ -271,15 +272,14 @@ exports.addCustomCartItemQuantity = function (req, rep) {
         }
         //send response
         rep.json(customSelected.price);
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
-
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 }
 
 /**
  * Changer la quantité d'un article dans le panier (ajout)
  */
 exports.addMenuCartItem = function (req, rep) {
-    if (req.session.user!==undefined){
+    //if (req.session.user!==undefined){
         //update session price
         let menuSelected = req.session.user.cartItem.menu[req.body.idMenu];
         if (menuSelected !== undefined) {
@@ -289,7 +289,7 @@ exports.addMenuCartItem = function (req, rep) {
         }
         //send response
         rep.json(menuSelected.price);
-    }else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
+    //}else rep.status(500).send({messageError : "Vous devez vous connecter pour réaliser cette action"})
 
 }
 
@@ -326,7 +326,7 @@ exports.shop = function (req, rep) {
                         return el;
                     }).then(entrees => {
                         Article.getAllIngredients().then(ingredients => {
-                            if (req.session.user !== undefined) {
+                            if (req.session.mobile !== undefined) {
                                 rep.render('../views/index', {
                                     params: {
                                         title: 'index',
@@ -345,6 +345,14 @@ exports.shop = function (req, rep) {
                                     }
                                 });
                             } else {
+                                req.session.user={/*TODO:iciC*/
+                                    cartItem: {
+                                        price: 0,
+                                        idQuantity: {/*id: {size : quantity}*/},
+                                        menu: [/*{{menu} : quantity}*/],
+                                        custom: [/*{{menu} : quantity}*/]
+                                    }
+                                }
                                 rep.render('../views/index', {
                                     params: {
                                         title: 'index',
@@ -375,8 +383,14 @@ exports.shop = function (req, rep) {
  * TODO: Enregistrer la commande dans la base de donnée
  */
 exports.saveCommande = function (req, rep) {
-    if (req.session.user!==undefined){
-        let deliveryDate = req.body.dateTimeCommande;
+    let nom = req.body.nomCommande;
+    let prenom = req.body.prenomCommande;
+    let adresse = req.body.adresseCommande;
+    let otherInfo = req.body.otherInfoCommande;
+    let portable = req.body.portableCommande;
+    let email = req.body.emailCommande;
+    let deliveryDate = req.body.dateTimeCommande;
+    if (req.session.mobile!==undefined){
         let menus = req.session.user.cartItem.menu;
         let articles = req.session.user.cartItem.idQuantity;
         let customs = req.session.user.cartItem.custom;

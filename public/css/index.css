@@ -182,7 +182,7 @@ button{
     margin: auto;
 }
 
-#dateTimeCommande-time{
+#create-new-commande input, textarea{
     width: 100%;
 }
 

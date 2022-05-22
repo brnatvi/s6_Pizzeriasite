@@ -314,7 +314,24 @@
                     <p>Total (TTC)</p>
                     <p id="total-price-cart-item"><%- (locals.params.price===undefined)?"0":locals.params.price.toFixed(2); %> &#8364;</p>
                 </div>
-                <form action="create-new-commande" method="post">
+                <form id="create-new-commande" action="create-new-commande" method="post">
+                    <% if (!locals.params.isLogued){ %>
+                        <label for="nomCommande">Nom</label>
+                        <input type="text" minlength="2" name="nomCommande">
+
+                        <label for="prenomCommande">Prenom</label>
+                        <input type="text" minlength="2" name="prenomCommande">
+
+                        <label for="adresseCommande">Adresse</label>
+                        <input type="text" minlength="5" name="adresseCommande">
+
+                        <label for="otherInfoCommande">Autre informations</label>
+                        <textarea name="otherInfoCommande"></textarea>
+
+                        <label for="portableCommande">Portable</label>
+                        <input type="tel" minlength="5"  name="portableCommande">
+                    <% } %>
+
                     <label for="dateTimeCommande">Date de livraison:</label>
                     <input type="datetime-local" id="dateTimeCommande-time" name="dateTimeCommande"
                     <%let dateMin =new Date(new Date().getTime() + 60*60*1000);
@@ -322,7 +339,7 @@
                     value="<%-dateMinCl%>"
                     min="<%-dateMinCl%>"
                     max="<%-new Date(new Date().getTime() + 60*60*24*1000).toJSON().slice(0,10).replace('/','-');%>T00:00">
-                    <input type="submit" class="btn btn-primary">Valider mon panier</input>
+                    <input type="submit" class="btn btn-primary" value="Valider mon panier">
                 </form>
             </div>
             <div id="header-border"></div>
