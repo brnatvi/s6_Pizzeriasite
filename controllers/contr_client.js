@@ -25,7 +25,7 @@ exports.getPizzaByListIngredients = function (req, rep) {
  * Changer la quantité d'un extra menu dans le panier (ajout)
  */
 exports.addCustomCartItem = function (req, rep) {
-    if (req.body.user!==undefined){
+    if (req.session.user!==undefined){
         let pricePizza = req.body.pricePizza;
         let sizePizza = req.body.sizePizzaCustom;
         let ingredients = [];
@@ -54,7 +54,7 @@ exports.addCustomCartItem = function (req, rep) {
  * Changer la quantité d'un extra menu dans le panier (ajout)
  */
 exports.addExtraMenuCartItem = function (req, rep) {
-    if (req.body.user!==undefined){
+    if (req.session.user!==undefined){
         Article.getArticleById(req.body.entreeExtraMenu).then(el => {
             return el.name;
         }).then(entree => {
@@ -87,7 +87,7 @@ exports.addExtraMenuCartItem = function (req, rep) {
  * Changer la quantité d'un giga menu dans le panier (ajout)
  */
 exports.addMegaMenuCartItem = function (req, rep) {
-    if (req.body.user!==undefined){
+    if (req.session.user!==undefined){
         Article.getArticleById(req.body.entreeMegaMenu).then(el => {
             return el.name;
         }).then(entree => {
@@ -120,7 +120,7 @@ exports.addMegaMenuCartItem = function (req, rep) {
  * Changer la quantité d'un giga menu dans le panier (ajout)
  */
 exports.addGigaMenuCartItem = function (req, rep) {
-    if (req.body.user!==undefined){
+    if (req.session.user!==undefined){
         Article.getArticleById(req.body.entreeGigaMenu).then(el => {
             return el.name;
         }).then(entree => {
@@ -375,11 +375,11 @@ exports.shop = function (req, rep) {
  * TODO: Enregistrer la commande dans la base de donnée
  */
 exports.saveCommande = function (req, rep) {
-    if (req.body.user!==undefined){
+    if (req.session.user!==undefined){
         let deliveryDate = req.body.dateTimeCommande;
-        let menus = req.body.user.cartItem.menu;
-        let articles = req.body.user.cartItem.idQuantity;
-        let customs = req.body.user.cartItem.custom;
+        let menus = req.session.user.cartItem.menu;
+        let articles = req.session.user.cartItem.idQuantity;
+        let customs = req.session.user.cartItem.custom;
         //TODO: Save in DB
         //TODO: remove all elements in session then reload page
         //Commande.createCommande(req, rep);
