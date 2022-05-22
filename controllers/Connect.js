@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 /*regex const*/
 const regex={
     email:/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    nom_prenom: /^[a-zA-Z\-]+$/
+    nom_prenom: /^[a-zA-Z\-]+$/,
+    tel: /^[0-9]+$/
 };
 
 class Connect {
@@ -41,6 +42,8 @@ class Connect {
         }else if(! regex.email.test(req.body.email)){
             res.status(409).send({messageError : 'Votre email est invalide.'});
         }else if(req.body.pw.length<8){
+            res.status(409).send({messageError : 'Votre mot de passe doit contenir au moins 8 caractères.'});
+        }else if(regex.tel.test(req.body.mobile)){
             res.status(409).send({messageError : 'Votre mot de passe doit contenir au moins 8 caractères.'});
         }else{
             User.getNbrUserByEmail(req.body.email).then(res => {
@@ -165,6 +168,7 @@ class Connect {
     static createSession(User, req, logIn){
         let user=(logIn!==undefined)?logIn:req.body;
         if (User.constructor.name==="Livreur"){
+            if (req.session.user !== undefined) {delete req.session.user}/*TODO:iciC*/
             req.session.user={
                 nom: user.nom,
                 prenom: user.prenom,

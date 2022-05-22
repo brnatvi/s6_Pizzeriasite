@@ -624,7 +624,9 @@ $(document).ready(function() {
             type: "GET",
             success: () => {
                 window.location.replace(window.location.origin);
-            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+            }, error: function () {
+                window.location.replace(window.location.origin+"/error");
+            }
         });
     });
 
