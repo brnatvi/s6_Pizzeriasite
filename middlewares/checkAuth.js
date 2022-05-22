@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 
+/**
+ * Vérifie la validité de la session.
+ */
 module.exports = (req, res, next) => {
     try {
         const token = req.session.user.tokenAuth.split(' ')[1];

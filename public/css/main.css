@@ -9,6 +9,22 @@ body {
     padding-top: 90px;
 }
 
+#alert{
+    transition-duration: .5s;
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    left: 0;
+    bottom:0%;
+    display: flex;
+    z-index: 100000;
+    padding: 25px 50px;
+    margin: 25px;
+    border-radius: 8px;
+    background-color: #D8D8DC;
+    border: solid 1px #c3c3c9;
+}
+
 .secondary{
     background-color: #D8D8DC;
     padding: 20px;
@@ -167,5 +183,9 @@ body {
     }
     .color-text{
         color: #F7F2F2;
+    }
+    #alert{
+        background-color: #252526;
+        border: solid 1px #2C2C31;
     }
 }

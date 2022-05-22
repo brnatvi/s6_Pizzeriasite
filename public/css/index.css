@@ -125,7 +125,7 @@ button{
     max-width: 1050px;
 }
 
-#form-giga-menu, #form-mega-menu, #form-extra-menu{
+#form-giga-menu, #form-mega-menu, #form-extra-menu, #total-pizza-custom{
     margin-top: 60px;
 }
 
@@ -133,7 +133,7 @@ button{
     margin-bottom: 40px;
 }
 
-#container-menu label{
+#container-menu label, #frm-custom label{
     margin-top: 20px;
 }
 
@@ -165,6 +165,25 @@ button{
     transform: scale(1.05);
     transition: all .5s;
     cursor: pointer;
+}
+
+#menu-custom-add-pizza {
+    display: flex;
+    flex-direction: row;
+}
+
+#form-custom-cart-item{
+    width: 40%;
+    margin-top: 70px;
+}
+
+.form-add-dart-item{
+    width: 40%;
+    margin: auto;
+}
+
+#dateTimeCommande-time{
+    width: 100%;
 }
 
 .container-item-desc:hover .name-pizza,
@@ -220,6 +239,20 @@ button{
     }
     #container-cart{
         max-width: 100%;
+    }
+}
+
+@media only screen and (max-width: 505px){
+    #menu-custom-add-pizza {
+        display: flex;
+        flex-direction: column;
+    }
+    #form-custom-cart-item{
+        margin-top: 10px;
+        width: 100%;
+    }
+    .form-add-dart-item{
+        width: 100%;
     }
 }
 

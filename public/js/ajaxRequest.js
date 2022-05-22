@@ -111,6 +111,62 @@ const addMenu = (data) => {
     totalpriceitem.text(((total<0)?"0":total)+" €");
 }
 
+const cntDupVal = (number, array) => {
+    let cpt = 0;
+    for (let i = 0; i < array.length; i++) {
+        if (array[i]===number)cpt++;
+    }
+    return cpt;
+}
+
+const addCustom = (data) => {
+    console.log(data)
+    console.log(data.ingredientsInfo)
+    console.log(data.ingredientsInfo.length)
+    let divList="";
+    for (let i=0; i<data.ingredientsInfo.length; i++){
+        divList+=cntDupVal(data.ingredientsInfo[i].id_ingred, data.ingredientsId)+" x ";
+        divList+=(i<data.ingredientsInfo.length-1)?data.ingredientsInfo[i].nom+" . ":data.ingredientsInfo[i].nom;
+    }
+    if (!isPresentCartItem(data.indexMenu+"_"+data.typeMenu)){
+        updateGraphCartItem(
+            data.indexCustom+"_Custom", "Pizza personnalisée - "+data.sizepizza, divList,
+            '-custom-cart-item', 'idCustom', false,
+            data.priceCustom, data.indexCustom, "null"
+        )
+    }
+    //update total
+    let totalpriceitem=$('#total-price-cart-item');
+    let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+    let total=(parseFloat(price)+parseFloat(data.priceCustom)).toFixed(2);
+    totalpriceitem.text(((total<0)?"0":total)+" €");
+}
+
+const alertUser = (message, color) =>{
+    if (document.getElementById('alert').textContent===''){
+        document.getElementById('alert').style.borderLeft = "10px solid "+color;
+        const para = document.createElement('p');
+        para.style.margin = 'auto';
+        const node = document.createTextNode(message);
+        para.appendChild(node);
+        document.getElementById('alert').appendChild(para);
+
+        /*animation*/
+        document.getElementById('alert').style.visibility = 'visible';
+        document.getElementById('alert').style.opacity = '1';
+        setTimeout(function(){
+            document.getElementById('alert').style.opacity = '0';
+        },2000);
+
+        /*Clear div*/
+        setTimeout(function(){
+            document.getElementById('alert').style.visibility = 'hidden';
+            document.getElementById('alert').style.borderLeft = "unset";
+            document.getElementById('alert').textContent = '';
+        },2500);
+    }
+}
+
 $(document).ready(function() {
 
     /**
@@ -127,12 +183,26 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function(data) {
-                $("#modal-info-item-title").text(data.name);
+
+                //remove all data-ingredient before click
+                $('.data-ingredient').remove();
+
+                //add hidden input data-ingredient
+                for (let i = 0; i < ((data.ingredients.length<=6)?data.ingredients.length:6); i++) {
+                    $('<input>', {
+                        type: 'hidden',
+                        name: data.ingredients[i].nom,
+                        value: data.ingredients[i].id_ingred,
+                        class: 'data-ingredient',
+                    }).appendTo($("#form-custom-cart-item"));
+                }
+
+                $("#modal-info-item-title").text(data.articles.name);
 
                 $("#modal-body-item").empty();
 
                 let ingredientSpanList= $('<span>').attr('id', 'ingredients-list')
-                    .text(data.ingredients)
+                    .text(data.articles.ingredients)
                     .css({
                         fontWeight: "normal"
                     });
@@ -147,15 +217,13 @@ $(document).ready(function() {
                     .appendTo('#modal-body-item');
 
                 $('#choiceSize').empty();
-                for (let sizeArticle in data.dimension){
-                    let priceArticle = data.dimension[sizeArticle];
+                for (let sizeArticle in data.articles.dimension){
+                    let priceArticle = data.articles.dimension[sizeArticle];
                     $('<option value="'+sizeArticle+'">'+sizeArticle + ': ' + priceArticle+'  &#8364;</option>').appendTo('#choiceSize');
                 }
 
-                $('.input-hide-add-cart').val(data.id);
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+                $('.input-hide-add-cart').val(data.articles.id);
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -174,10 +242,29 @@ $(document).ready(function() {
             data: data,
             success: function(data) {
                 addMenu(data)
-            }, error : function (data) {
-                console.log("Impossible d'accéder à l'article voulu:"+JSON.stringify(data));
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
+    });
+
+    /**
+     * Ajouter une pizza custom au panier.
+     */
+    $(document).on('click','#form-pizza-custom',function(e){
+        e.preventDefault();
+        if ($('#ingredientPizzaCustom1 option:selected').text()!=='Aucun') {
+            const form = $(this).parent('form');
+            let action = form.attr('action'),
+                method = form.attr('method'),
+                data = form.serialize();
+            $.ajax({
+                url: action,
+                type: method,
+                data: data,
+                success: function (data) {
+                    addCustom(data)
+                }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+            });
+        }else alertUser("Il faut sélectionner au moins un article", 'red');
     });
 
     /**
@@ -195,9 +282,7 @@ $(document).ready(function() {
             data: data,
             success: function(data) {
                 addMenu(data)
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -216,9 +301,7 @@ $(document).ready(function() {
             data: data,
             success: function(data) {
                 addMenu(data)
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -249,9 +332,7 @@ $(document).ready(function() {
                 totalpriceitem.text(((total<0)?"0":total)+" €");
                 //then hide modal
                 $('#modal-info-item').modal('hide');
-            }, error : function () {
-                console.log("Impossible d'ajouter l'article voulu ");
-            }
+            }, error : function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -280,9 +361,7 @@ $(document).ready(function() {
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
                 let total=(parseFloat(price)-parseFloat(data[0].dimension[form.find('input:hidden[name=choiceSize]').val()])).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -306,9 +385,31 @@ $(document).ready(function() {
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
                 let total=(parseFloat(price)+parseFloat(data[0].dimension[form.find('input:hidden[name=choiceSize]').val()])).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+        });
+    });
+
+    /**
+     * Modification de la quantité d'un article - Ajouter un article au panier
+     */
+    $(document).on('click', '.add-custom-img', function(e) {
+        const form = $(this).parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+                let qnttRemove=form.parent().find('.quantity-item');
+                qnttRemove.text(parseInt(qnttRemove.text())+1);
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)+parseFloat(data)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -332,14 +433,43 @@ $(document).ready(function() {
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
                 let total=(parseFloat(price)+parseFloat(data)).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
     /**
-     * Modification de la quantité d'un article - Ajouter un article au panier
+     * Modification de la quantité d'un article - Supprimer un article au panier
+     */
+    $(document).on('click', '.remove-custom-img', function(e) {
+        const form = $(this).parent();
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function(data) {
+
+                let qnttRemove=form.parent().find('.quantity-item');
+                if (parseInt(qnttRemove.text())-1<=0){
+                    form.parent().parent().parent().remove();
+                }else{
+                    qnttRemove.text(parseInt(qnttRemove.text())-1);
+                }
+                //update total
+                let totalpriceitem=$('#total-price-cart-item');
+                let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
+                let total=(parseFloat(price)-parseFloat(data)).toFixed(2);
+                totalpriceitem.text(((total<0)?"0":total)+" €");
+
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+        });
+    });
+
+    /**
+     * Modification de la quantité d'un article - Supprimer un article au panier
      */
     $(document).on('click', '.remove-menu-img', function(e) {
         const form = $(this).parent();
@@ -365,9 +495,7 @@ $(document).ready(function() {
                 let total=(parseFloat(price)-parseFloat(data)).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
 
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -394,9 +522,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -420,9 +546,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -441,9 +565,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -465,9 +587,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -490,9 +610,7 @@ $(document).ready(function() {
             success: function() {
                 window.location.reload(true);
                 window.location.replace(window.location.origin+"/commande");
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -506,9 +624,7 @@ $(document).ready(function() {
             type: "GET",
             success: () => {
                 window.location.replace(window.location.origin);
-            }, error : function () {
-                alert('Impossible de vous déconnecter.');
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 

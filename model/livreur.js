@@ -15,12 +15,11 @@ class Livreur {
         if (respsec.rows[0]===undefined)return undefined;
         let respnrm= await db.query("SELECT nom, prenom FROM livreur WHERE id_livr = $1;", [respsec.rows[0].id_livr]);
         let res = {id: respsec.rows[0].id_livr, nom: respnrm.rows[0].nom, prenom: respnrm.rows[0].prenom, email: emailreq, pw: respsec.rows[0].pw};
-        console.log("res--------------------->"+JSON.stringify(res));
         return res;
     }
 
 
-    //-------------- Create client -----------------------------------------
+    //-------------- Create livreur -----------------------------------------
 
     async addUser(req) {
         const { nom, prenom, email, pw } = req.body;
@@ -57,7 +56,6 @@ class Livreur {
         let respsec= await db.query("SELECT id_livr, pw FROM security_livreur WHERE email = $1;", [emailreq]);
         let respnrm= await db.query("SELECT nom, prenom FROM livreur WHERE id_livr = $1;", [respsec.rows[0].id_livr]);
         let res = {nom: respnrm.rows[0].nom, prenom: respnrm.rows[0].prenom, email: emailreq, pw: respsec.rows[0].pw};
-        //console.log("res--------------------->"+JSON.stringify(res));
         return res;
     }
 

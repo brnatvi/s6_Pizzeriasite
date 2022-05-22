@@ -27,10 +27,16 @@ router.post("/remove-cart-item", justClient, controller_Client.removeCartItem);
 router.post("/add-cart-item", justClient, controller_Client.addCartItem);
 router.post("/remove-menu-cart-item", justClient, controller_Client.removeMenuCartItem);
 router.post("/add-menu-cart-item", justClient, controller_Client.addMenuCartItem);
+router.post("/add-custom-cart-item", justClient, controller_Client.addCustomCartItemQuantity);
+router.post("/remove-custom-cart-item", justClient, controller_Client.removeCustomCartItemQuantity);
 router.post("/add-extra-menu-cart-item", justClient, controller_Client.addExtraMenuCartItem);
 router.post("/add-mega-menu-cart-item", justClient, controller_Client.addMegaMenuCartItem);
 router.post("/add-giga-menu-cart-item", justClient, controller_Client.addGigaMenuCartItem);
-
+//------------- Personalisation Pizza ---------------------
+router.post("/ingredient-to-pizza", justClient, controller_Client.getPizzaByListIngredients);
+router.post("/add-pizza-custom-cart-item", justClient, controller_Client.addCustomCartItem)
+//------------- Créer une commande ---------------------
+router.post("/create-new-commande", justClient, controller_Client.saveCommande)
 
 //------------- Livreur ---------------------
 //------------- Just livreur ---------------------
@@ -41,8 +47,6 @@ router.post("/livraisonsignin", controller_Livreur.signInLivreur);
 router.post("/livraisonsignup", controller_Livreur.signUpLivreur);
 router.get("/livraison", controller_Livreur.livraisonLivreur);
 
-
-router.get("/test", controller_Client.getPizzaByListIngredients);
 
 //------------- Default ---------------------
 router.get('*', stuffControllers.GetError);
@@ -56,6 +60,5 @@ router.get("/clients", controller_Client.getListClients);
 router.delete("/client/:id", controller_Client.deleteClient);
 // 3 changer le status de commande
 router.post("/commande/:id/update", controller_Livreur.updateCommande);//TODO: check dispo*/
-
 
 module.exports = router;

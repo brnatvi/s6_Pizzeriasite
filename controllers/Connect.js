@@ -13,7 +13,7 @@ class Connect {
         if (session!==undefined){
             session.destroy();
             res.status(200).send({messageSuccess : 'Success'})
-        }
+        }else res.status(500).send({messageError : "Impossible de vous déconnecter."});
     }
 
     signIn(User, req, res) {
@@ -185,7 +185,8 @@ class Connect {
                 cartItem: {
                     price: 0,
                     idQuantity: {/*id: {size : quantity}*/},
-                    menu: [/*{{menu} : quantity}*/]
+                    menu: [/*{{menu} : quantity}*/],
+                    custom: [/*{{menu} : quantity}*/]
                 },
                 tokenAuth: "Bearer "+jwt.sign(
                     { email: user.email },
