@@ -42,6 +42,8 @@ CREATE TABLE commande (
     id_client INT,   
     status_commande eStatusCommande DEFAULT 'undelivered',  
     sum_total NUMERIC(4, 2),
+    date_livraison TIMESTAMP,
+    autre TEXT,
     FOREIGN KEY (id_client) REFERENCES client (id_client)
 );
 

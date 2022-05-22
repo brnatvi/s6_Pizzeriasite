@@ -1,89 +1,171 @@
 <%- include('header'); %>
-<div class="container-fluid d-flex flex-column flex-lg-row justify-content-center main-container-livreur" id="main-container">
-    <div id="container-in-progress" class="col-9">
-        <!-- In Progress -->
-    <!--<div id="in-progress">
-            <h1>Votre livraison à terminer</h1>
-            <div class="card-cmd secondary secondary-livreur">
-                <div id="header-cart">
-                    <div class="info info-livreur">
-                        <p>Commande n°1478564545<span class="wip-livreur"> - en cours de livraison</span></p>
-                        <p>Heure de livraison - 19h50</p>
-                    </div>
-                    <div class="price price-livreur">
-                        <p>Total (TTC)</p>
-                        <p>11.08 &#8364;</p>
-                    </div>
-                    <button type="button" class="btn btn-primary btn-livreur">Livraison effectué</button>
-                </div>
-                <div id="header-border"></div>
-                <div>
-                    <% for (var i = 0; i < 3; i++) {%>
-                        <div class="element">
-                            <p>Lorem Ipsum</p>
-                            <p class="content-commande-livreur">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
-                            <div class="element-menu">
-                                <p>11.08 &#8364;</p>
+    <div class="container-fluid d-flex flex-column flex-lg-row justify-content-center main-container-livreur"
+        id="main-container">
+        <div id="container-in-progress" class="col-9">
+            <div class="row">
+                <div id="container-menu">
+                    <nav>
+                        <div class="nav nav-tabs menu-menu" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link" id="nav-mega-tab" data-toggle="tab" href="#nav-mega" role="tab"
+                                aria-controls="nav-mega" aria-selected="false">Livraison courante</a>
+                            <a class="nav-item nav-link active" id="nav-extra-tab" data-toggle="tab" href="#nav-extra"
+                                role="tab" aria-controls="nav-extra" aria-selected="true">Nouvelle livraison</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-extra" role="tabpanel"
+                            aria-labelledby="nav-extra-tab">
+                            <!-- New Order -->
+                            <div id="new-order" class="tabcontent">
+                                <h1>Novelle livraison à exécuter</h1>
+                                <div class="card-cmd secondary secondary-livreur">
+                                    <div id="header-cart">
+                                        <div class="info info-livreur">
+                                            <p>Commande n° <%-
+                                                    (locals.params.idCommande===undefined)?"0":locals.params.idCommande
+                                                    %>
+                                            </p>
+                                            <% console.log(locals.params) %>
+                                                <p>Heure de livraison - 19h50</p>
+                                        </div>
+                                        <div class="price price-livreur">
+                                            <p>Total (TTC)</p>
+                                            <p>
+                                                <%- (locals.params.totalPrice===undefined)?"0":locals.params.totalPrice
+                                                    %>
+                                                    &#8364;
+                                            </p>
+                                        </div>
+                                        <button type="button" class="btn btn-primary btn-livreur">Prendre en charge la
+                                            commande</button>
+                                    </div>
+
+                                    <div id="header-border"></div>
+
+                                    <div>
+                                        <% if (locals.params.listContenu!==undefined) {
+                                            locals.params.listContenu.forEach(article=>
+                                            {%>
+                                            <div class="element">
+                                                <p>
+                                                    <%- article.plat %>
+                                                </p>
+                                                <p class="content-commande-livreur">
+                                                    <%- article.description %>
+                                                </p>
+                                                <div class="element-menu">
+                                                    <p>
+                                                        <%- article.prix %> &#8364;
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <% })} %>
+                                    </div>
+
+                                    <div id="header-border"></div>
+
+                                    <!---<div class="info info-client">  -->
+                                    <div class="element">
+                                        <p>Client : </p>
+                                        <p class="field">
+                                            <%- (locals.params.nameClient===undefined)?"-":locals.params.nameClient %>
+                                        </p>
+                                    </div>
+
+                                    <div class="element">
+                                        <p>Addresse : </p>
+                                        <p class="field"></p>
+                                        <%- (locals.params.adressClient===undefined)?"-":locals.params.adressClient %>
+                                            </p>
+                                    </div>
+
+                                    <div class="element">
+                                        <p>Tel: </p>
+                                        <p class="field">
+                                            <%- (locals.params.mobileClient===undefined)?"-":locals.params.mobileClient
+                                                %>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    <%}%>
-                </div>
-            </div>
-        </div>-->
-        
-        <!-- New Order -->
-        <div id="new-order">
-            <h1>Novelle livraison à exécuter</h1>
-            <div class="card-cmd secondary secondary-livreur">
-                <div id="header-cart">
-                    <div class="info info-livreur">
-                        <p>Commande n° <%- (locals.params.idCommande===undefined)?"0":locals.params.idCommande %></p>
-                        <% console.log(locals.params) %>
-                        <p>Heure de livraison - 19h50</p>
-                    </div>
-                    <div class="price price-livreur">
-                        <p>Total (TTC)</p>
-                        <p><%- (locals.params.totalPrice===undefined)?"0":locals.params.totalPrice %> &#8364;</p>                       
-                    </div>
-                    <button type="button" class="btn btn-primary btn-livreur">Prendre en charge la commande</button>
-                </div>
+                        <div class="tab-pane fade" id="nav-mega" role="tabpanel" aria-labelledby="nav-mega-tab">
+                            <!-- In Progress -->
+                            <div id="in-progress" class="tabcontent">
+                                <h1>Votre livraison à terminer</h1>
+                                <div class="card-cmd secondary secondary-livreur">
+                                    <div id="header-cart">
+                                        <div class="info info-livreur">
+                                            <p>Commande n° <%-
+                                                    (locals.params.idCommande===undefined)?"0":locals.params.idCommande
+                                                    %><span class="wip-livreur"> - en cours de livraison</span></p>
+                                            <% console.log(locals.params) %>
+                                                <p>Heure de livraison - 19h50</p>
+                                        </div>
+                                        <div class="price price-livreur">
+                                            <p>Total (TTC)</p>
+                                            <p>
+                                                <%- (locals.params.totalPrice===undefined)?"0":locals.params.totalPrice
+                                                    %> &#8364;
+                                            </p>
+                                        </div>
+                                        <button type="button" class="btn btn-primary btn-livreur">Livraison
+                                            effectué</button>
+                                    </div>
 
-                <div id="header-border"></div>
+                                    <div id="header-border"></div>
 
-                <div>
-                    <% if (locals.params.listContenu!==undefined) { locals.params.listContenu.forEach(article => {%>                    
-                        <div class="element">
-                            <p> <%- article.plat %></p>
-                            <p class="content-commande-livreur"><%- article.description %> </p>
-                            <div class="element-menu">
-                                <p><%- article.prix %> &#8364;</p>
+                                    <div>
+                                        <% if (locals.params.listContenu!==undefined) {
+                                            locals.params.listContenu.forEach(article=> {%>
+                                            <div class="element">
+                                                <p>
+                                                    <%- article.plat %>
+                                                </p>
+                                                <p class="content-commande-livreur">
+                                                    <%- article.description %>
+                                                </p>
+                                                <div class="element-menu">
+                                                    <p>
+                                                        <%- article.prix %> &#8364;
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <% })} %>
+                                    </div>
+
+                                    <div id="header-border"></div>
+
+                                    <!---<div class="info info-client">  -->
+                                    <div class="element">
+                                        <p>Client : </p>
+                                        <p class="field">
+                                            <%- (locals.params.nameClient===undefined)?"-":locals.params.nameClient %>
+                                        </p>
+                                    </div>
+
+                                    <div class="element">
+                                        <p>Addresse : </p>
+                                        <p class="field"></p>
+                                        <%- (locals.params.adressClient===undefined)?"-":locals.params.adressClient %>
+                                            </p>
+                                    </div>
+
+                                    <div class="element">
+                                        <p>Tel: </p>
+                                        <p class="field">
+                                            <%- (locals.params.mobileClient===undefined)?"-":locals.params.mobileClient
+                                                %>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    <% })} %>
-                </div> 
-
-                <div id="header-border"></div>
-
-                <!---<div class="info info-client">  -->
-                    <div class="element">
-                        <p>Client :   </p>
-                        <p class="field"><%- (locals.params.nameClient===undefined)?"-":locals.params.nameClient %></p>                       
-                    </div>
-                    
-                    <div class="element">
-                        <p>Addresse : </p>
-                        <p class="field"></p><%- (locals.params.adressClient===undefined)?"-":locals.params.adressClient %></p>                       
-                    </div>
-
-                    <div class="element">
-                        <p>Tel:      </p>
-                        <p class="field"><%- (locals.params.mobileClient===undefined)?"-":locals.params.mobileClient %></p>                       
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script type="text/javascript" src="js/ajaxRequest.js"></script>
-<script type="text/javascript" src="js/main.js"></script>
-<%- include('footer'); %>
+    <script type="text/javascript" src="js/ajaxRequest.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <%- include('footer'); %>
