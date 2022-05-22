@@ -22,11 +22,19 @@ class Commande {
     };
 
     // get oldest commande from all undelivered
-    async getOldestCommande (req, res){         
-        const oldest = await db.query(
-    "SELECT id_commande, nom, adr_client, mobile FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE date_commande = (SELECT min(date_commande) FROM commande WHERE (commande.status_commande = 'undelivered'));");
-        res.json(oldest.rows);
+    async getOldestCommande(req, res) {
+        const oldest = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE date_commande = (SELECT min(date_commande) FROM commande WHERE (commande.status_commande = 'undelivered'));");
+        const ret = await db.query(
+            "SELECT id_plat, size FROM contenu_commande WHERE id_commande = $1;", [oldest.rows[0].id_commande]);
+        let contenu = [];
+        for (let i = 0; i < ret.rows.length; i++) {
+            const price = await db.query("SELECT prix FROM plat_size WHERE id_plat = $1 AND size = $2;", [ret.rows[i].id_plat, ret.rows[i].size]);
+            const descr = await db.query("SELECT nom, descript FROM plats WHERE id_plat = $1;", [ret.rows[i].id_plat]);
+            contenu.push({ plat: descr.rows[0].nom, prix: price.rows[0].prix, description: descr.rows[0].descript });
+        }       
+        return ({ info: oldest.rows[0], contenu });
     };
+
 
     // change status of commande to 'delivered'
     async updateStatusDelivered (req, res){  

@@ -29,17 +29,17 @@
             <a id="style-logo" class="rmv-style-btn rmw-style-a" href="/"><img src="img/logo_pizza.png" height="60px" alt="logo"></a>
             <div>
                 <% if (locals.params.isClient){ %>
-                <a class="rmv-style-btn rmw-style-a" href="/shop">Nos produits</a>
-                <% }else{ %>
-                <a class="rmv-style-btn rmw-style-a" href="/commande">Livraisons</a>
-                <% } %>
-                <% if (!locals.params.isLogued){ %>
-                <button id="connection-user-signin" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
-                <a class="rmv-style-btn rmw-style-a" href="/livraison">Livreur?</a>
-                <% }else{ %>
-                <button class="rmv-style-btn" id="logoutSession">Se déconnecter</button>
-                <button class="rmv-style-btn" id="settingSession" type="button" data-toggle="modal" data-target="#modal-setting-session">Paramètre</button>
-                <% } %>
+                    <a class="rmv-style-btn rmw-style-a" href="/shop">La carte</a>
+                    <% }else{ %>
+                    <a class="rmv-style-btn rmw-style-a" href="/commande">Consulter livraisons</a>
+                    <% } %>
+                    <% if (!locals.params.isLogued){ %>
+                    <button id="connection-user-signin" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
+                    <a class="rmv-style-btn rmw-style-a" href="/livraison">Espace livreur</a>
+                    <% }else{ %>                
+                    <button class="rmv-style-btn" id="settingSession" type="button" data-toggle="modal" data-target="#modal-setting-session">Changer mot de passe</button>
+                    <button class="rmv-style-btn" id="logoutSession">Se déconnecter</button>
+                    <% } %>
             </div>
         </div>
     </nav>
