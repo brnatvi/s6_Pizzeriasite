@@ -13,7 +13,7 @@ class Connect {
         if (session!==undefined){
             session.destroy();
             res.status(200).send({messageSuccess : 'Success'})
-        }
+        }else res.status(500).send({messageError : "Impossible de vous déconnecter."});
     }
 
     signIn(User, req, res) {

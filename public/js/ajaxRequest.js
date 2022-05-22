@@ -223,9 +223,7 @@ $(document).ready(function() {
                 }
 
                 $('.input-hide-add-cart').val(data.articles.id);
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -244,9 +242,7 @@ $(document).ready(function() {
             data: data,
             success: function(data) {
                 addMenu(data)
-            }, error : function (data) {
-                console.log("Impossible d'accéder à l'article voulu:"+JSON.stringify(data));
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -268,7 +264,7 @@ $(document).ready(function() {
                     addCustom(data)
                 }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
             });
-        }else alert("Il faut sélectionner au moins un article")
+        }else alertUser("Il faut sélectionner au moins un article", 'red');
     });
 
     /**
@@ -286,9 +282,7 @@ $(document).ready(function() {
             data: data,
             success: function(data) {
                 addMenu(data)
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -307,9 +301,7 @@ $(document).ready(function() {
             data: data,
             success: function(data) {
                 addMenu(data)
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -369,9 +361,7 @@ $(document).ready(function() {
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
                 let total=(parseFloat(price)-parseFloat(data[0].dimension[form.find('input:hidden[name=choiceSize]').val()])).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -395,9 +385,7 @@ $(document).ready(function() {
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
                 let total=(parseFloat(price)+parseFloat(data[0].dimension[form.find('input:hidden[name=choiceSize]').val()])).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -421,9 +409,7 @@ $(document).ready(function() {
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
                 let total=(parseFloat(price)+parseFloat(data)).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -447,9 +433,7 @@ $(document).ready(function() {
                 let price=parseFloat(totalpriceitem.text().substring(0, totalpriceitem.text().length-2));
                 let total=(parseFloat(price)+parseFloat(data)).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -480,9 +464,7 @@ $(document).ready(function() {
                 let total=(parseFloat(price)-parseFloat(data)).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
 
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -513,9 +495,7 @@ $(document).ready(function() {
                 let total=(parseFloat(price)-parseFloat(data)).toFixed(2);
                 totalpriceitem.text(((total<0)?"0":total)+" €");
 
-            }, error : function () {
-                console.log("Impossible d'accéder à l'article voulu");
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -542,9 +522,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -568,9 +546,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -589,9 +565,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -613,9 +587,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -638,9 +610,7 @@ $(document).ready(function() {
             success: function() {
                 window.location.reload(true);
                 window.location.replace(window.location.origin+"/commande");
-            }, error : function (data) {
-                console.log(data.responseJSON.messageError);
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
@@ -654,9 +624,7 @@ $(document).ready(function() {
             type: "GET",
             success: () => {
                 window.location.replace(window.location.origin);
-            }, error : function () {
-                alert('Impossible de vous déconnecter.');
-            }
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
 
