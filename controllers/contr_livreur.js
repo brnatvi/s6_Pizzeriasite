@@ -1,5 +1,6 @@
 const Livreur = require("../model/livreur");
 const Connect=require("./Connect");
+const Commande = require("../model/commande");
 
 
 
@@ -13,25 +14,44 @@ exports.signUpLivreur = (req, rep) => {Connect.signUp(Livreur, req, rep)};
 
 //----------- fonctionnality available to Livreur --------------------
 
-/**
- * TODO:
- */
-exports.livraisonLivreur = function (req, rep) {
-    rep.render('../views/livraison',{
-        params: {
-            title: 'livraison',
-            isClient: (req.session.user===undefined || req.session.user.mobile!==undefined),
-            isLogued: req.session.user!==undefined
-        }
-    });
-    // get the oldest commande   
-    //Commande.getOldestCommande(req, rep);       // it works, tested
+//----------- fonctionnality available to Livreur --------------------
+
+exports.getLivraisonDispo = function (req, rep) {
+    Commande.getOldestCommande().then(el => {
+        console.log(el.info.id_commande);
+        console.log(el.info.sum_total);
+        console.log(el.info.nom + ' ' + el.info.prenom);
+        console.log(el.info.adr_client);
+
+        rep.render('../views/commande', {
+            params: {
+                title: 'commande',
+                isClient: (req.session.user === undefined || req.session.user.mobile !== undefined),
+                isLogued: req.session.user !== undefined,
+                idCommande: el.info.id_commande,
+                totalPrice: el.info.sum_total,
+                nameClient: el.info.nom + ' ' + el.info.prenom,
+                adressClient: el.info.adr_client,
+                mobileClient: el.info.mobile,
+                listContenu: el.contenu
+            }
+        })
+    }).catch(() => { rep.status(500).send({ messageError: "Commande n'est pas disponible" }) });
+
 };
 
-/**
- * TODO:
- */
-exports.GetCommande = (req, res) => {
+exports.connectionLivreur = function (req, rep) {
+        rep.render('../views/livraison', {
+            params: {
+                title: 'livraison',
+                isClient: (req.session.user === undefined || req.session.user.mobile !== undefined),
+                isLogued: req.session.user !== undefined               
+            }
+        })
+};
+
+
+exports.getCurrentCommande = (req, res) => {
     res.status(404).render('commande',{
         params: {
             title: 'commande',
