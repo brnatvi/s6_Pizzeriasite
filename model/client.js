@@ -19,7 +19,7 @@ class Client {
     }
 
 
-    //-------------- Create client -----------------------------------------
+    //-------------- Create / delete client -----------------------------------------
     
     async addUser (req, res){
         const {nom, prenom, address, mobile, email, pw, autre} = req.body;
@@ -28,6 +28,9 @@ class Client {
         await db.query("INSERT INTO security_client (id_client, email, pw, resetToken) VALUES ($1, $2, $3, $4) RETURNING *;", [id, email, pw, ""]);
     };
 
+    async deleteUser (id){
+        await db.query("DELETE FROM client WHERE id_client = $1;", [id]);
+    };
 
     //-------------- Update data -----------------------------------------
 

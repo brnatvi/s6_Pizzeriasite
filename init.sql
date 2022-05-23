@@ -3,6 +3,11 @@ CREATE DATABASE pizzeria;
 
 \connect pizzeria
 
+DROP TYPE IF EXISTS eTypePlat cascade;
+DROP TYPE IF EXISTS eStatusCommande cascade;
+DROP TYPE IF EXISTS eSize cascade;
+DROP TYPE IF EXISTS eTypeInredient cascade;
+
 DROP TABLE IF EXISTS pizza_composition cascade;
 DROP TABLE IF EXISTS ingredients cascade;
 DROP TABLE IF EXISTS security_client cascade;
@@ -16,7 +21,7 @@ DROP TABLE IF EXISTS plats cascade;
 
 SET lc_monetary TO "en_IE.utf8";
 
-CREATE TYPE eTypePlat AS ENUM ('salade', 'boisson', 'dessert', 'pizza');
+CREATE TYPE eTypePlat AS ENUM ('salade', 'boisson', 'dessert', 'pizza', 'menu');
 
 CREATE TABLE plats (
     id_plat SERIAL PRIMARY KEY,
@@ -42,7 +47,7 @@ CREATE TABLE commande (
     date_commande TIMESTAMP  NOT NULL,
     id_client INT,   
     status_commande eStatusCommande DEFAULT 'undelivered',  
-    sum_total NUMERIC(4, 2),
+    sum_total NUMERIC(8, 2),
     date_livraison TIMESTAMP,
     FOREIGN KEY (id_client) REFERENCES client (id_client)
 );
@@ -113,6 +118,8 @@ CREATE TABLE pizza_composition (
 \COPY pizza_composition(id_plat, id_ingred) FROM 'model/csv/pizza_ingredients.csv' (DELIMITER ',', FORMAT CSV);
 
 
+
+
 INSERT INTO client(nom, prenom, adr_client, mobile) VALUES ('Richard', 'Julie', '30 Rue Gay-Lussac, 75005 Paris', 0189565144);
 INSERT INTO client(nom, prenom, adr_client, mobile) VALUES ('Dubois', 'Thomas', '64 Rue Réaumur, 75003 Paris', 0189545671);
 INSERT INTO security_client(id_client, email, pw) VALUES (2, 'dubois@ddddddd.com', '$2b$10$VkU6d3m5G.g7vG/cNV.9MeFMfgAdzEgNX4sHNcJdUn7hFa6p3dz32');
@@ -120,8 +127,8 @@ INSERT INTO security_client(id_client, email, pw) VALUES (2, 'dubois@ddddddd.com
 INSERT INTO livreur(nom, prenom) VALUES ('Martin', 'Louis');
 INSERT INTO security_livreur(id_livr, email, pw) VALUES (1, 'martin@ooooooo.com', '$2b$10$DnUeqkJSx9XB38nlRy.VhOLDBbjAL4UGbyWkIxiemYpHELDTddUkO');
 
-INSERT INTO commande(id_client, date_commande, status_commande, sum_total) VALUES (2, '2022-05-22 00:30:30.041429', 'undelivered', 58.08);
-INSERT INTO commande(id_client, date_commande, status_commande, sum_total) VALUES (2, CURRENT_TIMESTAMP, 'undelivered', 35.00);
+INSERT INTO commande(id_client, date_commande, status_commande, sum_total, date_livraison) VALUES (2, '2022-05-22 00:30:30.041429', 'undelivered', 58.08, '2022-05-23 16:12:00');
+INSERT INTO commande(id_client, date_commande, status_commande, sum_total, date_livraison) VALUES (2, CURRENT_TIMESTAMP, 'undelivered', 35.00, '2022-05-23 16:12:00');
 
 INSERT INTO contenu_commande VALUES (1, 6, 2, 'medium');
 INSERT INTO contenu_commande VALUES (1, 10, 1, 'unique');
@@ -131,7 +138,15 @@ INSERT INTO contenu_commande VALUES (1, 14, 1, 'unique');
 INSERT INTO contenu_commande VALUES (2, 3, 2, 'small');
 INSERT INTO contenu_commande VALUES (2, 9, 3, 'large');
 
-
 /*
-SELECT id_plat, (sum(prix) + 3) AS price_small, (sum(prix) + 3)*1.2 AS price_medium, (sum(prix) + 3)*1.5 AS price_large FROM pizza_composition NATURAL JOIN ingredients GROUP BY id_plat ORDER BY id_plat;
+2022-05-23 16:12:00
+2022-05-23 16:24:00
+2022-05-23 16:26:00
+2022-05-23 16:36:00
+2022-05-23 16:38:00
+2022-05-23 16:42:00
+2022-05-23 16:45:00
+2022-05-23 16:50:00
+
+
 */

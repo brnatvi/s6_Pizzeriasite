@@ -14,8 +14,6 @@ exports.signUpLivreur = (req, rep) => { Connect.signUp(Livreur, req, rep) };
 
 //----------- fonctionnality available to Livreur --------------------
 
-//----------- fonctionnality available to Livreur --------------------
-
 exports.getLivraisonDispo = function (req, rep) {
     if (req.body === 'current') {
         Commande.getCurrentCommande().then(el => {
