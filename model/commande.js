@@ -190,17 +190,24 @@ class Commande {
 
     // get current commande of livreur
     async getCurrentCommande(idLivreur) {
-        const idCommande = await db.query("SELECT current_commande FROM livreur WHERE id_livr = &1;", [idLivreur]);
-        const current = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE id_commande = $1;", [idCommande]);
-        const ret = await db.query(
-            "SELECT id_plat, size FROM contenu_commande WHERE id_commande = $1;", [current.rows[0].id_commande]);
+        const idCommande = await db.query("SELECT current_commande FROM livreur WHERE id_livr = $1;", [idLivreur]);
         let contenu = [];
-        for (let i = 0; i < ret.rows.length; i++) {
-            const price = await db.query("SELECT prix FROM plat_size WHERE id_plat = $1 AND size = $2;", [ret.rows[i].id_plat, ret.rows[i].size]);
-            const descr = await db.query("SELECT nom, descript FROM plats WHERE id_plat = $1;", [ret.rows[i].id_plat]);
-            contenu.push({ plat: descr.rows[0].nom, prix: price.rows[0].prix, description: descr.rows[0].descript });
+        if (idCommande.rows.length>0){//TODO: patch
+            console.log(">-1-<"+JSON.stringify(idCommande.rows))
+            const current = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE id_commande = $1;", [idCommande]);
+            console.log(">-2-<")
+            const ret = await db.query(
+                "SELECT id_plat, size FROM contenu_commande WHERE id_commande = $1;", [current.rows[0].id_commande]);
+            console.log(">-3-<")
+            for (let i = 0; i < ret.rows.length; i++) {
+                const price = await db.query("SELECT prix FROM plat_size WHERE id_plat = $1 AND size = $2;", [ret.rows[i].id_plat, ret.rows[i].size]);
+                const descr = await db.query("SELECT nom, descript FROM plats WHERE id_plat = $1;", [ret.rows[i].id_plat]);
+                contenu.push({ plat: descr.rows[0].nom, prix: price.rows[0].prix, description: descr.rows[0].descript });
+            }
+            console.log(">-5-<")
+            return ({ info: oldest.rows[0], contenu });
         }
-        return ({ info: oldest.rows[0], contenu });
+        return ({info:{}, contenu})
     };
 
     // accept commande for delivering

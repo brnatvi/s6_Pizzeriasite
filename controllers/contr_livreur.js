@@ -15,40 +15,34 @@ exports.signUpLivreur = (req, rep) => { Connect.signUp(Livreur, req, rep) };
 //----------- fonctionnality available to Livreur --------------------
 
 exports.getLivraisonDispo = function (req, rep) {
-    if (req.body === 'current') {
-        Commande.getCurrentCommande().then(el => {
+    Commande.getCurrentCommande().then(current=>{
+        Commande.getOldestCommande().then(old => {
             rep.render('../views/commande', {
                 params: {
                     title: 'commande',
                     isClient: (req.session.user === undefined || req.session.user.mobile !== undefined),
                     isLogued: req.session.user !== undefined,
-                    idCommande: el.info.id_commande,
-                    totalPrice: el.info.sum_total,
-                    nameClient: el.info.nom + ' ' + el.info.prenom,
-                    adressClient: el.info.adr_client,
-                    mobileClient: el.info.mobile,
-                    listContenu: el.contenu
+                    oldCommande:{
+                        idCommande: old.info.id_commande,
+                        totalPrice: old.info.sum_total,
+                        nameClient: old.info.nom + ' ' + old.info.prenom,
+                        adressClient: old.info.adr_client,
+                        mobileClient: old.info.mobile,
+                        listContenu: old.contenu
+                    },
+                    currentCommande:{
+                        idCommande: current.info.id_commande,
+                        totalPrice: current.info.sum_total,
+                        nameClient: current.info.nom + ' ' + current.info.prenom,
+                        adressClient: current.info.adr_client,
+                        mobileClient: current.info.mobile,
+                        listContenu: current.contenu
+                    }
+
                 }
             })
-        }).catch(() => { rep.status(500).send({ messageError: "Commande n'est pas disponible" }) });
-    }
-    else {
-        Commande.getOldestCommande().then(el => {
-            rep.render('../views/commande', {
-                params: {
-                    title: 'commande',
-                    isClient: (req.session.user === undefined || req.session.user.mobile !== undefined),
-                    isLogued: req.session.user !== undefined,
-                    idCommande: el.info.id_commande,
-                    totalPrice: el.info.sum_total,
-                    nameClient: el.info.nom + ' ' + el.info.prenom,
-                    adressClient: el.info.adr_client,
-                    mobileClient: el.info.mobile,
-                    listContenu: el.contenu
-                }
-            })
-        }).catch(() => { rep.status(500).send({ messageError: "Commande n'est pas disponible" }) });
-    }
+        }).catch((err) => { console.log(err); rep.status(500).send({ messageError: "Commande n'est pas disponible" }) });
+    }).catch((err) => { console.log(err);  rep.status(500).send({ messageError: "Commande n'est pas disponible" }) });
 };
 
 exports.connectionLivreur = function (req, rep) {

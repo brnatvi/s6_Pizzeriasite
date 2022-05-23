@@ -22,16 +22,16 @@
                                     <div id="header-cart">
                                         <div class="info info-livreur">
                                             <p>Commande n° <%-
-                                                    (locals.params.idCommande===undefined)?"0":locals.params.idCommande
+                                                    (locals.params.oldCommande.idCommande===undefined)?"0":locals.params.oldCommande.idCommande
                                                     %>
                                             </p>
-                                            <% console.log(locals.params) %>
+                                            <% console.log(locals.params.oldCommande) %>
                                                 <p>Heure de livraison - 19h50</p>
                                         </div>
                                         <div class="price price-livreur">
                                             <p>Total (TTC)</p>
                                             <p>
-                                                <%- (locals.params.totalPrice===undefined)?"0":locals.params.totalPrice
+                                                <%- (locals.params.oldCommande.totalPrice===undefined)?"0":locals.params.oldCommande.totalPrice
                                                     %>
                                                     &#8364;
                                             </p>
@@ -43,8 +43,8 @@
                                     <div id="header-border"></div>
 
                                     <div>
-                                        <% if (locals.params.listContenu!==undefined) {
-                                            locals.params.listContenu.forEach(article=>
+                                        <% if (locals.params.oldCommande.listContenu!==undefined) {
+                                            locals.params.oldCommande.listContenu.forEach(article=>
                                             {%>
                                             <div class="element">
                                                 <p>
@@ -68,21 +68,21 @@
                                     <div class="element">
                                         <p>Client : </p>
                                         <p class="field">
-                                            <%- (locals.params.nameClient===undefined)?"-":locals.params.nameClient %>
+                                            <%- (locals.params.oldCommande.nameClient===undefined)?"-":locals.params.oldCommande.nameClient %>
                                         </p>
                                     </div>
 
                                     <div class="element">
                                         <p>Addresse : </p>
                                         <p class="field"></p>
-                                        <%- (locals.params.adressClient===undefined)?"-":locals.params.adressClient %>
+                                        <%- (locals.params.oldCommande.adressClient===undefined)?"-":locals.params.oldCommande.adressClient %>
                                             </p>
                                     </div>
 
                                     <div class="element">
                                         <p>Tel: </p>
                                         <p class="field">
-                                            <%- (locals.params.mobileClient===undefined)?"-":locals.params.mobileClient
+                                            <%- (locals.params.oldCommande.mobileClient===undefined)?"-":locals.params.oldCommande.mobileClient
                                                 %>
                                         </p>
                                     </div>
@@ -97,15 +97,15 @@
                                     <div id="header-cart">
                                         <div class="info info-livreur">
                                             <p>Commande n° <%-
-                                                    (locals.params.idCommande===undefined)?"0":locals.params.idCommande
+                                                    (locals.params.currentCommande.idCommande===undefined)?"0":locals.currentCommande.params.idCommande
                                                     %><span class="wip-livreur"> - en cours de livraison</span></p>
-                                            <% console.log(locals.params) %>
+                                            <% console.log(locals.params.currentCommande) %>
                                                 <p>Heure de livraison - 19h50</p>
                                         </div>
                                         <div class="price price-livreur">
                                             <p>Total (TTC)</p>
                                             <p>
-                                                <%- (locals.params.totalPrice===undefined)?"0":locals.params.totalPrice
+                                                <%- (locals.params.currentCommande.totalPrice===undefined)?"0":locals.params.currentCommande.totalPrice
                                                     %> &#8364;
                                             </p>
                                         </div>
@@ -116,8 +116,8 @@
                                     <div id="header-border"></div>
 
                                     <div>
-                                        <% if (locals.params.listContenu!==undefined) {
-                                            locals.params.listContenu.forEach(article=> {%>
+                                        <% if (locals.params.currentCommande.listContenu!==undefined) {
+                                            locals.params.currentCommande.listContenu.forEach(article=> {%>
                                             <div class="element">
                                                 <p>
                                                     <%- article.plat %>
@@ -140,21 +140,21 @@
                                     <div class="element">
                                         <p>Client : </p>
                                         <p class="field">
-                                            <%- (locals.params.nameClient===undefined)?"-":locals.params.nameClient %>
+                                            <%- (locals.params.currentCommande.nameClient===undefined)?"-":locals.params.currentCommande.nameClient %>
                                         </p>
                                     </div>
 
                                     <div class="element">
                                         <p>Addresse : </p>
                                         <p class="field"></p>
-                                        <%- (locals.params.adressClient===undefined)?"-":locals.params.adressClient %>
+                                        <%- (locals.params.currentCommande.adressClient===undefined)?"-":locals.params.currentCommande.adressClient %>
                                             </p>
                                     </div>
 
                                     <div class="element">
                                         <p>Tel: </p>
                                         <p class="field">
-                                            <%- (locals.params.mobileClient===undefined)?"-":locals.params.mobileClient
+                                            <%- (locals.params.currentCommande.mobileClient===undefined)?"-":locals.params.currentCommande.mobileClient
                                                 %>
                                         </p>
                                     </div>
