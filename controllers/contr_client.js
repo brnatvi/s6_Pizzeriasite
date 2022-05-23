@@ -383,12 +383,19 @@ exports.saveCommande = function (req, rep) {
             articles: req.session.user.cartItem.idQuantity,
             customs: req.session.user.cartItem.custom
         };
-        
-        //TODO: Save in DB        
-        Commande.createCommande(newObj);
-        console.log("saveCommande for reg");
 
-        //TODO: remove all elements in session then reload page
+        //Save in DB
+        Commande.createCommande(newObj).then(()=>{
+            console.log("saveCommande for reg");
+            //remove all elements in session then reload page
+            delete req.session.user.cartItem;
+            req.session.user.cartItem = {
+                price: 0,
+                idQuantity: {/*id: {size : quantity}*/ },
+                menu: [/*{{menu} : quantity}*/],
+                custom: [/*{{menu} : quantity}*/]
+            }
+        }).catch(()=>{rep.status(500).send({messageError : "Impossible de sauvegarder la commande."});});
 
     } else {
         const newObj = {
@@ -404,7 +411,7 @@ exports.saveCommande = function (req, rep) {
             articles: req.session.user.cartItem.idQuantity,
             customs: req.session.user.cartItem.custom
         };
-        Commande.createCommandeUnreg(newObj);
+        Commande.createCommandeUnreg(newObj).catch(()=>{rep.status(500).send({messageError : "Impossible de sauvegarder la commande."});});
         console.log("saveCommande non reg");
     }
 }

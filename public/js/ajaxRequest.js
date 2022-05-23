@@ -547,7 +547,6 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.replace(window.location.origin+"/commande");
-                window.location.reload(true);
             }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
@@ -611,7 +610,6 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.replace(window.location.origin+"/commande");
-                window.location.reload(true);
             }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
