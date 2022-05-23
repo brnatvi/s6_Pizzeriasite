@@ -1,6 +1,8 @@
 const Livreur = require("../model/livreur");
 const Connect = require("./Connect");
 const Commande = require("../model/commande");
+//const User = require("../model/client");
+const { Client } = require("pg");
 
 
 
@@ -28,6 +30,7 @@ exports.getLivraisonDispo = function (req, rep) {
                         nameClient: old.info.nom + ' ' + old.info.prenom,
                         adressClient: old.info.adr_client,
                         mobileClient: old.info.mobile,
+                        dateLivr: old.info.date_livraison,
                         listContenu: old.contenu
                     },
                     currentCommande:{
@@ -36,6 +39,7 @@ exports.getLivraisonDispo = function (req, rep) {
                         nameClient: current.info.nom + ' ' + current.info.prenom,
                         adressClient: current.info.adr_client,
                         mobileClient: current.info.mobile,
+                        dateLivr: current.info.date_livraison,
                         listContenu: current.contenu
                     }
                 }
@@ -65,9 +69,13 @@ exports.getCurrentCommande = (req, res) => {
     })
 };
 
+exports.acceptCommande = (req, res) => {
+    Commande.updateStatusInprogress(req.session.user).then(idComm => {
+        Commande.makeCommandeCurrent(req.session.user, idComm);
+    })
+    
+};
 
-//---------------------- TODO: WIP: Basic delivery man --------------------------------------------------
-
-exports.updateCommande = function (req, rep) {
-
+exports.finishCommande = (req, res) => {
+    Commande.updateStatusDelivered(req.session.user);
 };

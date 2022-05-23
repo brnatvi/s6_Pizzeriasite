@@ -158,25 +158,13 @@ class Commande {
         ////////////////////////// add total to bd  ///////////////////////////////
         await db.query("UPDATE commande SET sum_total = ($1 + 0.0) WHERE id_commande = $2;", [total, id_command]);
     };
-
-
-    // change status of commande to 'delivered'
-    async updateStatusDelivered(req, res) {
-        const { id_commande } = req.body;
-        await db.query("UPDATE commande SET status_commande = 'delivered' WHERE id_commande = $1;", [id_commande]);
-    };
-
-    // change status of commande to 'inprogress'
-    async updateStatusInprogress(req, res) {
-        const { id_commande } = req.body;
-        await db.query("UPDATE commande SET status_commande = 'inprogress' WHERE id_commande = $1;", [id_commande]);
-    };
+    
 
     // get oldest commande from all undelivered
     async getOldestCommande(req, res) {
-        const oldest = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE date_commande = (SELECT min(date_commande) FROM commande WHERE (commande.status_commande = 'undelivered'));");
+        const oldest = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile, (SELECT to_char(date_livraison::timestamp, 'DD Mon YYYY HH:MI:SSPM')) AS date_livraison FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE date_commande = (SELECT min(date_commande) FROM commande WHERE (commande.status_commande = 'undelivered'));");
         const ret = await db.query(
-            "SELECT id_plat, size FROM contenu_commande WHERE id_commande = $1;", [oldest.rows[0].id_commande]);
+            "SELECT id_plat, size FROM contenu_commande WHERE id_commande = $1;", [oldest.rows[0].id_commande]);           
         let contenu = [];
         for (let i = 0; i < ret.rows.length; i++) {
             const price = await db.query("SELECT prix FROM plat_size WHERE id_plat = $1 AND size = $2;", [ret.rows[i].id_plat, ret.rows[i].size]);
@@ -196,7 +184,7 @@ class Commande {
         console.log('idCommande :');
         console.log(idCommande.rows[0].current_commande);
 
-        const infoClient = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE id_commande = $1;", [idCommande.rows[0].current_commande]);
+        const infoClient = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile, (SELECT to_char(date_livraison::timestamp, 'DD Mon YYYY HH:MI:SSPM')) AS date_livraison FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE id_commande = $1;", [idCommande.rows[0].current_commande]);
 
 
         const ret = await db.query(
@@ -211,18 +199,34 @@ class Commande {
             console.log(">-1-<" + JSON.stringify(ret.rows))
             const price = await db.query("SELECT prix FROM plat_size WHERE id_plat = $1 AND size = $2;", [ret.rows[i].id_plat, ret.rows[i].size]);
             const descr = await db.query("SELECT nom, descript FROM plats WHERE id_plat = $1;", [ret.rows[i].id_plat]);
-            contenu.push({ plat: descr.rows[0].nom, prix: price.rows[0].prix, description: descr.rows[0].descript });
-
-
-            return ({ info: infoClient.rows[0], contenu });
+            contenu.push({ plat: descr.rows[0].nom, prix: price.rows[0].prix, description: descr.rows[0].descript });           
         }
-        return ({ info: {}, contenu })
+        return ({ info: infoClient.rows[0], contenu });
     };
 
     // accept commande for delivering
-    async makeCommandeCurrent(req, res) {
+    async makeCommandeCurrent(obj) {
+        console.log('obj :');
+        console.log(obj);
+
+
+
         await db.query("UPDATE livreur SET current_commande = $1 WHERE id_livr = $2;", [req.body.id_commande, req.body.id_livr]);
     };
+
+    // change status of commande to 'delivered'
+    async updateStatusDelivered(req, res) {
+        const { id_commande } = req.body;
+        await db.query("UPDATE commande SET status_commande = 'delivered' WHERE id_commande = $1;", [id_commande]);
+    };
+    
+
+    // change status of commande to 'inprogress'
+    async updateStatusInprogress(req, res) {
+        const { id_commande } = req.body;
+        await db.query("UPDATE commande SET status_commande = 'inprogress' WHERE id_commande = $1;", [id_commande]);
+    };
+
 }
 
 module.exports = new Commande();
