@@ -328,25 +328,8 @@ exports.shop = function (req, rep) {
                         return el;
                     }).then(entrees => {
                         Article.getAllIngredients().then(ingredients => {
-                            if (req.session.user !== undefined && req.session.user.mobile !== undefined) {
-                                rep.render('../views/index', {
-                                    params: {
-                                        title: 'index',
-                                        custom: req.session.user.cartItem.custom,
-                                        menu: req.session.user.cartItem.menu,
-                                        quantity: req.session.user.cartItem.idQuantity,
-                                        price: req.session.user.cartItem.price,
-                                        list: articlesrq,
-                                        entreeMenu: entrees.rows,
-                                        pizzasMenu: pizzaMedium,
-                                        boissonMinMenu: boissonMin,
-                                        boissonMaxMenu: boissonMax,
-                                        listIngredients: ingredients,
-                                        isClient: true,
-                                        isLogued: true
-                                    }
-                                });
-                            } else {
+                            if (req.session.user===undefined) {
+                                console.log("----------------------------------------------------->AAA")
                                 req.session.user = {/*TODO:iciC*/
                                     cartItem: {
                                         price: 0,
@@ -355,20 +338,24 @@ exports.shop = function (req, rep) {
                                         custom: [/*{{menu} : quantity}*/]
                                     }
                                 }
-                                rep.render('../views/index', {
-                                    params: {
-                                        title: 'index',
-                                        list: articlesrq,
-                                        entreeMenu: entrees.rows,
-                                        pizzasMenu: pizzaMedium,
-                                        boissonMinMenu: boissonMin,
-                                        boissonMaxMenu: boissonMax,
-                                        listIngredients: ingredients,
-                                        isClient: true,
-                                        isLogued: false
-                                    }
-                                });
                             }
+                            rep.render('../views/index', {
+                                params: {
+                                    title: 'index',
+                                    custom: req.session.user.cartItem.custom,
+                                    menu: req.session.user.cartItem.menu,
+                                    quantity: req.session.user.cartItem.idQuantity,
+                                    price: req.session.user.cartItem.price,
+                                    list: articlesrq,
+                                    entreeMenu: entrees.rows,
+                                    pizzasMenu: pizzaMedium,
+                                    boissonMinMenu: boissonMin,
+                                    boissonMaxMenu: boissonMax,
+                                    listIngredients: ingredients,
+                                    isClient: true,
+                                    isLogued: req.session.user.mobile !== undefined
+                                }
+                            });
                         })
                     }).catch(() => { rep.status(500).send({ messageError: "Impossible de charger les ingrédients" }) });
                 }).catch(() => { rep.status(500).send({ messageError: "Impossible de charger les boissons de 100cl" }) });
