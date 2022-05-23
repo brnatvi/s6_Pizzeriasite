@@ -2,8 +2,6 @@ const db = require("./db");
 
 class Article {
 
-    list_ingredients = [];
-
     async getAllArticle() {
         return await db.query("SELECT * FROM plats NATURAL JOIN (SELECT id_plat, MIN(prix) AS prix FROM plat_size GROUP BY id_plat) AS min_price;");
     }

@@ -2,19 +2,17 @@ const db = require('./db');
 
 class Commande {
 
-    isEmpty = function (obj) {        
+    isEmpty = function (obj) {
         for (let i in obj) {
-            if (obj.hasOwnProperty(i)) {                
+            if (obj.hasOwnProperty(i)) {
                 return false;
             }
-        }        
+        }
         return true;
     };
 
     ////////////// create new commande and contenu_commande in BD
     async createCommande(newObj) {
-        console.log("newObj :");
-        console.log(newObj);
 
         /////////////////////// find client  ///////////////////////
         const idClient = await db.query("SELECT id_client FROM security_client WHERE email = $1;", [newObj.emailClient]);
@@ -34,16 +32,16 @@ class Commande {
             const lenItems = keys.length;
 
             /////////////////////// fill next items ///////////////////////////////
-            for (let i = 0; i < lenItems; i++) {            
+            for (let i = 0; i < lenItems; i++) {
 
-                let plat = parseInt(keys[i]);              
-                let size = Object.keys(values[i])[0];                
+                let plat = parseInt(keys[i]);
+                let size = Object.keys(values[i])[0];
                 let quant = parseInt(Object.values(values[i])[0]);
-                
+
                 // find price
                 const newPrix = await db.query("SELECT prix FROM plat_size WHERE size = $1 AND id_plat = $2;", [size, plat]);
-                
-                total += (newPrix.rows[0].prix * quant);       
+
+                total += (newPrix.rows[0].prix * quant);
 
                 await db.query("INSERT INTO contenu_commande VALUES ($1, $2, $3, $4);", [id_command, plat, quant, size]);
             }
@@ -81,7 +79,7 @@ class Commande {
 
             total += (quant * price);
         }
-        
+
         ////////////////////////// add total to bd  ///////////////////////////////
         await db.query("UPDATE commande SET sum_total = ($1 + 0.0) WHERE id_commande = $2;", [total, id_command]);
     };
@@ -97,7 +95,7 @@ class Commande {
         ///////////////////////  create new commande -> id_commande  ///////////////////////
         const newCommande = await db.query(
             "INSERT INTO commande (date_commande, id_client, date_livraison) VALUES (CURRENT_TIMESTAMP, $1, $2) RETURNING id_commande;", [newClient.rows[0].id_client, newObj.deliveryDate]);
-        const id_command = newCommande.rows[0].id_commande;  
+        const id_command = newCommande.rows[0].id_commande;
 
         let total = 0;
         ///////////////////////  fill items  ///////////////////////
@@ -109,16 +107,16 @@ class Commande {
             const lenItems = keys.length;
 
             /////////////////////// fill next items ///////////////////////////////
-            for (let i = 0; i < lenItems; i++) {            
+            for (let i = 0; i < lenItems; i++) {
 
-                let plat = parseInt(keys[i]);              
-                let size = Object.keys(values[i])[0];                
+                let plat = parseInt(keys[i]);
+                let size = Object.keys(values[i])[0];
                 let quant = parseInt(Object.values(values[i])[0]);
-                
+
                 // find price
                 const newPrix = await db.query("SELECT prix FROM plat_size WHERE size = $1 AND id_plat = $2;", [size, plat]);
-                
-                total += (newPrix.rows[0].prix * quant);       
+
+                total += (newPrix.rows[0].prix * quant);
 
                 await db.query("INSERT INTO contenu_commande VALUES ($1, $2, $3, $4);", [id_command, plat, quant, size]);
             }
@@ -156,7 +154,7 @@ class Commande {
 
             total += (quant * price);
         }
-        
+
         ////////////////////////// add total to bd  ///////////////////////////////
         await db.query("UPDATE commande SET sum_total = ($1 + 0.0) WHERE id_commande = $2;", [total, id_command]);
     };
@@ -189,25 +187,36 @@ class Commande {
     };
 
     // get current commande of livreur
-    async getCurrentCommande(idLivreur) {
-        const idCommande = await db.query("SELECT current_commande FROM livreur WHERE id_livr = $1;", [idLivreur]);
+    async getCurrentCommande(livreur) {
+        console.log('livreur :');
+        console.log(livreur);
+
+        const idCommande = await db.query(
+            "SELECT current_commande FROM livreur INNER JOIN security_livreur ON livreur.id_livr = security_livreur.id_livr WHERE nom = $1 AND prenom = $2 AND email = $3;", [livreur.nom, livreur.prenom, livreur.email]);
+        console.log('idCommande :');
+        console.log(idCommande.rows[0].current_commande);
+
+        const infoClient = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE id_commande = $1;", [idCommande.rows[0].current_commande]);
+
+
+        const ret = await db.query(
+            "SELECT id_plat, size FROM contenu_commande WHERE id_commande = $1;", [infoClient.rows[0].id_commande]);
+
+        console.log('ret :');
+        console.log(ret.rows[0]);
+
         let contenu = [];
-        if (idCommande.rows.length>0){//TODO: patch
-            console.log(">-1-<"+JSON.stringify(idCommande.rows))
-            const current = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE id_commande = $1;", [idCommande]);
-            console.log(">-2-<")
-            const ret = await db.query(
-                "SELECT id_plat, size FROM contenu_commande WHERE id_commande = $1;", [current.rows[0].id_commande]);
-            console.log(">-3-<")
-            for (let i = 0; i < ret.rows.length; i++) {
-                const price = await db.query("SELECT prix FROM plat_size WHERE id_plat = $1 AND size = $2;", [ret.rows[i].id_plat, ret.rows[i].size]);
-                const descr = await db.query("SELECT nom, descript FROM plats WHERE id_plat = $1;", [ret.rows[i].id_plat]);
-                contenu.push({ plat: descr.rows[0].nom, prix: price.rows[0].prix, description: descr.rows[0].descript });
-            }
-            console.log(">-5-<")
-            return ({ info: oldest.rows[0], contenu });
+        for (let i = 0; i < ret.rows.length; i++) {
+            
+            console.log(">-1-<" + JSON.stringify(ret.rows))
+            const price = await db.query("SELECT prix FROM plat_size WHERE id_plat = $1 AND size = $2;", [ret.rows[i].id_plat, ret.rows[i].size]);
+            const descr = await db.query("SELECT nom, descript FROM plats WHERE id_plat = $1;", [ret.rows[i].id_plat]);
+            contenu.push({ plat: descr.rows[0].nom, prix: price.rows[0].prix, description: descr.rows[0].descript });
+
+
+            return ({ info: infoClient.rows[0], contenu });
         }
-        return ({info:{}, contenu})
+        return ({ info: {}, contenu })
     };
 
     // accept commande for delivering

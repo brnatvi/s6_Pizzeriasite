@@ -15,7 +15,7 @@ exports.signUpLivreur = (req, rep) => { Connect.signUp(Livreur, req, rep) };
 //----------- fonctionnality available to Livreur --------------------
 
 exports.getLivraisonDispo = function (req, rep) {
-    Commande.getCurrentCommande().then(current=>{
+    Commande.getCurrentCommande(req.session.user).then(current=>{
         Commande.getOldestCommande().then(old => {
             rep.render('../views/commande', {
                 params: {
@@ -38,7 +38,6 @@ exports.getLivraisonDispo = function (req, rep) {
                         mobileClient: current.info.mobile,
                         listContenu: current.contenu
                     }
-
                 }
             })
         }).catch((err) => { console.log(err); rep.status(500).send({ messageError: "Commande n'est pas disponible" }) });

@@ -124,10 +124,8 @@ INSERT INTO client(nom, prenom, adr_client, mobile) VALUES ('Richard', 'Julie', 
 INSERT INTO client(nom, prenom, adr_client, mobile) VALUES ('Dubois', 'Thomas', '64 Rue Réaumur, 75003 Paris', 0189545671);
 INSERT INTO security_client(id_client, email, pw) VALUES (2, 'dubois@ddddddd.com', '$2b$10$VkU6d3m5G.g7vG/cNV.9MeFMfgAdzEgNX4sHNcJdUn7hFa6p3dz32');
 
-INSERT INTO livreur(nom, prenom) VALUES ('Martin', 'Louis');
-INSERT INTO security_livreur(id_livr, email, pw) VALUES (1, 'martin@ooooooo.com', '$2b$10$DnUeqkJSx9XB38nlRy.VhOLDBbjAL4UGbyWkIxiemYpHELDTddUkO');
 
-INSERT INTO commande(id_client, date_commande, status_commande, sum_total, date_livraison) VALUES (2, '2022-05-22 00:30:30.041429', 'undelivered', 58.08, '2022-05-23 16:12:00');
+INSERT INTO commande(id_client, date_commande, status_commande, sum_total, date_livraison) VALUES (2, '2022-05-22 00:30:30.041429', 'inprogress', 58.08, '2022-05-23 16:12:00');
 INSERT INTO commande(id_client, date_commande, status_commande, sum_total, date_livraison) VALUES (2, CURRENT_TIMESTAMP, 'undelivered', 35.00, '2022-05-23 16:12:00');
 
 INSERT INTO contenu_commande VALUES (1, 6, 2, 'medium');
@@ -137,6 +135,9 @@ INSERT INTO contenu_commande VALUES (1, 14, 1, 'unique');
 
 INSERT INTO contenu_commande VALUES (2, 3, 2, 'small');
 INSERT INTO contenu_commande VALUES (2, 9, 3, 'large');
+
+INSERT INTO livreur(nom, prenom, current_commande) VALUES ('Martin', 'Louis', 1);
+INSERT INTO security_livreur(id_livr, email, pw) VALUES (1, 'martin@ooooooo.com', '$2b$10$DnUeqkJSx9XB38nlRy.VhOLDBbjAL4UGbyWkIxiemYpHELDTddUkO');
 
 /*
 2022-05-23 16:12:00
