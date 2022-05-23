@@ -92,6 +92,13 @@ class Livreur {
         res.json(updated.rows);
     };
 
+    //--------------- change current_commande -----------------------------
+
+    async updateCurrentCommande(req, res) {
+        const { id_livr, id_commande } = req.body;
+        const updated = await db.query("UPDATE livreur SET current_commande = $1 WHERE id_livr = $2;", [id_commande, id_livr]);
+        res.json(updated.rows);
+    };
 
 }
 
