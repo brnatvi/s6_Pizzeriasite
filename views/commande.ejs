@@ -97,16 +97,16 @@
                                     <div id="header-cart">
                                         <div class="info info-livreur">
                                             <p>Commande n° <%-
-                                                    (locals.params.currentCommande.idCommande===undefined)?"0":locals.currentCommande.params.idCommande
-                                                    %><span class="wip-livreur"> - en cours de livraison</span></p>
+                                                    (locals.params.currentCommande.idCommande===undefined)?"0":locals.params.currentCommande.idCommande
+                                                %><span class="wip-livreur"> - en cours de livraison</span></p>
                                             <% console.log(locals.params.currentCommande) %>
-                                                <p>Heure de livraison - 19h50</p>
+                                            <p>Heure de livraison - 19h50</p>
                                         </div>
                                         <div class="price price-livreur">
                                             <p>Total (TTC)</p>
                                             <p>
                                                 <%- (locals.params.currentCommande.totalPrice===undefined)?"0":locals.params.currentCommande.totalPrice
-                                                    %> &#8364;
+                                                %> &#8364;
                                             </p>
                                         </div>
                                         <button type="button" class="btn btn-primary btn-livreur">Livraison
@@ -117,7 +117,7 @@
 
                                     <div>
                                         <% if (locals.params.currentCommande.listContenu!==undefined) {
-                                            locals.params.currentCommande.listContenu.forEach(article=> {%>
+                                        locals.params.currentCommande.listContenu.forEach(article=> {%>
                                             <div class="element">
                                                 <p>
                                                     <%- article.plat %>
@@ -131,7 +131,7 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                            <% })} %>
+                                        <% })} %>
                                     </div>
 
                                     <div id="header-border"></div>
@@ -148,14 +148,14 @@
                                         <p>Addresse : </p>
                                         <p class="field"></p>
                                         <%- (locals.params.currentCommande.adressClient===undefined)?"-":locals.params.currentCommande.adressClient %>
-                                            </p>
+                                        </p>
                                     </div>
 
                                     <div class="element">
                                         <p>Tel: </p>
                                         <p class="field">
                                             <%- (locals.params.currentCommande.mobileClient===undefined)?"-":locals.params.currentCommande.mobileClient
-                                                %>
+                                            %>
                                         </p>
                                     </div>
                                 </div>
