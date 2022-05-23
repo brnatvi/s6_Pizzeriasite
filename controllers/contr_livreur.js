@@ -58,7 +58,6 @@ exports.connectionLivreur = function (req, rep) {
     })
 };
 
-
 exports.getCurrentCommande = (req, res) => {
     res.status(404).render('commande', {
         params: {
@@ -70,12 +69,11 @@ exports.getCurrentCommande = (req, res) => {
 };
 
 exports.acceptCommande = (req, res) => {
-    Commande.updateStatusInprogress(req.session.user).then(idComm => {
-        Commande.makeCommandeCurrent(req.session.user, idComm);
-    })
-    
+    Commande.updateStatusInprogress(idCommande);
+    Livreur.makeCommandeCurrent(req.session.user, idCommande);
 };
 
 exports.finishCommande = (req, res) => {
     Commande.updateStatusDelivered(req.session.user);
+    Livreur.finishCommande(req.session.user);
 };

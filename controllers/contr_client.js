@@ -366,8 +366,6 @@ exports.shop = function (req, rep) {
 
 //---------------------- TODO: WIP: Basic client --------------------------------------------------
 
-//TODO: pizza recommandation?
-
 /**
  * TODO: Enregistrer la commande dans la base de donnée
  */
@@ -411,8 +409,7 @@ exports.saveCommande = function (req, rep) {
             articles: req.session.user.cartItem.idQuantity,
             customs: req.session.user.cartItem.custom
         };
-        Commande.createCommandeUnreg(newObj).catch(()=>{rep.status(500).send({messageError : "Impossible de sauvegarder la commande."});});
-        console.log("saveCommande non reg");
+        Commande.createCommandeUnreg(newObj).catch(()=>{rep.status(500).send({messageError : "Impossible de sauvegarder la commande."});});        
     }
 }
 

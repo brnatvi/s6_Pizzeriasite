@@ -95,9 +95,14 @@ class Livreur {
     //--------------- change current_commande -----------------------------
 
     async updateCurrentCommande(req, res) {
-        const { id_livr, id_commande } = req.body;
-        const updated = await db.query("UPDATE livreur SET current_commande = $1 WHERE id_livr = $2;", [id_commande, id_livr]);
-        res.json(updated.rows);
+        const id_livr = req.params.id_livr;
+        const id_commande = req.params.id_commande;
+        const updated = await db.query("UPDATE livreur SET current_commande = $1 WHERE id_livr = $2;", [id_commande, id_livr]);        
+    };
+
+    async finishCommande(req, res) {
+        const id_livr = req.params.id_livr;       
+        const updated = await db.query("UPDATE livreur SET current_commande = $1 WHERE id_livr = $2;", ['', id_livr]);        
     };
 
 }

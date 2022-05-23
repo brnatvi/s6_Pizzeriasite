@@ -1,4 +1,5 @@
 const db = require('./db');
+const livreur = require('./livreur');
 
 class Commande {
 
@@ -175,23 +176,15 @@ class Commande {
     };
 
     // get current commande of livreur
-    async getCurrentCommande(livreur) {
-        console.log('livreur :');
-        console.log(livreur);
+    async getCurrentCommande(livreur) {        
 
         const idCommande = await db.query(
             "SELECT current_commande FROM livreur INNER JOIN security_livreur ON livreur.id_livr = security_livreur.id_livr WHERE nom = $1 AND prenom = $2 AND email = $3;", [livreur.nom, livreur.prenom, livreur.email]);
-        console.log('idCommande :');
-        console.log(idCommande.rows[0].current_commande);
-
+        
         const infoClient = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile, (SELECT to_char(date_livraison::timestamp, 'DD Mon YYYY HH:MI:SSPM')) AS date_livraison FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE id_commande = $1;", [idCommande.rows[0].current_commande]);
-
 
         const ret = await db.query(
             "SELECT id_plat, size FROM contenu_commande WHERE id_commande = $1;", [infoClient.rows[0].id_commande]);
-
-        console.log('ret :');
-        console.log(ret.rows[0]);
 
         let contenu = [];
         for (let i = 0; i < ret.rows.length; i++) {
@@ -204,15 +197,6 @@ class Commande {
         return ({ info: infoClient.rows[0], contenu });
     };
 
-    // accept commande for delivering
-    async makeCommandeCurrent(obj) {
-        console.log('obj :');
-        console.log(obj);
-
-
-
-        await db.query("UPDATE livreur SET current_commande = $1 WHERE id_livr = $2;", [req.body.id_commande, req.body.id_livr]);
-    };
 
     // change status of commande to 'delivered'
     async updateStatusDelivered(req, res) {
@@ -226,7 +210,6 @@ class Commande {
         const { id_commande } = req.body;
         await db.query("UPDATE commande SET status_commande = 'inprogress' WHERE id_commande = $1;", [id_commande]);
     };
-
 }
 
 module.exports = new Commande();
