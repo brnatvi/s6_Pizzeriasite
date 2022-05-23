@@ -43,8 +43,8 @@ class Connect {
             res.status(409).send({messageError : 'Votre email est invalide.'});
         }else if(req.body.pw.length<8){
             res.status(409).send({messageError : 'Votre mot de passe doit contenir au moins 8 caractères.'});
-        }else if(regex.tel.test(req.body.mobile)){
-            res.status(409).send({messageError : 'Votre mot de passe doit contenir au moins 8 caractères.'});
+        }else if(! regex.tel.test(req.body.mobile)){
+            res.status(409).send({messageError : 'Votre numéro de téléphone est invalide.'});
         }else{
             User.getNbrUserByEmail(req.body.email).then(res => {
                 if (parseInt(res.rows[0].count) === 0) return res;
@@ -113,7 +113,7 @@ class Connect {
                     })
                 })
             }
-            if (User.constructor.name==="Livreur"){
+            if (User.constructor.name!=="Livreur"){
                 if (req.body.userAdressSet) {
                     user_req.then(user=>{
                         let ps_res = {id: user.id, address: req.body.userAdressSet};
@@ -134,6 +134,17 @@ class Connect {
                             req.session.save( function(err) {})
                         }).catch(()=>{
                             res.status(500).send({messageError : "Impossible de mettre à jour le numéro de téléphone."});
+                        })
+                    })
+                }
+                if (req.body.userAutreSet) {
+                    user_req.then(user=>{
+                        let ps_res={id:user.id , autre:req.body.userAutreSet};
+                        User.updateAutre(ps_res).then(()=>{
+                            req.session.user.autre=ps_res.autre
+                            req.session.save( function(err) {})
+                        }).catch(()=>{
+                            res.status(500).send({messageError : "Impossible de mettre à jour vos données."});
                         })
                     })
                 }
@@ -186,6 +197,7 @@ class Connect {
                 address: user.address,
                 mobile: user.mobile,
                 email: user.email,
+                autre: user.autre,
                 cartItem: {
                     price: 0,
                     idQuantity: {/*id: {size : quantity}*/},

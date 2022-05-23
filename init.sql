@@ -31,6 +31,7 @@ CREATE TABLE client (
     nom VARCHAR(255) NOT NULL,
     prenom VARCHAR(255) NOT NULL,
     adr_client TEXT NOT NULL,
+    autre TEXT,
     mobile VARCHAR(50) NOT NULL
 );
 
@@ -43,7 +44,6 @@ CREATE TABLE commande (
     status_commande eStatusCommande DEFAULT 'undelivered',  
     sum_total NUMERIC(4, 2),
     date_livraison TIMESTAMP,
-    autre TEXT,
     FOREIGN KEY (id_client) REFERENCES client (id_client)
 );
 

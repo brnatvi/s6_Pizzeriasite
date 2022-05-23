@@ -70,7 +70,6 @@
                 </form>
             </div>
 
-            //TODO: add + autre info
             <div id="signup-modal-content" class="modal-content secondary login-client">
                 <div class="modal-header">
                     <h5 class="modal-title text-center m-auto" id="modal-connexion-signup-user">Sign-Up</h5>
@@ -103,6 +102,11 @@
                         </div>
 
                         <div>
+                            <label for="userAutre">Autre:</label><br>
+                            <input class="form-control" type="text" id="userAutre" name="userAutre" pattern="text">
+                        </div>
+
+                        <div>
                             <label for="userPassword">Mot de passe:</label><br>
                             <input class="form-control" type="password" id="userPassword" name="userPassword" minlength="8">
                             <input type="checkbox" id="signup-show-password">Afficher le mot de passe
@@ -117,7 +121,7 @@
 
         </div>
     </div>
-    <!-- TODO: set + session -->
+
     <% if (locals.params.isLogued){ %>
     <div class="modal fade" id="modal-setting-session" tabindex="-1" role="dialog" aria-labelledby="modal-setting-session-user" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -141,6 +145,11 @@
                         <div>
                             <label for="userPhoneSet">Numéro de téléphone:</label><br>
                             <input class="form-control" type="tel" id="userPhoneSet" name="userPhoneSet" pattern="tel">
+                        </div>
+
+                        <div>
+                            <label for="userAutreSet">Autre:</label><br>
+                            <input class="form-control" type="text" id="userAutreSet" name="userAutreSet">
                         </div>
 
                         <input type="hidden" id="isClientSet" name="isClientSet" value="true">

@@ -22,14 +22,19 @@ class Client {
     //-------------- Create client -----------------------------------------
     
     async addUser (req, res){
-        const {nom, prenom, address, mobile, email, pw} = req.body;
-        const newId = await db.query("INSERT INTO client (nom, prenom, adr_client, mobile) VALUES ($1, $2, $3, $4) RETURNING id_client;", [nom, prenom, address, mobile]);
+        const {nom, prenom, address, mobile, email, pw, autre} = req.body;
+        const newId = await db.query("INSERT INTO client (nom, prenom, adr_client, mobile, autre) VALUES ($1, $2, $3, $4, $5) RETURNING id_client;", [nom, prenom, address, mobile, autre]);
         const id = newId.rows[0].id_client;       
         await db.query("INSERT INTO security_client (id_client, email, pw, resetToken) VALUES ($1, $2, $3, $4) RETURNING *;", [id, email, pw, ""]);
     };
 
 
     //-------------- Update data -----------------------------------------
+
+    async updateAutre(req) {
+        const { id, autre } = req;
+        return await db.query("UPDATE client SET autre = $2 WHERE id_client = $1 RETURNING *;", [id, autre]);
+    };
 
     async updateMail(req) {
         const { id, email } = req;

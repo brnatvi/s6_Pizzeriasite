@@ -128,7 +128,7 @@ const addCustom = (data) => {
         divList+=cntDupVal(data.ingredientsInfo[i].id_ingred, data.ingredientsId)+" x ";
         divList+=(i<data.ingredientsInfo.length-1)?data.ingredientsInfo[i].nom+" . ":data.ingredientsInfo[i].nom;
     }
-    if (!isPresentCartItem(data.indexMenu+"_"+data.typeMenu)){
+    if (!isPresentCartItem(data.indexCustom+"_Custom")){
         updateGraphCartItem(
             data.indexCustom+"_Custom", "Pizza personnalisée - "+data.sizepizza, divList,
             '-custom-cart-item', 'idCustom', false,
@@ -513,7 +513,8 @@ $(document).ready(function() {
                 address : $("#userAdress").val(),
                 mobile : $("#userPhone").val(),
                 email : $("#userEmail").val(),
-                pw : $("#userPassword").val()
+                pw : $("#userPassword").val(),
+                autre : $("#userAutre").val()
             }
         e.preventDefault();
         $.ajax({
@@ -546,6 +547,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 window.location.reload(true);
+                window.location.replace(window.location.origin+"/commande");
             }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });

@@ -223,7 +223,7 @@
             <div class="tab-pane fade show active" id="v-pills-pizzas" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <h1>Nos pizzas</h1>
                 <div class="row" id="all-pizzas">
-                    <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(article.type_plat==="pizza"){%>
+                    <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(article.type_plat==="pizza" && article.id_plat!==25){%>
                         <div class="m-auto container-item-desc" type="button" data-toggle="modal" data-target="#modal-info-item">
                             <img class="item-description" src="img/pizzas_pics/<%- article.link_picture%>" alt="pizza">
                             <p class="name-pizza"><%- article.nom %></p>
