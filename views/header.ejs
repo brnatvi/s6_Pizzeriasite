@@ -31,13 +31,13 @@
                 <% if (locals.params.isClient){ %>
                     <a class="rmv-style-btn rmw-style-a" href="/shop">La carte</a>
                     <% }else{ %>
-                    <a class="rmv-style-btn rmw-style-a" href="/commande">Consulter livraisons</a>
+                    <a class="rmv-style-btn rmw-style-a" href="/commande">Livraisons</a>
                     <% } %>
                     <% if (!locals.params.isLogued){ %>
                     <button id="connection-user-signin" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
                     <a class="rmv-style-btn rmw-style-a" href="/livraison">Espace livreur</a>
                     <% }else{ %>                
-                    <button class="rmv-style-btn" id="settingSession" type="button" data-toggle="modal" data-target="#modal-setting-session">Changer mot de passe</button>
+                    <button class="rmv-style-btn" id="settingSession" type="button" data-toggle="modal" data-target="#modal-setting-session">Paramètres</button>
                     <button class="rmv-style-btn" id="logoutSession">Se déconnecter</button>
                     <% } %>
             </div>
@@ -70,6 +70,7 @@
                 </form>
             </div>
 
+            //TODO: add + autre info
             <div id="signup-modal-content" class="modal-content secondary login-client">
                 <div class="modal-header">
                     <h5 class="modal-title text-center m-auto" id="modal-connexion-signup-user">Sign-Up</h5>

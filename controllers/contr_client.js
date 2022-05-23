@@ -300,8 +300,8 @@ exports.index = function (req, rep) {
     rep.render('../views/home', {
         params: {
             title: 'home',
-            isClient: (req.session.user === undefined || req.session.user.mobile !== undefined),
-            isLogued: req.session.user !== undefined
+            isClient: (req.session.user === undefined || req.session.user.cartItem !== undefined),
+            isLogued: req.session.user !== undefined && req.session.user.nom !== undefined
         }
     });
 }
@@ -326,7 +326,7 @@ exports.shop = function (req, rep) {
                         return el;
                     }).then(entrees => {
                         Article.getAllIngredients().then(ingredients => {
-                            if (req.session.mobile !== undefined) {
+                            if (req.session.user !== undefined && req.session.user.mobile !== undefined) {
                                 rep.render('../views/index', {
                                     params: {
                                         title: 'index',
@@ -340,7 +340,7 @@ exports.shop = function (req, rep) {
                                         boissonMinMenu: boissonMin,
                                         boissonMaxMenu: boissonMax,
                                         listIngredients: ingredients,
-                                        isClient: (req.session.user.mobile !== undefined),
+                                        isClient: true,
                                         isLogued: true
                                     }
                                 });
@@ -390,7 +390,7 @@ exports.saveCommande = function (req, rep) {
     let portable = req.body.portableCommande;
     let email = req.body.emailCommande;
     let deliveryDate = req.body.dateTimeCommande;
-    if (req.session.mobile!==undefined){
+    if (req.session.user !== undefined && req.session.user.mobile!==undefined){
         let menus = req.session.user.cartItem.menu;
         let articles = req.session.user.cartItem.idQuantity;
         let customs = req.session.user.cartItem.custom;

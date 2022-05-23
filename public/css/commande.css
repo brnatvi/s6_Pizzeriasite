@@ -111,6 +111,10 @@
     margin-right: 0;
 }
 
+#container-menu{
+    width: 100%;
+}
+
 /*responsive*/
 @media only screen and (max-width: 992px){
     #container-cart{
