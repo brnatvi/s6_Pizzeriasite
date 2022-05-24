@@ -1,6 +1,6 @@
 <%- include('header'); %>
-    <div class="container-fluid d-flex flex-column flex-lg-row justify-content-center main-container-livreur"
-        id="main-container">
+<div class="container-fluid d-flex flex-column flex-lg-row justify-content-center main-container-livreur"
+     id="main-container" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
         <div id="container-in-progress" class="col-9">
             <div class="row">
                 <div id="container-menu">
@@ -36,8 +36,11 @@
                                                     &#8364;
                                             </p>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-livreur">Prendre en charge la 
-                                            commande</button>
+                                        <form id="form-accept-commande" action="accept-commande" method="post">
+                                            <input id="id-accept-commande" type="submit" class="btn btn-primary btn-livreur">Prendre en charge la
+                                            commande</input>
+                                            <input type="hidden" name="idacceptCommande" value="<%- locals.params.oldCommande.idCommande %>">
+                                        </form>
                                     </div>
 
                                     <div id="header-border"></div>
@@ -108,7 +111,10 @@
                                                 %> &#8364;
                                             </p>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-livreur">Livraison effectué</button>
+                                        <form id="form-finish-commande" action="finish-commande" method="post">
+                                            <input type="submit" class="btn btn-primary btn-livreur">Livraison effectué</input>
+                                            <input id="id_commande_finish" type="hidden" name="idCommandeFinish" value="<%- locals.params.currentCommande.idCommande %>">
+                                        </form>
                                     </div>
 
                                     <div id="header-border"></div>

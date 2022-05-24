@@ -552,6 +552,66 @@ $(document).ready(function() {
     });
 
     /**
+     * Prendre en charge une commande
+     */
+    $(document).on('click', '#id-accept-commande', function(e) {
+        const form = $("#form-accept-commande");
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                alertUser("La commande a bien été traité.", 'green')
+                window.location.reload(true);
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+        });
+    });
+
+    /**
+     * Finir une commande
+     */
+    $(document).on('click', '#id-commande-finish', function(e) {
+        const form = $("#form-finish-commande");
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                alertUser("La commande a bien été traité.", 'green')
+                window.location.reload(true);
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+        });
+    });
+
+    /**
+     * Valider le panier
+     */
+    $(document).on('click', '#submit-cart-item', function(e) {
+        const form = $("#create-new-commande");
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                alertUser("La commande a bien été validée.", 'green')
+                window.location.reload(true);
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+        });
+    });
+
+    /**
      * Modifier les informations d'un utilisateur (client et livreur)
      */
     $(document).on('click', '.parameters-user', function(e) {

@@ -18,6 +18,7 @@ exports.signUpLivreur = (req, rep) => { Connect.signUp(Livreur, req, rep) };
 
 exports.getLivraisonDispo = function (req, rep) {
     Commande.getCurrentCommande(req.session.user).then(current=>{
+        console.log("current"+current)
         Commande.getOldestCommande().then(old => {
             rep.render('../views/commande', {
                 params: {
@@ -44,8 +45,8 @@ exports.getLivraisonDispo = function (req, rep) {
                     }
                 }
             })
-        }).catch((err) => { console.log(err); rep.status(500).send({ messageError: "Commande n'est pas disponible" }) });
-    }).catch((err) => { console.log(err);  rep.status(500).send({ messageError: "Commande n'est pas disponible" }) });
+        }).catch((err) => { console.log(err); rep.status(500).send({ messageError: "ACommande n'est pas disponible" }) });
+    }).catch((err) => { console.log(err);  rep.status(500).send({ messageError: "BCommande n'est pas disponible" }) });
 };
 
 exports.connectionLivreur = function (req, rep) {
@@ -69,11 +70,22 @@ exports.getCurrentCommande = (req, res) => {
 };
 
 exports.acceptCommande = (req, res) => {
-    Commande.updateStatusInprogress(idCommande);
-    Livreur.makeCommandeCurrent(req.session.user, idCommande);
+    Livreur.getLivreurByEmail(req.session.user.email).then(user =>{
+        Commande.updateStatusInprogress(req.body.idacceptCommande).then(()=>{
+            Livreur.updateCurrentCommande(user.rows[0].id_livr, req.body.acceptCommande).then(()=>{
+                res.status(200).send();
+            });
+        });
+    }).catch(()=>{res.status(500).send({ messageError: "Commande n'est pas disponible" })})
 };
 
 exports.finishCommande = (req, res) => {
-    Commande.updateStatusDelivered(req.session.user);
-    Livreur.finishCommande(req.session.user);
+    Livreur.getLivreurByEmail(req.session.user.email).then(user =>{
+        console.log("-------->"+user.rows[0].id_livr)
+        Commande.updateStatusDelivered(req.body.idCommandeFinish).then(()=>{
+            Livreur.finishCommande(user.rows[0].id_livr).then(()=>{
+                res.status(200).send();
+            }).catch(()=>{res.status(500).send({ messageError: "Impossible d'archiver la commande." })});
+        }).catch(()=>{res.status(500).send({ messageError: "Impossible de mettre à jour le status de la commande." })});
+    }).catch(()=>{res.status(500).send({ messageError: "Commande n'est pas disponible" })})
 };

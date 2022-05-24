@@ -59,9 +59,8 @@ class Livreur {
         return res;
     }
 
-    async getLivreurByEmail(req) {
-        const email = req.body.email;
-        return await db.query("SELECT email, pw FROM security_livreur WHERE email = $1;", [email]);
+    async getLivreurByEmail(email) {
+        return await db.query("SELECT id_livr, email, pw FROM security_livreur WHERE email = $1;", [email]);
     }
 
     async getLivreurByID(req, res) {
@@ -94,15 +93,12 @@ class Livreur {
 
     //--------------- change current_commande -----------------------------
 
-    async updateCurrentCommande(req, res) {
-        const id_livr = req.params.id_livr;
-        const id_commande = req.params.id_commande;
+    async updateCurrentCommande(id_livr, id_commande) {
         const updated = await db.query("UPDATE livreur SET current_commande = $1 WHERE id_livr = $2;", [id_commande, id_livr]);        
     };
 
-    async finishCommande(req, res) {
-        const id_livr = req.params.id_livr;       
-        const updated = await db.query("UPDATE livreur SET current_commande = $1 WHERE id_livr = $2;", ['', id_livr]);        
+    async finishCommande(id_livr) {
+        const updated = await db.query("UPDATE livreur SET current_commande = NULL WHERE id_livr = $1;", [id_livr]);
     };
 
 }

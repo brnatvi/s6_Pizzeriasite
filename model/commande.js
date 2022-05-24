@@ -180,13 +180,14 @@ class Commande {
 
         const idCommande = await db.query(
             "SELECT current_commande FROM livreur INNER JOIN security_livreur ON livreur.id_livr = security_livreur.id_livr WHERE nom = $1 AND prenom = $2 AND email = $3;", [livreur.nom, livreur.prenom, livreur.email]);
-        
+        console.log("current_commande : "+JSON.stringify(idCommande.rows[0].current_commande))
         const infoClient = await db.query("SELECT id_commande, sum_total, nom, prenom, adr_client, mobile, (SELECT to_char(date_livraison::timestamp, 'DD Mon YYYY HH:MI:SSPM')) AS date_livraison FROM client INNER JOIN commande ON commande.id_client = client.id_client WHERE id_commande = $1;", [idCommande.rows[0].current_commande]);
-
+        let contenu = [];
+        if (infoClient.rows[0]===undefined)return ({info:{},contenu});
         const ret = await db.query(
             "SELECT id_plat, size FROM contenu_commande WHERE id_commande = $1;", [infoClient.rows[0].id_commande]);
 
-        let contenu = [];
+
         for (let i = 0; i < ret.rows.length; i++) {
             
             console.log(">-1-<" + JSON.stringify(ret.rows))
@@ -199,15 +200,13 @@ class Commande {
 
 
     // change status of commande to 'delivered'
-    async updateStatusDelivered(req, res) {
-        const { id_commande } = req.body;
+    async updateStatusDelivered(id_commande) {
         await db.query("UPDATE commande SET status_commande = 'delivered' WHERE id_commande = $1;", [id_commande]);
     };
     
 
     // change status of commande to 'inprogress'
-    async updateStatusInprogress(req, res) {
-        const { id_commande } = req.body;
+    async updateStatusInprogress(id_commande) {
         await db.query("UPDATE commande SET status_commande = 'inprogress' WHERE id_commande = $1;", [id_commande]);
     };
 }

@@ -338,7 +338,7 @@
                     let dateMinCl = dateMin.toJSON().slice(0,10).replace('/','-')+'T'+("00"+dateMin.getHours()).slice(-2)+":"+("00"+dateMin.getMinutes()).slice(-2)%>
                     value="<%-dateMinCl%>"
                     min="<%-dateMinCl%>"
-                    max="<%-new Date(new Date().getTime() + 60*60*24*1000).toJSON().slice(0,10).replace('/','-');%>T00:00">
+                    max="<%-new Date(new Date().getTime() + 60*60*24*2*1000).toJSON().slice(0,10).replace('/','-');%>T00:00">
                     <input id="submit-cart-item" type="submit" class="btn btn-primary" value="Valider mon panier">
                 </form>
             </div>
