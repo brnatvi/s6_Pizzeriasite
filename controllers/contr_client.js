@@ -393,6 +393,8 @@ exports.saveCommande = function (req, rep) {
                 menu: [/*{{menu} : quantity}*/],
                 custom: [/*{{menu} : quantity}*/]
             }
+            req.session.save();
+            rep.status(200).send();
         }).catch(()=>{rep.status(500).send({messageError : "Impossible de sauvegarder la commande."});});
 
     } else {
@@ -409,8 +411,19 @@ exports.saveCommande = function (req, rep) {
             articles: req.session.user.cartItem.idQuantity,
             customs: req.session.user.cartItem.custom
         };
-        Commande.createCommandeUnreg(newObj).catch(()=>{rep.status(500).send({messageError : "Impossible de sauvegarder la commande."});});        
+        Commande.createCommandeUnreg(newObj).then(()=>{
+            console.log("saveCommande for reg");
+            //remove all elements in session then reload page
+            delete req.session.user.cartItem;
+            req.session.user.cartItem = {
+                price: 0,
+                idQuantity: {/*id: {size : quantity}*/ },
+                menu: [/*{{menu} : quantity}*/],
+                custom: [/*{{menu} : quantity}*/]
+            }
+            req.session.save();
+            rep.status(200).send();
+        }).catch(()=>{rep.status(500).send({messageError : "Impossible de sauvegarder la commande."});});
     }
 }
-
 
