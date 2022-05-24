@@ -9,6 +9,20 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
 }
+#bg-sub{
+    height: calc(100vh - 70px);
+    width: 100vw;
+    background-image: linear-gradient(to top, black -2000px, transparent ), url('../img/pizza_bg_2.jpg');
+    background-position: right;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+#bg-sub p{
+    font-size: 20px;
+}
+#bg-sub h2{
+    font-size: 40px;
+}
 #presentation{
     height: 120px;
     bottom: 0;

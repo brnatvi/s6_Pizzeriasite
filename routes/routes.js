@@ -41,11 +41,13 @@ router.post("/create-new-commande", justClient, controller_Client.saveCommande)
 //------------- Livreur ---------------------
 //------------- Just livreur ---------------------
 router.post("/parameters-delivery-man", checkAuth, justDeliveryMan, controller_Livreur.updateProfileLivreur);
-router.get("/commande", checkAuth, justDeliveryMan, controller_Livreur.GetCommande);
+router.post("/accept-commande", checkAuth, justDeliveryMan, controller_Livreur.acceptCommande);
+router.post("/finish-commande", checkAuth, justDeliveryMan, controller_Livreur.finishCommande);
+router.get("/commande", checkAuth, justDeliveryMan, controller_Livreur.getLivraisonDispo);
 //------------- Log in - Log out ---------------------
 router.post("/livraisonsignin", controller_Livreur.signInLivreur);
 router.post("/livraisonsignup", controller_Livreur.signUpLivreur);
-router.get("/livraison", controller_Livreur.livraisonLivreur);
+router.get("/livraison", controller_Livreur.connectionLivreur);
 
 
 //------------- Default ---------------------

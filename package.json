@@ -2,9 +2,9 @@
   "name": "pizzeriasite",
   "version": "1.0.0",
   "description": "Site de livraison de pizzas à domicile.",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
-    "test": "nodemon server.js"
+    "test": "nodemon main.js"
   },
   "repository": {
     "type": "git",

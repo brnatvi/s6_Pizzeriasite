@@ -128,7 +128,7 @@ const addCustom = (data) => {
         divList+=cntDupVal(data.ingredientsInfo[i].id_ingred, data.ingredientsId)+" x ";
         divList+=(i<data.ingredientsInfo.length-1)?data.ingredientsInfo[i].nom+" . ":data.ingredientsInfo[i].nom;
     }
-    if (!isPresentCartItem(data.indexMenu+"_"+data.typeMenu)){
+    if (!isPresentCartItem(data.indexCustom+"_Custom")){
         updateGraphCartItem(
             data.indexCustom+"_Custom", "Pizza personnalisée - "+data.sizepizza, divList,
             '-custom-cart-item', 'idCustom', false,
@@ -513,7 +513,8 @@ $(document).ready(function() {
                 address : $("#userAdress").val(),
                 mobile : $("#userPhone").val(),
                 email : $("#userEmail").val(),
-                pw : $("#userPassword").val()
+                pw : $("#userPassword").val(),
+                autre : $("#userAutre").val()
             }
         e.preventDefault();
         $.ajax({
@@ -545,6 +546,66 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function() {
+                window.location.replace(window.location.origin+"/commande");
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+        });
+    });
+
+    /**
+     * Prendre en charge une commande
+     */
+    $(document).on('click', '#id-accept-commande', function(e) {
+        const form = $("#form-accept-commande");
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                alertUser("La commande a bien été traité.", 'green')
+                window.location.replace(window.location.origin+"/commande");
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+        });
+    });
+
+    /**
+     * Finir une commande
+     */
+    $(document).on('click', '#id-commande-finish', function(e) {
+        const form = $("#form-finish-commande");
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                alertUser("La commande a bien été traité.", 'green')
+                window.location.replace(window.location.origin+"/commande");
+            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+        });
+    });
+
+    /**
+     * Valider le panier
+     */
+    $(document).on('click', '#submit-cart-item', function(e) {
+        const form = $("#create-new-commande");
+        let action = form.attr('action'),
+            method = form.attr('method'),
+            data = form.serialize();
+        e.preventDefault();
+        $.ajax({
+            url: action,
+            type: method,
+            data: data,
+            success: function() {
+                alertUser("La commande a bien été validée.", 'green')
                 window.location.reload(true);
             }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
@@ -608,7 +669,6 @@ $(document).ready(function() {
             type: method,
             data: data,
             success: function() {
-                window.location.reload(true);
                 window.location.replace(window.location.origin+"/commande");
             }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
@@ -624,8 +684,11 @@ $(document).ready(function() {
             type: "GET",
             success: () => {
                 window.location.replace(window.location.origin);
-            }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
+            }, error: function () {
+                window.location.replace(window.location.origin+"/error");
+            }
         });
     });
+
 
 });

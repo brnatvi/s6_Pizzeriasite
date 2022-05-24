@@ -29,17 +29,17 @@
             <a id="style-logo" class="rmv-style-btn rmw-style-a" href="/"><img src="img/logo_pizza.png" height="60px" alt="logo"></a>
             <div>
                 <% if (locals.params.isClient){ %>
-                <a class="rmv-style-btn rmw-style-a" href="/shop">Nos produits</a>
-                <% }else{ %>
-                <a class="rmv-style-btn rmw-style-a" href="/commande">Livraisons</a>
-                <% } %>
-                <% if (!locals.params.isLogued){ %>
-                <button id="connection-user-signin" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
-                <a class="rmv-style-btn rmw-style-a" href="/livraison">Livreur?</a>
-                <% }else{ %>
-                <button class="rmv-style-btn" id="logoutSession">Se déconnecter</button>
-                <button class="rmv-style-btn" id="settingSession" type="button" data-toggle="modal" data-target="#modal-setting-session">Paramètre</button>
-                <% } %>
+                    <a class="rmv-style-btn rmw-style-a" href="/shop">La carte</a>
+                    <% }else{ %>
+                    <a class="rmv-style-btn rmw-style-a" href="/commande">Livraisons</a>
+                    <% } %>
+                    <% if (!locals.params.isLogued){ %>
+                    <button id="connection-user-signin" type="button" class="rmv-style-btn" data-toggle="modal" data-target="#modal-connexion-signin">Se connecter</button>
+                    <a class="rmv-style-btn rmw-style-a" href="/livraison">Espace livreur</a>
+                    <% }else{ %>                
+                    <button class="rmv-style-btn" id="settingSession" type="button" data-toggle="modal" data-target="#modal-setting-session">Paramètres</button>
+                    <button class="rmv-style-btn" id="logoutSession">Se déconnecter</button>
+                    <% } %>
             </div>
         </div>
     </nav>
@@ -102,6 +102,11 @@
                         </div>
 
                         <div>
+                            <label for="userAutre">Autre:</label><br>
+                            <input class="form-control" type="text" id="userAutre" name="userAutre" pattern="text">
+                        </div>
+
+                        <div>
                             <label for="userPassword">Mot de passe:</label><br>
                             <input class="form-control" type="password" id="userPassword" name="userPassword" minlength="8">
                             <input type="checkbox" id="signup-show-password">Afficher le mot de passe
@@ -116,7 +121,7 @@
 
         </div>
     </div>
-    <!-- TODO: set + session -->
+
     <% if (locals.params.isLogued){ %>
     <div class="modal fade" id="modal-setting-session" tabindex="-1" role="dialog" aria-labelledby="modal-setting-session-user" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -140,6 +145,11 @@
                         <div>
                             <label for="userPhoneSet">Numéro de téléphone:</label><br>
                             <input class="form-control" type="tel" id="userPhoneSet" name="userPhoneSet" pattern="tel">
+                        </div>
+
+                        <div>
+                            <label for="userAutreSet">Autre:</label><br>
+                            <input class="form-control" type="text" id="userAutreSet" name="userAutreSet">
                         </div>
 
                         <input type="hidden" id="isClientSet" name="isClientSet" value="true">

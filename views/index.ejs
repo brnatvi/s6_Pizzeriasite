@@ -223,7 +223,7 @@
             <div class="tab-pane fade show active" id="v-pills-pizzas" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <h1>Nos pizzas</h1>
                 <div class="row" id="all-pizzas">
-                    <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(article.type_plat==="pizza"){%>
+                    <% if (locals.params.list!==undefined) { locals.params.list.forEach(article =>{ if(article.type_plat==="pizza" && article.id_plat!==25){%>
                         <div class="m-auto container-item-desc" type="button" data-toggle="modal" data-target="#modal-info-item">
                             <img class="item-description" src="img/pizzas_pics/<%- article.link_picture%>" alt="pizza">
                             <p class="name-pizza"><%- article.nom %></p>
@@ -314,15 +314,32 @@
                     <p>Total (TTC)</p>
                     <p id="total-price-cart-item"><%- (locals.params.price===undefined)?"0":locals.params.price.toFixed(2); %> &#8364;</p>
                 </div>
-                <form action="create-new-commande" method="post">
+                <form id="create-new-commande" action="create-new-commande" method="post">
+                    <% if (!locals.params.isLogued){ %>
+                        <label for="nomCommande">Nom</label>
+                        <input type="text" minlength="2" name="nomCommande">
+
+                        <label for="prenomCommande">Prenom</label>
+                        <input type="text" minlength="2" name="prenomCommande">
+
+                        <label for="adresseCommande">Adresse</label>
+                        <input type="text" minlength="5" name="adresseCommande">
+
+                        <label for="otherInfoCommande">Autre informations</label>
+                        <textarea name="otherInfoCommande"></textarea>
+
+                        <label for="portableCommande">Portable</label>
+                        <input type="tel" minlength="5"  name="portableCommande">
+                    <% } %>
+
                     <label for="dateTimeCommande">Date de livraison:</label>
                     <input type="datetime-local" id="dateTimeCommande-time" name="dateTimeCommande"
                     <%let dateMin =new Date(new Date().getTime() + 60*60*1000);
                     let dateMinCl = dateMin.toJSON().slice(0,10).replace('/','-')+'T'+("00"+dateMin.getHours()).slice(-2)+":"+("00"+dateMin.getMinutes()).slice(-2)%>
                     value="<%-dateMinCl%>"
                     min="<%-dateMinCl%>"
-                    max="<%-new Date(new Date().getTime() + 60*60*24*1000).toJSON().slice(0,10).replace('/','-');%>T00:00">
-                    <input type="submit" class="btn btn-primary">Valider mon panier</input>
+                    max="<%-new Date(new Date().getTime() + 60*60*24*2*1000).toJSON().slice(0,10).replace('/','-');%>T00:00">
+                    <input id="submit-cart-item" type="submit" class="btn btn-primary" value="Valider mon panier">
                 </form>
             </div>
             <div id="header-border"></div>
