@@ -16,6 +16,7 @@
                         <div class="tab-pane fade show active" id="nav-extra" role="tabpanel"
                             aria-labelledby="nav-extra-tab">
                             <!-- New Order -->
+                            <% if(locals.params.oldCommande.idCommande!==undefined){ %>
                             <div id="new-order" class="tabcontent">
                                 <h1>Novelle livraison à exécuter</h1>
                                 <div class="card-cmd secondary secondary-livreur">
@@ -90,80 +91,87 @@
                                     </div>
                                 </div>
                             </div>
+                            <% }else{ %>
+                                <p class="nada-article">Aucune commande n'est disponible.</p>
+                            <% } %>
                         </div>
                         <div class="tab-pane fade" id="nav-mega" role="tabpanel" aria-labelledby="nav-mega-tab">
                             <!-- In Progress -->
-                            <div id="in-progress" class="tabcontent">
-                                <h1>Votre livraison à terminer</h1>
-                                <div class="card-cmd secondary secondary-livreur">
-                                    <div id="header-cart">
-                                        <div class="info info-livreur">
-                                            <p>Commande n° <%-
-                                                    (locals.params.currentCommande.idCommande===undefined)?"0":locals.params.currentCommande.idCommande
-                                                %><span class="wip-livreur"> - en cours de livraison</span></p>
-                                            <% console.log(locals.params.currentCommande) %>
-                                            <p>Heure de livraison - <%- (locals.params.currentCommande.dateLivr===undefined)?"0":locals.params.currentCommande.dateLivr %></p>
+                            <% if(locals.params.currentCommande.idCommande!==undefined){ %>
+                                <div id="in-progress" class="tabcontent">
+                                    <h1>Votre livraison à terminer</h1>
+                                    <div class="card-cmd secondary secondary-livreur">
+                                        <div id="header-cart">
+                                            <div class="info info-livreur">
+                                                <p>Commande n° <%-
+                                                        (locals.params.currentCommande.idCommande===undefined)?"0":locals.params.currentCommande.idCommande
+                                                    %><span class="wip-livreur"> - en cours de livraison</span></p>
+                                                <% console.log(locals.params.currentCommande) %>
+                                                <p>Heure de livraison - <%- (locals.params.currentCommande.dateLivr===undefined)?"0":locals.params.currentCommande.dateLivr %></p>
+                                            </div>
+                                            <div class="price price-livreur">
+                                                <p>Total (TTC)</p>
+                                                <p>
+                                                    <%- (locals.params.currentCommande.totalPrice===undefined)?"0":locals.params.currentCommande.totalPrice
+                                                    %> &#8364;
+                                                </p>
+                                            </div>
+                                            <form id="form-finish-commande" action="finish-commande" method="post">
+                                                <input id="id-commande-finish" type="submit" class="btn btn-primary btn-livreur">Livraison effectué</input>
+                                                <input id="id_commande_finish" type="hidden" name="idCommandeFinish" value="<%- locals.params.currentCommande.idCommande %>">
+                                            </form>
                                         </div>
-                                        <div class="price price-livreur">
-                                            <p>Total (TTC)</p>
-                                            <p>
-                                                <%- (locals.params.currentCommande.totalPrice===undefined)?"0":locals.params.currentCommande.totalPrice
-                                                %> &#8364;
+
+                                        <div id="header-border"></div>
+
+                                        <div>
+                                            <% if (locals.params.currentCommande.listContenu!==undefined) {
+                                            locals.params.currentCommande.listContenu.forEach(article=> {%>
+                                                <div class="element">
+                                                    <p>
+                                                        <%- article.plat %>
+                                                    </p>
+                                                    <p class="content-commande-livreur">
+                                                        <%- article.description %>
+                                                    </p>
+                                                    <div class="element-menu">
+                                                        <p>
+                                                            <%- article.prix %> &#8364;
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            <% })} %>
+                                        </div>
+
+                                        <div id="header-border"></div>
+
+                                        <!---<div class="info info-client">  -->
+                                        <div class="element">
+                                            <p>Client : </p>
+                                            <p class="field">
+                                                <%- (locals.params.currentCommande.nameClient===undefined)?"-":locals.params.currentCommande.nameClient %>
                                             </p>
                                         </div>
-                                        <form id="form-finish-commande" action="finish-commande" method="post">
-                                            <input type="submit" class="btn btn-primary btn-livreur">Livraison effectué</input>
-                                            <input id="id_commande_finish" type="hidden" name="idCommandeFinish" value="<%- locals.params.currentCommande.idCommande %>">
-                                        </form>
-                                    </div>
 
-                                    <div id="header-border"></div>
+                                        <div class="element">
+                                            <p>Addresse : </p>
+                                            <p class="field"></p>
+                                            <%- (locals.params.currentCommande.adressClient===undefined)?"-":locals.params.currentCommande.adressClient %>
+                                            </p>
+                                        </div>
 
-                                    <div>
-                                        <% if (locals.params.currentCommande.listContenu!==undefined) {
-                                        locals.params.currentCommande.listContenu.forEach(article=> {%>
-                                            <div class="element">
-                                                <p>
-                                                    <%- article.plat %>
-                                                </p>
-                                                <p class="content-commande-livreur">
-                                                    <%- article.description %>
-                                                </p>
-                                                <div class="element-menu">
-                                                    <p>
-                                                        <%- article.prix %> &#8364;
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <% })} %>
-                                    </div>
-
-                                    <div id="header-border"></div>
-
-                                    <!---<div class="info info-client">  -->
-                                    <div class="element">
-                                        <p>Client : </p>
-                                        <p class="field">
-                                            <%- (locals.params.currentCommande.nameClient===undefined)?"-":locals.params.currentCommande.nameClient %>
-                                        </p>
-                                    </div>
-
-                                    <div class="element">
-                                        <p>Addresse : </p>
-                                        <p class="field"></p>
-                                        <%- (locals.params.currentCommande.adressClient===undefined)?"-":locals.params.currentCommande.adressClient %>
-                                        </p>
-                                    </div>
-
-                                    <div class="element">
-                                        <p>Tel: </p>
-                                        <p class="field">
-                                            <%- (locals.params.currentCommande.mobileClient===undefined)?"-":locals.params.currentCommande.mobileClient
-                                            %>
-                                        </p>
+                                        <div class="element">
+                                            <p>Tel: </p>
+                                            <p class="field">
+                                                <%- (locals.params.currentCommande.mobileClient===undefined)?"-":locals.params.currentCommande.mobileClient
+                                                %>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            <% }else{ %>
+                            <p class="nada-article">Aucune commande n'est prise en charge.</p>
+                            <% } %>
                         </div>
                     </div>
                 </div>

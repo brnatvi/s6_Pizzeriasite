@@ -59,6 +59,10 @@ class Livreur {
         return res;
     }
 
+    async getCurrentCommandeByLivrer(id_livr) {
+        return await db.query("SELECT current_commande FROM livreur WHERE id_livr = $1;", [id_livr]);
+    }
+
     async getLivreurByEmail(email) {
         return await db.query("SELECT id_livr, email, pw FROM security_livreur WHERE email = $1;", [email]);
     }

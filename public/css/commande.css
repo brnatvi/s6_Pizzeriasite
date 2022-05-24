@@ -106,7 +106,9 @@
 #new-order{
     margin-top: 50px;
 }
-
+.nada-article{
+    text-align: center;
+}
 .info-livreur p:last-child{
     margin-right: 0;
 }

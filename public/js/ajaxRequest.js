@@ -566,7 +566,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 alertUser("La commande a bien été traité.", 'green')
-                window.location.reload(true);
+                window.location.replace(window.location.origin+"/commande");
             }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });
@@ -586,7 +586,7 @@ $(document).ready(function() {
             data: data,
             success: function() {
                 alertUser("La commande a bien été traité.", 'green')
-                window.location.reload(true);
+                window.location.replace(window.location.origin+"/commande");
             }, error: function (err) {alertUser(err.responseJSON['messageError'], 'red')}
         });
     });

@@ -71,10 +71,15 @@ exports.getCurrentCommande = (req, res) => {
 
 exports.acceptCommande = (req, res) => {
     Livreur.getLivreurByEmail(req.session.user.email).then(user =>{
-        Commande.updateStatusInprogress(req.body.idacceptCommande).then(()=>{
-            Livreur.updateCurrentCommande(user.rows[0].id_livr, req.body.acceptCommande).then(()=>{
-                res.status(200).send();
-            });
+        Livreur.getCurrentCommandeByLivrer(user.rows[0].id_livr).then(existCommande=>{
+            console.log("existCommande.rows[0]"+JSON.stringify(existCommande.rows[0]))
+            if (existCommande.rows[0].current_commande===null){
+                Commande.updateStatusInprogress(req.body.idacceptCommande).then(()=>{
+                    Livreur.updateCurrentCommande(user.rows[0].id_livr, req.body.idacceptCommande).then(()=>{
+                        res.status(200).send();
+                    });
+                });
+            }else res.status(500).send({ messageError: "Il faut effectuer la première livraison." })
         });
     }).catch(()=>{res.status(500).send({ messageError: "Commande n'est pas disponible" })})
 };
